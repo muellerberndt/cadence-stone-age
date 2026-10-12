@@ -1,0 +1,124 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P2 development: the vanished route cue, cue kept visible (external-register control), guide caregiver, carried-interpretation trace genes",
+  "question": "With the cue kept visible at every event, does the same brain and budget learn the routes? A failure here is a learning or budget limit, not a memory limit.",
+  "scope": "component context use; development founders only; the first decision is the only one that needs history",
+  "world": {
+    "kind": "route_cue",
+    "neutral": 2,
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "cue_persists": true
+  },
+  "recipes": {
+    "carried": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "working_memory_decay": 0.0,
+        "working_memory_amplitude": 0.3
+      },
+      "note": "V5's anatomy with the working trace carrying the last interpretation only (retention 0) at amplitude 0.3, the recall chamber's development point of 12 October"
+    }
+  },
+  "arms": {
+    "guide_step": {
+      "adapter": "step",
+      "caregiver": "guide",
+      "note": "labels every decision's observation in a guided window with its required action before the brain acts, the ambiguous first decision included"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "caregiver_note": "the reward-only arms failed the visible-cue control at 480 episodes; uniform current-state teaching supplies the label at the ambiguous decision, an explicitly supplied lesson",
+  "training_episodes": 480,
+  "budget_readings": [
+    120,
+    480,
+    1920
+  ],
+  "withdrawal_episodes": 0,
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader"
+  },
+  "seeds": {
+    "historical": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005
+    ],
+    "confirmation": [
+      2101,
+      2102,
+      2103,
+      2104,
+      2105,
+      2106,
+      2107,
+      2108,
+      2109,
+      2110,
+      2111,
+      2112,
+      2113,
+      2114,
+      2115,
+      2116,
+      2117,
+      2118,
+      2119,
+      2120
+    ],
+    "confirmation_note": "unopened until code, protocol digest, genes, thresholds and cost limits are frozen"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "primary": "first-choice accuracy and whole-route success; context-blind ceiling 0.5 at the first choice"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}

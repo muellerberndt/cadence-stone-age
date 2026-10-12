@@ -1,0 +1,132 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P1 development, carried-interpretation trace genes",
+  "question": "On fresh founders, which of V5's caregiver arms beat uniform random and the frozen founder in frozen whole-chain success, sampled and greedy, and what do their information, teaching work and continuation cost?",
+  "scope": "component prerequisite behavior in a fully observed world; a memoryless stage-aware policy solves it, so it tests no memory",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "carried": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "working_memory_decay": 0.0,
+        "working_memory_amplitude": 0.3
+      },
+      "note": "V5's anatomy with the working trace carrying the last interpretation only (retention 0) at amplitude 0.3, the recall chamber's development point of 12 October"
+    }
+  },
+  "arms": {
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none"
+    },
+    "grade_step": {
+      "adapter": "step",
+      "caregiver": "grade"
+    },
+    "correct_step": {
+      "adapter": "step",
+      "caregiver": "correct"
+    },
+    "correct_step_qualified": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "compose": {
+        "learning_qualified": true
+      },
+      "note": "the same caregiver with qualified teaching; a separately named numerical arm, refusals counted at the fixed budget"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; a separate frozen copy is read at the end",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader"
+  },
+  "seeds": {
+    "historical": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005
+    ],
+    "confirmation": [
+      2101,
+      2102,
+      2103,
+      2104,
+      2105,
+      2106,
+      2107,
+      2108,
+      2109,
+      2110,
+      2111,
+      2112,
+      2113,
+      2114,
+      2115,
+      2116,
+      2117,
+      2118,
+      2119,
+      2120
+    ],
+    "confirmation_note": "unopened until code, protocol digest, genes, thresholds and cost limits are frozen"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "primary": "immediate sampled success minus random and minus founder, founder-paired"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}
