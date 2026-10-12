@@ -87,6 +87,23 @@ def episode_summary(episodes: Sequence[dict[str, Any]], stages: int) -> dict[str
         "outcomes": dict(Counter(str(e["reason"]) for e in episodes)),
         "refusals": int(sum(int(e.get("refusals", 0)) for e in episodes)),
         "undecided": int(sum(int(e.get("undecided", 0)) for e in episodes)),
+        **_first_choice(episodes),
+    }
+
+
+def _first_choice(episodes: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    """Accuracy of the first decision, overall and per hidden route: the only decision of the
+    route cue that needs the vanished cue. Empty when episodes carry no first choice."""
+    rows = [e for e in episodes if e.get("first_choice") and e["first_choice"].get("required") is not None]
+    if not rows:
+        return {}
+    right = [int(e["first_choice"]["action"] == e["first_choice"]["required"]) for e in rows]
+    by_route: dict[str, list[int]] = {}
+    for e, r in zip(rows, right):
+        by_route.setdefault(str(e.get("route")), []).append(r)
+    return {
+        "first_choice_accuracy": sum(right) / len(right),
+        "first_choice_by_route": {k: sum(v) / len(v) for k, v in sorted(by_route.items())},
     }
 
 

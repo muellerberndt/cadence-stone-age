@@ -409,3 +409,20 @@ def test_frozen_evaluation_is_isolated_and_seeded(tmp_path: Path) -> None:
     assert pr.state_digest(brain, copier) == before
     greedy = ru.evaluate(path, COLD, episodes=3, greedy=True, seed=5)
     assert greedy == ru.evaluate(path, COLD, episodes=3, greedy=True, seed=99)
+
+
+def test_visible_cue_control_keeps_the_cue_and_first_choice_metric() -> None:
+    world = wo.make_world({"kind": "route_cue", "cue_persists": True}, route=wo.ROUTE_B)
+    for _ in range(3):
+        world.step(wo.WAIT)
+    assert world.observation()[0, 8] == 1.0 and world.observation()[0, 7] == 0.0
+    rows = ru.control_rows("oracle", {"kind": "route_cue"}, episodes=10, seed=0,
+                           routes=wo.balanced_routes(10, np.random.default_rng(1)))
+    assert all(r["success"] for r in rows)
+    summary = me.episode_summary(
+        [{"success": True, "decisions": 4, "stage_reached": 4, "reason": "success", "route": 0,
+          "first_choice": {"action": 0, "required": 0}},
+         {"success": False, "decisions": 1, "stage_reached": 0, "reason": "locked", "route": 1,
+          "first_choice": {"action": 0, "required": 1}}], 4)
+    assert summary["first_choice_accuracy"] == 0.5
+    assert summary["first_choice_by_route"] == {"0": 1.0, "1": 0.0}

@@ -186,12 +186,14 @@ class RouteCue:
         deadline: int = V5_DEADLINE,
         success_reward: float = V5_SUCCESS,
         failure_reward: float = V5_FAILURE,
+        cue_persists: bool = False,
     ) -> None:
         if route not in (ROUTE_A, ROUTE_B):
             raise ValueError("route is ROUTE_A or ROUTE_B")
         if neutral < 0 or deadline < 1:
             raise ValueError("neutral events are nonnegative and the deadline positive")
         self.route = route
+        self.cue_persists = bool(cue_persists)  # the external-register control: the cue stays visible
         self.neutral = int(neutral)
         self.deadline = int(deadline)
         self.success_reward = float(success_reward)
@@ -226,7 +228,7 @@ class RouteCue:
         x[0, :7] = v5_observation(
             wood=wood, stone=stone, fire=fire, warmth=0.90 if self.success else 0.35
         )[0]
-        if self.event == 0:
+        if self.event == 0 or self.cue_persists:
             x[0, 7 + self.route] = 1.0
         return x
 
@@ -293,6 +295,7 @@ def make_world(spec: dict[str, Any], route: int | None = None) -> Any:
             deadline=spec.get("deadline", V5_DEADLINE),
             success_reward=spec.get("success_reward", V5_SUCCESS),
             failure_reward=spec.get("failure_reward", V5_FAILURE),
+            cue_persists=spec.get("cue_persists", False),
         )
     raise ValueError(f"unknown world {kind!r}")
 
