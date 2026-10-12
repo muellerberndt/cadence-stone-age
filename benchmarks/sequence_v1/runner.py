@@ -53,9 +53,9 @@ def load_protocol(path: Path) -> tuple[dict[str, Any], str]:
     for name, arm in protocol["arms"].items():
         if arm["adapter"] not in ADAPTERS:
             raise ValueError(f"arm {name}: unknown adapter {arm['adapter']!r}")
-        if arm["caregiver"] not in ("none", "grade", "correct"):
+        if arm["caregiver"] not in ("none", "grade", "correct", "guide"):
             raise ValueError(f"arm {name}: unknown caregiver {arm['caregiver']!r}")
-        if arm["adapter"] == "live" and arm["caregiver"] == "correct":
+        if arm["adapter"] == "live" and arm["caregiver"] in ("correct", "guide"):
             raise ValueError(f"arm {name}: live takes no teacher; declare an ordering first")
     return protocol, hashlib.sha256(raw).hexdigest()
 
@@ -109,7 +109,10 @@ class Caregiver:
     counted in executed decisions of the whole life. ``grade`` adds +right/-wrong to the
     world's reward of the executed action in guided windows; ``correct`` labels the current
     observation with its required action after an executed nonterminal mistake in a guided
-    window. Labels and grades come from the world's scorer, never from the brain's input."""
+    window; ``guide`` labels every decision's observation in a guided window with its required
+    action before the brain acts (uniform current-state teaching, which also reaches a decision
+    whose mistake ends the episode). Labels and grades come from the world's scorer, never from
+    the brain's input."""
 
     kind: str
     guided_span: int
@@ -128,7 +131,10 @@ class Caregiver:
             return 0.0
         return self.right if outcome.advanced else self.wrong
 
-    def label(self, guided: bool, outcome: Any, world: Any) -> int | None:
+    def label(self, guided: bool, outcome: Any, world: Any, next_guided: bool = False) -> int | None:
+        if self.kind == "guide":
+            # the observation shown next, if its decision falls in a guided window
+            return world.required() if next_guided and not world.done else None
         if self.kind != "correct" or not guided or not outcome.decision:
             return None
         if outcome.advanced or outcome.done:
@@ -229,9 +235,9 @@ def run_life(
             episode += 1
             episode_decisions = 0
             world = new_world(episode)
-            label = None
+            label = caregiver.label(guided, outcome, world, caregiver.guided(decision)) if caregiver.kind == "guide" else None
         else:
-            label = caregiver.label(guided, outcome, world)
+            label = caregiver.label(guided, outcome, world, caregiver.guided(decision))
         x = world.observation()
         action, record = adapter.next(x, reward=consumed, done=outcome.done, teacher=label)
         event["label"] = label

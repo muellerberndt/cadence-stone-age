@@ -445,3 +445,24 @@ def test_live_arousal_refusal_after_an_accepted_outcome_answers_without_it() -> 
     _, record = adapter.next(wo.ColdChain().observation(), reward=-1.0, done=False)
     assert spy.outcomes == [-1.0] and record["refused_attempts"] == 1
     assert adapter.ledger.consumed == [1]
+
+
+def test_guide_labels_every_guided_decision_before_the_brain_acts() -> None:
+    spy = SpyBrain(seed=5)
+    routes = wo.balanced_routes(20, np.random.default_rng(0))
+    life = ru.run_life(ad.StepAdapter(spy, 5), {"kind": "route_cue"}, ru.Caregiver("guide", 4, 8), 20,
+                       life_id="guide", routes=routes)
+    events = life.events
+    for previous, event in zip(events, events[1:]):
+        # a label rides with the observation of the event that follows it
+        if previous["label"] is not None:
+            assert event["kind"] == "decision"
+            assert previous["label"] == event["required"]
+    labelled_first = [
+        e for p, e in zip(events, events[1:])
+        if p["label"] is not None and e["stage_before"] == 0 and e["kind"] == "decision"
+    ]
+    assert labelled_first, "the ambiguous first decision receives labels in guided windows"
+    for event in events:
+        if event["kind"] == "observe":
+            assert event["required"] is None
