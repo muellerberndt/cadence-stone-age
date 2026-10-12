@@ -496,3 +496,13 @@ def test_recall_schedule_is_balanced_and_guide_labels_the_query_only() -> None:
     assert labelled and all(e["kind"] == "decision" for e in
                             [e for p, e in zip(life.events, life.events[1:]) if p["label"] is not None])
     assert life.counts["outcomes_delivered"] == life.counts["actions_issued"] - 1
+
+
+def test_oracle_and_random_controls_run_on_every_world() -> None:
+    schedule = wo.recall_schedule(14, np.random.default_rng(2))
+    rows = ru.control_rows("oracle", {"kind": "recall"}, episodes=14, seed=0, routes=schedule)
+    assert all(r["success"] for r in rows)
+    rows = ru.control_rows("random", {"kind": "recall"}, episodes=14, seed=0, routes=schedule)
+    assert all(r["decisions"] == 1 for r in rows)
+    routes = wo.balanced_routes(6, np.random.default_rng(0))
+    assert all(r["success"] for r in ru.control_rows("oracle", {"kind": "route_cue"}, episodes=6, seed=0, routes=routes))

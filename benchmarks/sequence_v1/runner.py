@@ -342,7 +342,8 @@ def control_rows(kind: str, world_spec: dict[str, Any], *, episodes: int, seed: 
                 action = int(rng.integers(world.actions))
             else:
                 required = world.required()
-                action = 4 if required is None else int(required)
+                # no decision is due: any valid action, the world ignores it
+                action = 0 if required is None else int(required)
             world.step(action)
         rows.append(
             {
