@@ -98,3 +98,54 @@ recipe fall to zero. V5's own script on its own seeds does reproduce its gain af
 (above); this instrument differs in its founders and in resuming the life from its seam instead
 of a reset, and the two are not yet separated. The live arms learn nothing useful under end pay at
 this budget.
+
+## Cadence 0.82.0 against 0.81.0, published wheels
+
+Cadence 0.82.0 carries the composed brain's context differently: the prefrontal copy of the last
+interpretation keeps amplitude 3.0 but is read back through a projection that starts at scale 1.2
+instead of 12, and the trace carries exactly the last interpretation (retention 0 instead of 0.2).
+Both releases ran in one interpreter (Python 3.13.7, NumPy 2.5.4, macOS arm64, one BLAS thread):
+the PyPI 0.81.0 wheel (SHA-256 `182dcc6e…`) and the 0.82.0 wheel as published (`716b7008…`).
+
+**V5's own script**, published command, seeds 42 to 46. On 0.82.0 the script's version guard
+(`if version != "0.81.0":`) accepts 0.82.0 as well; nothing else differs. Frozen full-chain success
+in %, sampled, per seed, then the mean:
+
+| Arm | 0.81.0 immediate | 0.82.0 immediate | 0.81.0 after 80 natural episodes | 0.82.0 after 80 natural episodes |
+| --- | --- | --- | --- | --- |
+| Corrective teacher | 28, 24, 20, 11, 11 (18.8) | 28, 33, 38, 9, 24 (**26.4**) | 23, 18, 21, 32, 22 (23.2) | 31, 69, 0, 4, 24 (**25.6**) |
+| Natural only | 0, 10, 0, 0, 1 (2.2) | 0, 1, 0, 1, 15 (3.4) | 0, 1, 0, 15, 1 (3.4) | 1, 0, 0, 11, 19 (6.2) |
+| Grade only | 0, 1, 0, 0, 0 (0.2) | 0, 0, 7, 0, 0 (1.4) | 0, 5, 0, 0, 0 (1.0) | 0, 0, 83, 0, 0 (16.6) |
+| Founder / uniform random | 7.6 / 12.4 | 9.2 / 12.4 | | |
+
+**P1 on fresh founders 1001 to 1005** (`protocol-p1-library-defaults.json`: V5's layout at the
+library's own trace defaults, 120 training episodes, 200 frozen episodes, then 80 natural episodes).
+Sampled %, per founder, immediately → after the caregiver leaves:
+
+| Arm | 0.81.0 | 0.82.0 |
+| --- | --- | --- |
+| Correcting executed mistakes | 12 0 34 27 32 (21.0) → 14 0 12 27 24 (15.5) | 96 26 33 54 16 (**44.8**) → 86 26 53 1 0 (33.2) |
+| The same, qualified | 20 20 16 35 18 (21.8) → 20 0 30 0 32 (16.3) | 66 36 52 54 12 (**44.3**) → 20 0 66 0 0 (17.2) |
+| Reward only (`natural_step`) | 0 0 0 0 0 → 0 0 0 0 0 | 20 0 0 16 32 (13.4) → 30 0 19 29 31 (21.7) |
+| Graded only | 0 0 0 0 0 → 0 0 0 6 0 | 0 0 0 0 0 → 0 60 0 0 0 |
+| Untrained founder (uniform random 11.6) | 0 1 10 11 8 (6.3) | 6 10 14 18 14 (12.3) |
+
+Reading: with 0.82.0 an untrained brain is no longer worse than random on the observed chain,
+correcting executed mistakes doubles the frozen success, reward alone lifts three founders above
+random where 0.81.0 lifted none, and single founders reach full greedy competence (1001 under
+correction, greedy 100% before and after withdrawal). The chain is not mastered: after the
+caregiver leaves, skills still erode in some founders (V5 seeds 44 and 45, P1 founders 1004 and
+1005), and the route task with a vanished cue is not addressed by this release.
+
+Reproduce:
+
+```sh
+python -m pip install cadence-net==0.82.0
+sed -i.bak 's/    if version != "0.81.0":/    if version not in ("0.81.0", "0.82.0"):/' \
+  benchmarks/cadence_081/v5_mochi_style.py
+python benchmarks/cadence_081/v5_mochi_style.py --train 120 --eval 100 --post-life 80 \
+  --guided-span 4 --autonomous-span 8 --fingerprint-samples 300 --seeds 5
+cd benchmarks/sequence_v1
+python runner.py --protocol protocol-p1-library-defaults.json --out ../../p1-082 \
+  --seeds 1001 1002 1003 1004 1005
+```
