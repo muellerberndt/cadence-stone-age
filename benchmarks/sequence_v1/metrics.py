@@ -100,7 +100,9 @@ def _first_choice(episodes: Sequence[dict[str, Any]]) -> dict[str, Any]:
     right = [int(e["first_choice"]["action"] == e["first_choice"]["required"]) for e in rows]
     by_route: dict[str, list[int]] = {}
     for e, r in zip(rows, right):
-        by_route.setdefault(str(e.get("route")), []).append(r)
+        route = e.get("route")
+        key = route.get("condition", "all") if isinstance(route, dict) else str(route)
+        by_route.setdefault(key, []).append(r)
     return {
         "first_choice_accuracy": sum(right) / len(right),
         "first_choice_by_route": {k: sum(v) / len(v) for k, v in sorted(by_route.items())},

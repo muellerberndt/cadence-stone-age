@@ -38,7 +38,7 @@ from metrics import (  # noqa: E402
 )
 from probes import Copier, reseed_actions, state_digest  # noqa: E402
 from receipts import Manifest, canonical  # noqa: E402
-from worlds import action_id, balanced_routes, make_world  # noqa: E402
+from worlds import action_id, balanced_routes, make_world, recall_schedule  # noqa: E402
 
 SCHEMA = "stone-age-sequence/1"
 CONTROLS = ("founder", "random", "oracle")
@@ -399,17 +399,18 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
         "founder_digest": state_digest(founder, copier),
         "arms": {},
     }
-    needs_routes = world["kind"] == "route_cue"
+    needs_routes = world["kind"] in ("route_cue", "recall")
+    schedule_of = recall_schedule if world["kind"] == "recall" else balanced_routes
     train_routes = (
-        balanced_routes(protocol["training_episodes"], np.random.default_rng(stream_seed(STREAM["routes"], seed)))
+        schedule_of(protocol["training_episodes"], np.random.default_rng(stream_seed(STREAM["routes"], seed)))
         if needs_routes else None
     )
     after_routes = (
-        balanced_routes(protocol["withdrawal_episodes"], np.random.default_rng(stream_seed(STREAM["withdrawal_routes"], seed)))
-        if needs_routes else None
+        schedule_of(protocol["withdrawal_episodes"], np.random.default_rng(stream_seed(STREAM["withdrawal_routes"], seed)))
+        if needs_routes and protocol.get("withdrawal_episodes", 0) > 0 else None
     )
     eval_routes = (
-        balanced_routes(evaluation["episodes"], np.random.default_rng(stream_seed(STREAM["routes"], seed, 1)))
+        schedule_of(evaluation["episodes"], np.random.default_rng(stream_seed(STREAM["routes"], seed, 1)))
         if needs_routes else None
     )
 

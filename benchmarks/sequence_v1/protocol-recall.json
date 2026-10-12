@@ -1,0 +1,118 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "Recall world: carried interpretation against retained average, taught and paid",
+  "question": "Does a working trace that carries only the last interpretation let one continuing brain keep and revise a written value, when the only signal is the reward at QUERY (live and step) as well as when the answer is taught?",
+  "scope": "component context use; development founders; one stream; the value asked is the latest written one",
+  "world": {
+    "kind": "recall",
+    "success_reward": 1.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "carried": {
+      "compose": {
+        "modules": [
+          32
+        ],
+        "lateral": 0.0,
+        "episodic": false,
+        "arousal": true,
+        "learning_eta": 0.5,
+        "learning_eta_bias": 0.005,
+        "learning_momentum": 0.9,
+        "learning_normalize": 0.0,
+        "learning_homeostasis_rate": 0.1,
+        "learning_qualified": true,
+        "learning_free_steps": 1024,
+        "learning_nudged_steps": 128,
+        "learning_tolerance": 0.003,
+        "working_memory_decay": 0.0,
+        "working_memory_amplitude": 0.3
+      },
+      "note": "the trace equals the previous association state, amplitude 0.3"
+    },
+    "retained": {
+      "compose": {
+        "modules": [
+          32
+        ],
+        "lateral": 0.0,
+        "episodic": false,
+        "arousal": true,
+        "learning_eta": 0.5,
+        "learning_eta_bias": 0.005,
+        "learning_momentum": 0.9,
+        "learning_normalize": 0.0,
+        "learning_homeostasis_rate": 0.1,
+        "learning_qualified": true,
+        "learning_free_steps": 1024,
+        "learning_nudged_steps": 128,
+        "learning_tolerance": 0.003,
+        "working_memory_decay": 0.8,
+        "working_memory_amplitude": 0.3
+      },
+      "note": "the recall/2 to recall/5 retention: an exponential average keeping 0.8 per event"
+    }
+  },
+  "arms": {
+    "teach_step": {
+      "adapter": "step",
+      "caregiver": "guide",
+      "note": "the asked value labelled at every QUERY before the brain answers"
+    },
+    "reward_step": {
+      "adapter": "step",
+      "caregiver": "none",
+      "note": "only the paid outcome of the answer"
+    },
+    "reward_live": {
+      "adapter": "live",
+      "caregiver": "none",
+      "note": "the continuing life: calm routine, surprise arouses and learns"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 1,
+    "autonomous": 0,
+    "unit": "decisions; every QUERY of the guide arm is labelled"
+  },
+  "training_episodes": 1536,
+  "withdrawal_episodes": 0,
+  "evaluation": {
+    "episodes": 224,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode"
+  },
+  "seeds": {
+    "development": [
+      1001,
+      1002,
+      1003
+    ],
+    "confirmation": []
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder",
+    "primary": "QUERY accuracy per condition, greedy and sampled"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}

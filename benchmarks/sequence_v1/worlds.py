@@ -276,10 +276,16 @@ class RouteCue:
         )
 
 
-def make_world(spec: dict[str, Any], route: int | None = None) -> Any:
-    """A fresh episode world from a protocol entry; ``route`` is the hidden route of a route
-    cue episode, drawn by the caller from a balanced schedule."""
+def make_world(spec: dict[str, Any], route: Any = None) -> Any:
+    """A fresh episode world from a protocol entry; ``route`` is the episode's hidden cell from
+    a balanced schedule: the route of a route cue episode, or a recall episode's condition,
+    value and distractor seed."""
     kind = spec["kind"]
+    if kind == "recall":
+        cell = route if isinstance(route, dict) else {"condition": "clean-0", "value": int(route or 0), "seed": 0}
+        return Recall(cell["condition"], cell["value"], cell.get("seed", 0),
+                      success_reward=spec.get("success_reward", 1.0),
+                      failure_reward=spec.get("failure_reward", -1.0))
     if kind == "cold_chain":
         return ColdChain(
             deadline=spec.get("deadline", V5_DEADLINE),
@@ -308,3 +314,110 @@ def balanced_routes(episodes: int, rng: np.random.Generator) -> list[int]:
         rng.shuffle(block)
         routes.extend(block)
     return routes[:episodes]
+
+
+# -- recall: keep a written value, revise it when a later WRITE arrives, answer at QUERY
+
+RECALL_START, RECALL_WRITE, RECALL_NEUTRAL, RECALL_DISTRACTOR, RECALL_QUERY = range(5)
+RECALL_PAYLOAD = slice(5, 9)
+RECALL_INPUTS = 9
+RECALL_TOKENS = np.array([[1.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 1.0]])
+RECALL_CONDITIONS = (
+    "clean-0", "clean-1", "clean-2", "distractor-1", "distractor-2", "replacement", "order-latest",
+)
+
+
+def recall_events(condition: str, value: int, seed: int) -> list[np.ndarray]:
+    """The observations of one recall episode; the value asked at QUERY is ``value``, the
+    latest written one. Distractors carry a small random payload under their own marker."""
+    rng = np.random.default_rng(seed)
+
+    def marker(index: int, payload: np.ndarray | None = None) -> np.ndarray:
+        x = np.zeros((1, RECALL_INPUTS))
+        x[0, index] = 1.0
+        if payload is not None:
+            x[0, RECALL_PAYLOAD] = payload
+        return x
+
+    events = [marker(RECALL_START)]
+    kind, _, count = condition.partition("-")
+    if kind in ("clean", "distractor"):
+        events.append(marker(RECALL_WRITE, RECALL_TOKENS[value]))
+        for _ in range(int(count)):
+            if kind == "distractor":
+                events.append(marker(RECALL_DISTRACTOR, rng.uniform(-0.25, 0.25, 4)))
+            else:
+                events.append(marker(RECALL_NEUTRAL))
+    elif condition == "replacement":
+        events += [marker(RECALL_WRITE, RECALL_TOKENS[1 - value]), marker(RECALL_NEUTRAL),
+                   marker(RECALL_WRITE, RECALL_TOKENS[value]), marker(RECALL_NEUTRAL)]
+    elif condition == "order-latest":
+        events += [marker(RECALL_WRITE, RECALL_TOKENS[1 - value]),
+                   marker(RECALL_WRITE, RECALL_TOKENS[value]), marker(RECALL_NEUTRAL)]
+    else:
+        raise ValueError(f"unknown recall condition {condition!r}")
+    events.append(marker(RECALL_QUERY))
+    return events
+
+
+class Recall:
+    """One recall episode: observation events whose actions the world ignores, then the QUERY
+    decision, paid ``success_reward`` for the latest written value and ``failure_reward``
+    otherwise. The asked value is a scorer field; no input carries it after its WRITE."""
+
+    name = "recall"
+    actions = 2
+    inputs = RECALL_INPUTS
+    stages = 1
+
+    def __init__(self, condition: str, value: int, seed: int = 0, *,
+                 success_reward: float = 1.0, failure_reward: float = -1.0) -> None:
+        if value not in (0, 1):
+            raise ValueError("value is 0 or 1")
+        self.condition, self.value = condition, int(value)
+        self.events = recall_events(condition, self.value, seed)
+        self.success_reward, self.failure_reward = float(success_reward), float(failure_reward)
+        self.event = 0
+        self.stage = 0
+        self.decisions = 0
+        self.deadline = 1
+        self.done = False
+        self.success = False
+
+    def required(self) -> int | None:
+        return self.value if self.event == len(self.events) - 1 and not self.done else None
+
+    def observation(self) -> np.ndarray:
+        return self.events[min(self.event, len(self.events) - 1)].copy()
+
+    def step(self, action: int) -> Outcome:
+        if self.done:
+            raise RuntimeError("the episode has ended; start a new world")
+        index = action_id(np.asarray([action], dtype=np.int64), self.actions)
+        if self.event < len(self.events) - 1:
+            self.event += 1
+            return Outcome(0.0, False, False, False, None, 0, 0, "ignored", decision=False)
+        self.decisions = 1
+        self.done = True
+        self.success = index == self.value
+        self.stage = int(self.success)
+        return Outcome(
+            reward=self.success_reward if self.success else self.failure_reward,
+            done=True, success=self.success, advanced=self.success, required=self.value,
+            stage_before=0, stage_after=self.stage,
+            reason="success" if self.success else "wrong", decision=True,
+        )
+
+
+def recall_schedule(episodes: int, rng: np.random.Generator,
+                    conditions: tuple[str, ...] = RECALL_CONDITIONS) -> list[dict]:
+    """Balanced blocks: every condition with both values once per block, shuffled; each
+    episode has its own distractor seed."""
+    out: list[dict] = []
+    while len(out) < episodes:
+        block = [{"condition": c, "value": v} for c in conditions for v in (0, 1)]
+        rng.shuffle(block)
+        for cell in block:
+            cell["seed"] = int(rng.integers(2**31))
+        out.extend(block)
+    return out[:episodes]

@@ -466,3 +466,33 @@ def test_guide_labels_every_guided_decision_before_the_brain_acts() -> None:
     for event in events:
         if event["kind"] == "observe":
             assert event["required"] is None
+
+
+def test_recall_world_answers_the_latest_written_value_only_at_query() -> None:
+    for condition in wo.RECALL_CONDITIONS:
+        for value in (0, 1):
+            world = wo.make_world({"kind": "recall"}, {"condition": condition, "value": value, "seed": 3})
+            while world.required() is None:
+                outcome = world.step(1 - value)  # ignored before the query
+                assert outcome.reason == "ignored" and not outcome.decision and outcome.reward == 0.0
+            query = world.observation()
+            assert query[0, wo.RECALL_QUERY] == 1.0 and not query[0, wo.RECALL_PAYLOAD].any()
+            outcome = world.step(value)
+            assert outcome.done and outcome.success and outcome.reward == 1.0 and outcome.required == value
+    world = wo.make_world({"kind": "recall"}, {"condition": "replacement", "value": 1, "seed": 0})
+    writes = [x for x in world.events if x[0, wo.RECALL_WRITE] == 1.0]
+    assert np.array_equal(writes[-1][0, wo.RECALL_PAYLOAD], wo.RECALL_TOKENS[1])
+    assert np.array_equal(writes[0][0, wo.RECALL_PAYLOAD], wo.RECALL_TOKENS[0])
+
+
+def test_recall_schedule_is_balanced_and_guide_labels_the_query_only() -> None:
+    schedule = wo.recall_schedule(28, np.random.default_rng(0))
+    cells = {(c["condition"], c["value"]) for c in schedule}
+    assert len(cells) == 14 and len(schedule) == 28
+    spy = SpyBrain(actions=2, seed=1)
+    life = ru.run_life(ad.StepAdapter(spy, 2), {"kind": "recall"}, ru.Caregiver("guide", 1, 0), 28,
+                       life_id="recall", routes=schedule)
+    labelled = [p for p, e in zip(life.events, life.events[1:]) if p["label"] is not None]
+    assert labelled and all(e["kind"] == "decision" for e in
+                            [e for p, e in zip(life.events, life.events[1:]) if p["label"] is not None])
+    assert life.counts["outcomes_delivered"] == life.counts["actions_issued"] - 1
