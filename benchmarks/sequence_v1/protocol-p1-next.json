@@ -1,0 +1,139 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P1 next: the motor readout's bias at birth, and a life alone through live",
+  "question": "On fresh founders at the 0.82.0 composition: does a motor bias of 0.3 at birth change acquisition of the observed chain, and does continuing alone through Brain.live (calm moments do not learn) keep what the caregiver taught better than continuing through step?",
+  "scope": "component prerequisite behavior in a fully observed world; a memoryless stage-aware policy solves it, so it tests no memory",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "defaults": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true
+      },
+      "note": "V5's layout at the 0.82.0 composition"
+    },
+    "motor03": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "motor_bias": 0.3
+      },
+      "note": "the same founder with every motor bias set to 0.3 at birth"
+    }
+  },
+  "arms": {
+    "correct_step": {
+      "adapter": "step",
+      "caregiver": "correct"
+    },
+    "correct_then_live": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "withdrawal_adapter": "live",
+      "note": "taught through step; alone through live"
+    },
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none"
+    },
+    "natural_live": {
+      "adapter": "live",
+      "caregiver": "none"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; a separate frozen copy is read at the end",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader"
+  },
+  "seeds": {
+    "historical": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005
+    ],
+    "confirmation": [
+      2101,
+      2102,
+      2103,
+      2104,
+      2105,
+      2106,
+      2107,
+      2108,
+      2109,
+      2110,
+      2111,
+      2112,
+      2113,
+      2114,
+      2115,
+      2116,
+      2117,
+      2118,
+      2119,
+      2120
+    ],
+    "confirmation_note": "unopened until code, protocol digest, genes, thresholds and cost limits are frozen"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "primary": "immediate sampled success minus random and minus founder, founder-paired"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}

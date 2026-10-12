@@ -149,3 +149,26 @@ cd benchmarks/sequence_v1
 python runner.py --protocol protocol-p1-library-defaults.json --out ../../p1-082 \
   --seeds 1001 1002 1003 1004 1005
 ```
+
+## After the caregiver leaves: `step` against `live`, and a motor bias at birth (0.82.0)
+
+`protocol-p1-next.json`, the published 0.82.0 wheel, fresh founders 1001 to 1005, V5's layout,
+120 training episodes, 200 frozen episodes, then 80 episodes alone. Two new instrument options: an
+arm's life after the caregiver may continue through another interface (`withdrawal_adapter`), and a
+recipe may set every motor bias once at birth (`motor_bias`; zero in every released composition).
+Sampled %, per founder, immediately → after the life alone:
+
+| Arm | 0.82.0 composition | Motor bias 0.3 at birth |
+| --- | --- | --- |
+| Corrected while taught, then alone through `step` | 96 25.5 33 54 15.5 (44.8) → 86 26 53 1 0 (33.2) | 0.5 60 87 0.5 74.5 (44.5) → 1.5 28 0.5 20.5 1 (10.3) |
+| Corrected while taught, then alone through `live` | same → 85.5 28.5 37.5 47 14 (**42.5**) | same → 0.5 31.5 0 2.5 1.5 (7.2) |
+| Reward only through `step` | 19.5 0 0 16 31.5 (13.4) → 29.5 0 19 29 31 (21.7) | 1.5 0.5 0.5 0 0 (0.5) → 1.5 0 0 0 0 (0.3) |
+| Reward only through `live` | 2 3.5 0 17 16 (7.7) → unchanged | 5 0 0 3.5 9 (3.5) → 5 0 0 3.5 20 (5.7) |
+| Untrained founder | 5.5 10 14 18 14 (12.3) | 4 5 17 13 12.5 (10.3) |
+
+Reading: a brain that continues alone through `live` keeps what the caregiver taught. Calm moments
+do not learn, and the two collapses of the `step` continuation (founders 1004 and 1005) do not
+happen; the price is less further improvement (founder 1003: 37.5 against 53). `live` from birth
+with reward only learns little at this budget. A motor bias of 0.3 at birth, which makes a taught
+recall chamber recall far better, harms this chain: two founders learn nothing while taught,
+reward alone learns nothing, and even `live` does not keep what was taught.

@@ -506,3 +506,25 @@ def test_oracle_and_random_controls_run_on_every_world() -> None:
     assert all(r["decisions"] == 1 for r in rows)
     routes = wo.balanced_routes(6, np.random.default_rng(0))
     assert all(r["success"] for r in ru.control_rows("oracle", {"kind": "route_cue"}, episodes=6, seed=0, routes=routes))
+
+
+def test_a_recipe_can_set_the_motor_readout_bias_at_birth_and_nothing_else():
+    world = {"kind": "cold_chain", "deadline": 10, "success_reward": 2.0, "failure_reward": -1.0}
+    recipe = {"compose": {"modules": [12, 6], "arousal": True}}
+    plain = ru.compose(recipe, 3, world, {})
+    biased = ru.compose({"compose": {**recipe["compose"], "motor_bias": 0.3}}, 3, world, {})
+    motor = np.asarray(biased.motor_index)
+    assert np.allclose(biased.brain.bias[motor], 0.3)
+    others = np.setdiff1d(np.arange(len(biased.brain.bias)), motor)
+    assert np.array_equal(biased.brain.bias[others], plain.brain.bias[others])
+    assert np.array_equal(biased.brain.efficacy, plain.brain.efficacy)
+
+
+def test_an_arm_may_continue_alone_through_another_interface(tmp_path):
+    protocol = json.loads((HERE / "protocol-p1-next.json").read_text())
+    assert protocol["arms"]["correct_then_live"]["withdrawal_adapter"] == "live"
+    protocol["arms"]["correct_then_live"]["withdrawal_adapter"] = "telepathy"
+    path = tmp_path / "bad.json"
+    path.write_text(json.dumps(protocol))
+    with pytest.raises(ValueError, match="withdrawal adapter"):
+        ru.load_protocol(path)

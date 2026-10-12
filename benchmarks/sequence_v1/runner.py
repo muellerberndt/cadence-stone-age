@@ -57,6 +57,8 @@ def load_protocol(path: Path) -> tuple[dict[str, Any], str]:
             raise ValueError(f"arm {name}: unknown caregiver {arm['caregiver']!r}")
         if arm["adapter"] == "live" and arm["caregiver"] in ("correct", "guide"):
             raise ValueError(f"arm {name}: live takes no teacher; declare an ordering first")
+        if arm.get("withdrawal_adapter", arm["adapter"]) not in ADAPTERS:
+            raise ValueError(f"arm {name}: unknown withdrawal adapter {arm['withdrawal_adapter']!r}")
     return protocol, hashlib.sha256(raw).hexdigest()
 
 
@@ -79,8 +81,17 @@ def compose(recipe: dict[str, Any], seed: int, world: dict[str, Any], extra: dic
     options.update(extra)
     if "modules" in options:
         options["modules"] = tuple(int(width) for width in options["modules"])
+    # The motor readout's bias at birth (zero in every released composition), set once after
+    # composing; it stays plastic.
+    motor_bias = float(options.pop("motor_bias", 0.0))
     probe = make_world(world, route=0)
-    return Brain.compose(inputs=probe.inputs, actions=probe.actions, seed=int(seed), **options)
+    brain = Brain.compose(inputs=probe.inputs, actions=probe.actions, seed=int(seed), **options)
+    if motor_bias:
+        graph = brain.brain
+        bias = graph.bias.copy()
+        bias[np.asarray(brain.motor_index)] = motor_bias
+        brain.learner.brain = graph.with_parameters(bias=bias)
+    return brain
 
 
 def describe(brain: Any) -> dict[str, Any]:
@@ -463,7 +474,8 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
         if protocol.get("withdrawal_episodes", 0) > 0:
             living = Brain.load(trained)
             seam = PendingOutcome(**json.loads((directory / f"{arm}-trained.seam.json").read_text()))
-            follow = ADAPTERS[spec["adapter"]](living, make_world(world, route=0).actions)
+            # the life after the caregiver leaves may go on through another interface
+            follow = ADAPTERS[spec.get("withdrawal_adapter", spec["adapter"])](living, make_world(world, route=0).actions)
             after = run_life(follow, world, Caregiver("none", 0, 1), protocol["withdrawal_episodes"],
                              life_id=f"{recipe_name}/{seed}/{arm}/withdrawal", routes=after_routes, seam=seam)
             withdrawn = directory / f"{arm}-withdrawn.npz"
