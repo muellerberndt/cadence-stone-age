@@ -207,6 +207,11 @@ class Adapter:
             self.teaching_refusals += 1
             self.ledger.consume(owner)
             return self._call(lambda: self._answer_only(x), lambda: self._answer_only(x)), 1
+        if isinstance(error, ValueError) and "feedback was accepted" in str(error):
+            # live took the outcome but its arousal could not update: answer without it
+            self.refusals += 1
+            self.ledger.consume(owner)
+            return self._call(lambda: self._answer_only(x), lambda: self._answer_only(x)), 1
         if not isinstance(error, RuntimeError) or "settle" not in str(error):
             raise error
         self.refusals += 1

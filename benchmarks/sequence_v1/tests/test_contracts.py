@@ -426,3 +426,22 @@ def test_visible_cue_control_keeps_the_cue_and_first_choice_metric() -> None:
           "first_choice": {"action": 0, "required": 1}}], 4)
     assert summary["first_choice_accuracy"] == 0.5
     assert summary["first_choice_by_route"] == {"0": 1.0, "1": 0.0}
+
+
+def test_live_arousal_refusal_after_an_accepted_outcome_answers_without_it() -> None:
+    class ArousalFailure(SpyBrain):
+        failed = False
+
+        def live(self, x, *, reward=None, done=None, decision_id=None):  # noqa: ANN001
+            if reward is not None and not self.failed:
+                self.failed = True
+                self._outcome(reward, done)  # the outcome is taken
+                raise ValueError("feedback was accepted but arousal could not update; retry")
+            return super().live(x, reward=reward, done=done, decision_id=decision_id)
+
+    spy = ArousalFailure()
+    adapter = ad.LiveAdapter(spy, 5)
+    adapter.first(wo.ColdChain().observation())
+    _, record = adapter.next(wo.ColdChain().observation(), reward=-1.0, done=False)
+    assert spy.outcomes == [-1.0] and record["refused_attempts"] == 1
+    assert adapter.ledger.consumed == [1]

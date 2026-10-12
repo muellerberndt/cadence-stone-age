@@ -174,9 +174,12 @@ def run_life(
     x = world.observation()
     if seam is None:
         action, choice = adapter.first(x)
+        choice.pop("learning", None)  # nothing was learned before a life's first action
     else:
         action, choice = adapter.resume(seam, x)
+        resumed = choice.pop("learning", {})
     episode_decisions = 0
+    resumed_learning = resumed if seam is not None else None
     while True:
         guided = caregiver.guided(decision)
         stage_before = world.stage
@@ -246,6 +249,7 @@ def run_life(
         choice = record
         events.append(event)
     counts = {
+        "resumed_learning": resumed_learning,
         "decisions": decision,
         "events": len(events),
         "episodes": len(summaries),
@@ -428,6 +432,12 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
             brain = compose(recipe, seed, world, spec["compose"])  # a different numerical arm: recompose
             if state_digest(brain, copier) == result["founder_digest"]:
                 raise RuntimeError(f"arm {arm}: its compose override changed nothing")
+            parent = Brain.load(founder_path)
+            if not (
+                np.array_equal(brain.brain.efficacy, parent.brain.efficacy)
+                and np.array_equal(brain.brain.bias, parent.brain.bias)
+            ):
+                raise RuntimeError(f"arm {arm}: its override changed the founder's initial weights")
         adapter = ADAPTERS[spec["adapter"]](brain, make_world(world, route=0).actions)
         caregiver = Caregiver(spec["caregiver"], schedule["guided"], schedule["autonomous"])
         life = run_life(adapter, world, caregiver, protocol["training_episodes"],
