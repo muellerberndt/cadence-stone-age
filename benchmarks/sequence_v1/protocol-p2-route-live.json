@@ -1,0 +1,173 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P2 development: the vanished route cue, under the delayed-credit live regime",
+  "question": "Does one continuing Brain.live life at the delayed-credit actor point learn to take the route its vanished cue named, at the one decision where only history tells the routes apart, on the development founders whose visible-cue control passed under the same regime?",
+  "note": "The same regime, recipes, arms, budgets and evaluation as protocol-p2-route-visible-live.json, with the cue shown at event 0 only (cue_persists false). Run on the founders whose visible-cue control passed in that protocol's reading of 14 October 2026 (greedy first choice right on both routes and greedy whole-route success above the founder and random controls, at 1920 episodes): delayed on founders 1001, 1002, 1004 and 1005, arena on founders 1001, 1003 and 1004 (runner --seeds), so a failure here is a memory limit and not a learning or budget limit. The causal probe p2_route_probe.py then reads every trained checkpoint: the first-choice policy of each cue branch intact, after a trace erase, after a reset and after a trace transplant from the other branch. The regime is the one the recall world validated through the live interface on Cadence 0.83.0: the composed trace of 0.82.0 (amplitude 3.0, working-memory scale 1.2, retention 0) with the key-door nursery's delayed-credit actor point (lam 0.95, gamma 0.95, critic rate 5) at actor step 0.1 (delayed) or 0.03 (arena), the body's need 0.2 per moment and a youth of 300 moments, passed to Brain.compose as arousal={need, youth}, which patches the founder arousal config. The historical recipe keeps V5's brain so the contrast with the earlier reading is paired within founders. The grade caregiver is reward-only (no label), so the live interface takes it. Budget readings are arms of their own length: the 480-episode arm lives the first 480 episodes of the 1920-episode arm's schedule from the same founder checkpoint.",
+  "scope": "component context use; development founders only; the first decision is the only one that needs history",
+  "world": {
+    "kind": "route_cue",
+    "neutral": 2,
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "cue_persists": false
+  },
+  "recipes": {
+    "delayed": {
+      "compose": {
+        "modules": [
+          32
+        ],
+        "lateral": 0.0,
+        "actor_lam": 0.95,
+        "actor_gamma": 0.95,
+        "actor_eta_critic": 5.0,
+        "actor_eta": 0.1,
+        "actor_eta_bias": 0.01,
+        "arousal": {
+          "need": 0.2,
+          "youth": 300
+        }
+      },
+      "note": "the composed trace with the delayed-credit actor point at actor step 0.1; Brain.compose(inputs=9, actions=5, modules=(32,), seed, lateral=0.0, actor_lam=0.95, actor_gamma=0.95, actor_eta_critic=5.0, actor_eta=0.1, actor_eta_bias=0.01, arousal={'need': 0.2, 'youth': 300})"
+    },
+    "arena": {
+      "compose": {
+        "modules": [
+          32
+        ],
+        "lateral": 0.0,
+        "actor_lam": 0.95,
+        "actor_gamma": 0.95,
+        "actor_eta_critic": 5.0,
+        "actor_eta": 0.03,
+        "actor_eta_bias": 0.003,
+        "arousal": {
+          "need": 0.2,
+          "youth": 300
+        }
+      },
+      "note": "the same at the arena founder's actor step 0.03"
+    },
+    "historical": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true
+      },
+      "note": "V5's brain, as in the earlier reading: Brain.compose(inputs=9, actions=5, modules=(48, 24), seed, arousal=True); compose actor step 1.0, the founder arousal config"
+    }
+  },
+  "arms": {
+    "natural_live_480": {
+      "adapter": "live",
+      "caregiver": "none",
+      "training_episodes": 480,
+      "note": "the 480-episode budget reading of natural_live: the same founder through the first 480 episodes of the same schedule"
+    },
+    "natural_live": {
+      "adapter": "live",
+      "caregiver": "none",
+      "note": "the continuing life, reward only, 1920 episodes"
+    },
+    "grade_live_480": {
+      "adapter": "live",
+      "caregiver": "grade",
+      "training_episodes": 480,
+      "note": "the 480-episode budget reading of grade_live"
+    },
+    "grade_live": {
+      "adapter": "live",
+      "caregiver": "grade",
+      "note": "the continuing life with the grade added to the pay of executed decisions in guided windows, 1920 episodes"
+    },
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none",
+      "note": "the interface control: Brain.step learns from every outcome; run for the delayed recipe only, 1920 episodes"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "caregiver_note": "a wrong first collection ends the episode, so a corrective label never reaches the decision that needs history; the arms are reward-only and graded; the grade carries no label, so Brain.live takes it",
+  "training_episodes": 1920,
+  "budget_readings": [
+    480,
+    1920
+  ],
+  "withdrawal_episodes": 0,
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader"
+  },
+  "seeds": {
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005
+    ],
+    "confirmation": [
+      2101,
+      2102,
+      2103,
+      2104,
+      2105,
+      2106,
+      2107,
+      2108,
+      2109,
+      2110,
+      2111,
+      2112,
+      2113,
+      2114,
+      2115,
+      2116,
+      2117,
+      2118,
+      2119,
+      2120
+    ],
+    "confirmation_note": "unopened until code, protocol digest, genes, thresholds and cost limits are frozen"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "primary": "first-choice accuracy and whole-route success; context-blind ceiling 0.5 at the first choice; a founder passes when its greedy first choice is right on both routes and its greedy whole-route success is above the founder and random controls; the probe's intact reading above its trace-erased reading on both routes says the working trace carries the cue"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}
