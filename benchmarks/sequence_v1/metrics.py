@@ -47,6 +47,29 @@ def uniform_chain_success_exact(actions: int, stages: int, deadline: int) -> Fra
     )
 
 
+def never_repeat_chain_success_exact(actions: int, stages: int, deadline: int) -> Fraction:
+    """Exact success of a searcher that knows nothing of the chain and never repeats a failed
+    action in the same situation within an attempt.
+
+    From Will Glynn's cadence-teachers, EXP-45 (https://github.com/WGlynn/cadence-teachers,
+    experiments/EXP-45.md), which named this searcher the right chance level for a chamber where
+    a wrong action costs nothing but a decision: on V5's chain (5 actions, 4 stages, 10
+    decisions) it succeeds with probability 190/625 = .304, two and a half times uniform random.
+    At each stage the searcher tries the untried actions in a uniformly random order, so the
+    decisions a stage takes are uniform on ``1..actions``; it succeeds when the stages' sum stays
+    within the deadline."""
+    if actions < 1 or stages < 0 or deadline < 0:
+        raise ValueError("actions is positive, stages and deadline nonnegative")
+    ways = [1]  # ways[t]: orderings of the stages so far that spend exactly t decisions
+    for _ in range(stages):
+        following = [0] * (len(ways) + actions)
+        for spent, count in enumerate(ways):
+            for cost in range(1, actions + 1):
+                following[spent + cost] += count
+        ways = following
+    return Fraction(sum(ways[: deadline + 1]), actions**stages)
+
+
 def first_passage(advance: Sequence[float], deadline: int) -> list[float]:
     """Probability that the chain completes exactly at decision ``t`` (index t-1)."""
     stages = len(advance)

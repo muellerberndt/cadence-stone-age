@@ -1,0 +1,200 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P3 generalization: the chain taught under four weathers, read under four it never met",
+  "credit": "Will Glynn, cadence-teachers EXP-48 (https://github.com/WGlynn/cadence-teachers): three irrelevant weather bits, teaching under the even-parity combinations and testing under the odd-parity ones",
+  "question": "On fresh founders, with and without the episodic memory: does a chain taught under four weathers hold under four weathers it never met, stage by stage, or did the brain record the taught situations?",
+  "scope": "invariance to irrelevant features in unseen combinations; the inventory takes the same four values at test as in teaching, so this is not a new recipe or a longer chain",
+  "world": {
+    "kind": "weather_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "seen": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        0
+      ]
+    ],
+    "unseen": [
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        1
+      ]
+    ],
+    "note": "V5's chain with three weather bits after its seven inputs, fixed for an episode and irrelevant to every rule; lives draw from the even-parity weathers, frozen evaluations cycle through the odd-parity ones"
+  },
+  "recipes": {
+    "defaults": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true
+      },
+      "note": "V5's layout at the library's defaults; the memory arms add memory_choice=True"
+    }
+  },
+  "arms": {
+    "correct_step": {
+      "adapter": "step",
+      "caregiver": "correct"
+    },
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none"
+    },
+    "correct_step_memory": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "compose": {
+        "memory_choice": true
+      }
+    },
+    "natural_step_memory": {
+      "adapter": "step",
+      "caregiver": "none",
+      "compose": {
+        "memory_choice": true
+      }
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 0,
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 0,
+    "note": "whole-chain success under the unseen weathers in turn; per-state reading of every stage under each seen and each unseen weather (16 situations each)"
+  },
+  "seeds": {
+    "historical": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012
+    ],
+    "confirmation": [
+      2101,
+      2102,
+      2103,
+      2104,
+      2105,
+      2106,
+      2107,
+      2108,
+      2109,
+      2110,
+      2111,
+      2112,
+      2113,
+      2114,
+      2115,
+      2116,
+      2117,
+      2118,
+      2119,
+      2120
+    ],
+    "confirmation_note": "unopened until code, protocol digest, genes, thresholds and cost limits are frozen",
+    "development_note": "twelve founders, as the twelve seeds of EXP-48"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "primary": "the seen-minus-unseen per-state gap of each arm, and each memory arm minus its plain twin under unseen weather, founder-paired",
+    "pairs": [
+      [
+        "correct_step_memory",
+        "correct_step"
+      ],
+      [
+        "natural_step_memory",
+        "natural_step"
+      ]
+    ]
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}

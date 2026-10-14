@@ -1,0 +1,274 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P3 content: a correcting caregiver against a random-label twin at three lesson lengths",
+  "credit": "Will Glynn, cadence-teachers EXP-52 and EXP-53 (https://github.com/WGlynn/cadence-teachers): the random-label null teacher that speaks at the correcting caregiver's moments, lessons of 40, 120 and 240 episodes, 20 episodes alone through live, per-state accuracy under unseen weather",
+  "question": "On fresh founders with the episodic memory: does the content of the caregiver's label matter, or does a student learn as much from being corrected with a random action?",
+  "scope": "the teaching path of Brain.step(teacher=...) on executed mistakes in guided windows; one chamber, one schedule",
+  "world": {
+    "kind": "weather_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "seen": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        0
+      ]
+    ],
+    "unseen": [
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        1
+      ]
+    ],
+    "note": "V5's chain with three weather bits after its seven inputs, fixed for an episode and irrelevant to every rule; lives draw from the even-parity weathers, frozen evaluations cycle through the odd-parity ones"
+  },
+  "recipes": {
+    "memory": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "V5's layout at the library's defaults with the episodic memory"
+    }
+  },
+  "arms": {
+    "correct_40": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 40,
+      "withdrawal_adapter": "live"
+    },
+    "random_label_40": {
+      "adapter": "step",
+      "caregiver": "random_label",
+      "training_episodes": 40,
+      "withdrawal_adapter": "live"
+    },
+    "natural_40": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 40,
+      "withdrawal_adapter": "live"
+    },
+    "correct_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "withdrawal_adapter": "live"
+    },
+    "random_label_120": {
+      "adapter": "step",
+      "caregiver": "random_label",
+      "training_episodes": 120,
+      "withdrawal_adapter": "live"
+    },
+    "natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "withdrawal_adapter": "live"
+    },
+    "correct_240": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 240,
+      "withdrawal_adapter": "live"
+    },
+    "random_label_240": {
+      "adapter": "step",
+      "caregiver": "random_label",
+      "training_episodes": 240,
+      "withdrawal_adapter": "live"
+    },
+    "natural_240": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 240,
+      "withdrawal_adapter": "live"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 20,
+  "withdrawal": "every arm lives 20 episodes alone through live from its seam (EXP-53's vest), then a frozen copy is read",
+  "evaluation": {
+    "episodes": 100,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 0,
+    "note": "whole-chain success under the unseen weathers in turn; per-state reading under each seen and each unseen weather"
+  },
+  "seeds": {
+    "historical": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019,
+      1020,
+      1021,
+      1022,
+      1023,
+      1024
+    ],
+    "confirmation": [
+      2101,
+      2102,
+      2103,
+      2104,
+      2105,
+      2106,
+      2107,
+      2108,
+      2109,
+      2110,
+      2111,
+      2112,
+      2113,
+      2114,
+      2115,
+      2116,
+      2117,
+      2118,
+      2119,
+      2120
+    ],
+    "confirmation_note": "unopened until code, protocol digest, genes, thresholds and cost limits are frozen",
+    "development_note": "twenty-four founders, as the twenty-four students per lesson length of EXP-53"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "primary": "content: per-state accuracy under unseen weather after the life alone, correcting arm minus its random-label twin at each lesson length, founder-paired",
+    "pairs": [
+      [
+        "correct_40",
+        "random_label_40"
+      ],
+      [
+        "correct_40",
+        "natural_40"
+      ],
+      [
+        "random_label_40",
+        "natural_40"
+      ],
+      [
+        "correct_120",
+        "random_label_120"
+      ],
+      [
+        "correct_120",
+        "natural_120"
+      ],
+      [
+        "random_label_120",
+        "natural_120"
+      ],
+      [
+        "correct_240",
+        "random_label_240"
+      ],
+      [
+        "correct_240",
+        "natural_240"
+      ],
+      [
+        "random_label_240",
+        "natural_240"
+      ]
+    ]
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}

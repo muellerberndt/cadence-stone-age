@@ -1,4 +1,5 @@
-"""Worlds of the sequence instrument: the V5 COLD chain and the vanished route cue.
+"""Worlds of the sequence instrument: the V5 COLD chain, the vanished route cue, and the COLD
+chain under a weather that has nothing to do with it.
 
 A world defines what is correct independently of the brain. Its observation never carries
 the required action, the hidden route, the step count or the remaining deadline; those live
@@ -150,6 +151,74 @@ class ColdChain:
         )
 
 
+# -- the COLD chain under an irrelevant weather (P3)
+#
+# Adapted from Will Glynn's cadence-teachers, EXP-48 "does 0.83's episodic memory generalize the
+# Stone Age chain, or record the taught situations?" (https://github.com/WGlynn/cadence-teachers,
+# experiments/EXP-48.md and exp/EXP-48_generalize_or_record.py). His design, kept exactly: three
+# weather bits after V5's seven inputs, fixed for an attempt; teaching under the four even-parity
+# combinations, testing under the four odd-parity ones, so every single bit value is seen in
+# teaching and only the combinations are new.
+
+WEATHER_BITS = 3
+WEATHER_SEEN = ((0, 0, 0), (0, 1, 1), (1, 0, 1), (1, 1, 0))  # even parity: taught
+WEATHER_UNSEEN = ((0, 0, 1), (0, 1, 0), (1, 0, 0), (1, 1, 1))  # odd parity: never taught
+
+
+def weather_cell(cell: Any) -> tuple[int, ...]:
+    """A weather as a tuple of 0/1 bits; an episode's schedule cell or a plain sequence."""
+    if isinstance(cell, dict):
+        cell = cell["weather"]
+    bits = tuple(int(b) for b in cell)
+    if len(bits) != WEATHER_BITS or any(b not in (0, 1) for b in bits):
+        raise ValueError(f"a weather is {WEATHER_BITS} bits of 0 or 1, got {cell!r}")
+    return bits
+
+
+class WeatherChain(ColdChain):
+    """V5's COLD chain whose observation also carries a weather, fixed for the episode and
+    irrelevant to every rule: the stage, the required action, the deadline and the pay are
+    ColdChain's. A brain that learned "inventory to action" ignores the weather; one that keyed
+    what it learned on the whole situation meets new situations under an unseen weather."""
+
+    name = "weather_chain"
+    inputs = V5_INPUTS + WEATHER_BITS
+
+    def __init__(self, weather: Any = WEATHER_SEEN[0], **chain: Any) -> None:
+        super().__init__(**chain)
+        self.weather = weather_cell(weather)
+
+    def observation(self) -> np.ndarray:
+        return np.concatenate(
+            [super().observation(), np.asarray([self.weather], dtype=np.float64)], axis=1
+        )
+
+
+def weather_schedule(episodes: int, rng: np.random.Generator,
+                     weathers: tuple[tuple[int, ...], ...] = WEATHER_SEEN) -> list[dict]:
+    """One weather per episode, drawn uniformly and independently from ``weathers`` (EXP-48's
+    teaching draw)."""
+    return [{"weather": list(weathers[int(rng.integers(len(weathers)))])} for _ in range(episodes)]
+
+
+def weather_cycle(episodes: int, weathers: tuple[tuple[int, ...], ...] = WEATHER_UNSEEN) -> list[dict]:
+    """The evaluation's weathers in turn, episode ``i`` under ``weathers[i % len(weathers)]``
+    (EXP-48's test order)."""
+    return [{"weather": list(weathers[i % len(weathers)])} for i in range(episodes)]
+
+
+def chain_situations(spec: dict[str, Any], cell: Any = None) -> list[tuple[int, np.ndarray, int]]:
+    """Every stage of a chain world as ``(stage, observation, required action)``: the
+    observation the world shows at that stage, reached through its own rules."""
+    world = make_world(spec, cell)
+    out = []
+    while not world.done:
+        stage, required = world.stage, world.required()
+        out.append((stage, world.observation().copy(), int(required)))
+        world.step(required)
+    return out
+
+
 # -- the vanished route cue (P2)
 
 ROUTE_INPUTS = 9  # warmth, wood, stone, fire, wood/2, stone/2, world cue, cue A, cue B
@@ -277,9 +346,9 @@ class RouteCue:
 
 
 def make_world(spec: dict[str, Any], route: Any = None) -> Any:
-    """A fresh episode world from a protocol entry; ``route`` is the episode's hidden cell from
-    a balanced schedule: the route of a route cue episode, or a recall episode's condition,
-    value and distractor seed."""
+    """A fresh episode world from a protocol entry; ``route`` is the episode's cell from its
+    schedule: the hidden route of a route cue episode, a recall episode's condition, value and
+    distractor seed, or the weather of a weather chain episode."""
     kind = spec["kind"]
     if kind == "recall":
         cell = route if isinstance(route, dict) else {"condition": "clean-0", "value": int(route or 0), "seed": 0}
@@ -288,6 +357,15 @@ def make_world(spec: dict[str, Any], route: Any = None) -> Any:
                       failure_reward=spec.get("failure_reward", -1.0))
     if kind == "cold_chain":
         return ColdChain(
+            deadline=spec.get("deadline", V5_DEADLINE),
+            success_reward=spec.get("success_reward", V5_SUCCESS),
+            failure_reward=spec.get("failure_reward", V5_FAILURE),
+        )
+    if kind == "weather_chain":
+        # a probe for the alphabet and the input width passes no cell: the first taught weather
+        weather = WEATHER_SEEN[0] if route is None or isinstance(route, int) else route
+        return WeatherChain(
+            weather,
             deadline=spec.get("deadline", V5_DEADLINE),
             success_reward=spec.get("success_reward", V5_SUCCESS),
             failure_reward=spec.get("failure_reward", V5_FAILURE),
