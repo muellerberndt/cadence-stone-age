@@ -17,6 +17,7 @@ with explicit custody, separate random streams and complete receipts.
 | `protocol-p1-drift.json` | The taught chain read state by state over 80 episodes alone, through `live` and, from the same taught brain, through `step`; with and without the episodic memory. |
 | `protocol-p3-generalization.json` | The weather chain: taught under the even-parity weathers, read under the odd-parity ones, with and without the episodic memory. |
 | `protocol-p3-content.json` | The weather chain: a correcting caregiver against a random-label twin and an untaught twin, at lessons of 40, 120 and 240 episodes, then 20 episodes alone through `live`. |
+| `protocol-p1-drift-reset.json`, `protocol-p3-content-reset.json` | The same designs in V5's order (`withdrawal_reset`), as the notebook ran them; the drift protocol names EXP-47's seeds 42 to 53 for the replica check. |
 | `tests/test_contracts.py` | Scorer, world rules, custody with a spy brain, probe isolation, seeded evaluation and exact save/load continuation on real brains; the searcher's exact value against enumeration, the weather chain's rules and splits, the random-label teacher's moments, the per-state reading against a direct reset-and-act read, an unchanged life when read at checkpoints, and twin arms. |
 
 ```sh
@@ -31,7 +32,10 @@ python benchmarks/sequence_v1/runner.py --protocol benchmarks/sequence_v1/protoc
   discards the action that call issues and resets the brain. Here the last outcome is held in
   `*.seam.json` beside the checkpoint and delivered exactly once when the life resumes.
 - **Withdrawal.** V5 resets transient state before the caregiver-free life. Here that life
-  resumes from the seam with the trace, activity and pending action intact.
+  resumes from the seam with the trace, activity and pending action intact. A protocol that
+  declares `withdrawal_reset: true` keeps V5's order instead: the lesson's last outcome arrives
+  through the teaching interface with a fresh episode's observation, the action that call
+  issues is discarded, and `Brain.reset` precedes the life alone.
 - **Evaluation streams.** V5 samples evaluation actions with the checkpoint's own generator.
   Here each frozen copy gets a declared stream per founder and mode, shared by every arm of
   that founder.

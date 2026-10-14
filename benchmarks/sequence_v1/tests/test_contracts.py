@@ -775,3 +775,51 @@ def test_weather_founder_reads_seen_and_unseen_and_a_random_label_arm_runs(tmp_p
     teaching = result["arms"]["random_label_40"]["training"]["counts"]["teaching"]
     assert teaching["labels"] > 0
     assert result["arms"]["searcher"]["frozen"]["sampled"]["summary"]["episodes"] == 4
+
+
+@needs_cadence
+def test_reset_withdrawal_starts_from_the_brain_of_v5s_own_order(tmp_path: Path) -> None:
+    """``withdrawal_reset``: the lesson's held outcome is delivered through the teaching
+    interface with a fresh episode's observation, then ``Brain.reset``. The brain the life alone
+    starts from equals the one of V5's loop as cadence-teachers' EXP-45 writes it out."""
+    import probes as pr
+
+    instrument = _small_brain(23)
+    life = ru.run_life(ad.StepAdapter(instrument, 5), COLD, ru.Caregiver("correct", 4, 8), 5, life_id="i")
+    ad.StepAdapter(instrument, 5).resume(life.seam, wo.ColdChain().observation())
+    instrument.reset()
+
+    v5 = _small_brain(23)
+    world, decisions = wo.ColdChain(), 0
+    action = int(v5.step(world.observation())[0])
+    for _ in range(5):
+        while True:
+            guided = decisions % 12 < 4
+            outcome = world.step(action)
+            teacher = np.array([world.required()]) if guided and not outcome.advanced and not outcome.done else None
+            decisions += 1
+            if outcome.done:
+                world = wo.ColdChain()
+                action = int(v5.step(world.observation(), reward=np.array([outcome.reward]), done=np.array([True]))[0])
+                break
+            action = int(v5.step(world.observation(), reward=np.array([outcome.reward]), done=np.array([False]),
+                                 teacher=teacher)[0])
+    v5.reset()
+    copier = pr.Copier(tmp_path / "c")
+    assert pr.state_digest(instrument, copier) == pr.state_digest(v5, copier)
+
+
+@needs_cadence
+def test_a_reset_withdrawal_begins_afresh_and_the_flag_is_checked(tmp_path: Path) -> None:
+    protocol = json.loads((HERE / "protocol-p1-drift.json").read_text())
+    protocol["recipes"] = {"small": {"compose": {"modules": [12], "arousal": True}}}
+    protocol.update(training_episodes=3, withdrawal_episodes=3, withdrawal_checkpoints=[1], withdrawal_reset=True)
+    protocol["evaluation"].update(episodes=2, per_state_samples=0)
+    result = ru.run_founder(protocol, 8, ["correct_then_live"], "small", tmp_path)
+    counts = result["arms"]["correct_then_live"]["withdrawal"]["counts"]
+    assert counts["resumed_learning"] is None and counts["episodes"] == 3 and counts["checkpoints"] == [1]
+    protocol["withdrawal_reset"] = "yes"
+    path = tmp_path / "bad.json"
+    path.write_text(json.dumps(protocol))
+    with pytest.raises(ValueError, match="withdrawal_reset"):
+        ru.load_protocol(path)

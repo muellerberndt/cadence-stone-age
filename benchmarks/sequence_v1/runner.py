@@ -95,6 +95,8 @@ def load_protocol(path: Path) -> tuple[dict[str, Any], str]:
         raise ValueError("withdrawal checkpoints are distinct and increasing")
     if int(protocol["evaluation"].get("per_state_samples", 0)) < 0:
         raise ValueError("per-state samples are a nonnegative count")
+    if type(protocol.get("withdrawal_reset", False)) is not bool:
+        raise ValueError("withdrawal_reset is true or false")
     return protocol, hashlib.sha256(raw).hexdigest()
 
 
@@ -332,12 +334,13 @@ def run_withdrawal(
     episodes: int,
     *,
     life_id: str,
-    seam: PendingOutcome,
+    seam: PendingOutcome | None,
     routes: list[Any] | None = None,
     marks: list[int] | tuple[int, ...] = (),
     at_mark: Any = None,
 ) -> Life:
-    """The caregiver-free life of ``episodes`` episodes, resumed from ``seam``. At every mark the
+    """The caregiver-free life of ``episodes`` episodes, resumed from ``seam`` (or begun afresh
+    when there is none). At every mark the
     life stops at a seam, ``at_mark(mark, seam)`` saves and reads a copy, and the same adapter
     resumes the life from that seam, so the stops leave it exactly as it would have run
     (``tests/test_contracts.py`` checks this). Reading a taught brain over time while it lives
@@ -725,7 +728,16 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
             taught[arm] = {"checkpoint": trained, "seam": seam_path, "result": arm_result}
         if protocol.get("withdrawal_episodes", 0) > 0:
             living = Brain.load(trained)
-            seam = PendingOutcome(**json.loads(seam_path.read_text()))
+            seam: PendingOutcome | None = PendingOutcome(**json.loads(seam_path.read_text()))
+            if protocol.get("withdrawal_reset", False):
+                # V5's order, which cadence-teachers' EXP-46, EXP-47 and EXP-53 keep: the lesson's
+                # last outcome arrives through the teaching interface with a fresh episode's first
+                # observation, the action that call issues is discarded, and Brain.reset starts the
+                # stream afresh before the life alone begins.
+                closing = ADAPTERS[spec["adapter"]](living, make_world(world, route=0).actions)
+                closing.resume(seam, make_world(world, None if after_routes is None else after_routes[0]).observation())
+                living.reset()
+                seam = None
             # the life after the caregiver leaves may go on through another interface
             follow = ADAPTERS[spec.get("withdrawal_adapter", spec["adapter"])](living, make_world(world, route=0).actions)
             checkpoints: dict[str, Any] = {}
