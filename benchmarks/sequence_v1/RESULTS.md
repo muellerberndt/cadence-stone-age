@@ -65,6 +65,127 @@ decision, because a wrong collection costs −1 at once while waiting defers the
 these budgets the chamber measures acquisition of the chain, not memory; its causal probe
 (`p2_route_probe.py`) is ready for a chamber whose visible control passes.
 
+### Under the delayed-credit live regime (14 October 2026)
+
+`protocol-p2-route-visible-live.json`, development founders 1001 to 1005, the published
+`cadence-net==0.83.0` wheel (SHA-256 `6ea5eb6b…`), NumPy 2.5.4, Python 3.13.7, macOS arm64, one BLAS
+thread, instrument commit `376b8c4`. The regime is the one the recall world validated through `live`:
+the composed trace (amplitude 3.0, scale 1.2, retention 0) with the delayed-credit actor point (lam
+0.95, gamma 0.95, critic rate 5) at actor step 0.1 (`delayed`) or 0.03 (`arena`), the body's need 0.2
+per moment and a youth of 300 moments, passed to `Brain.compose` as `arousal={"need": 0.2, "youth":
+300}`; V5's brain (`historical`: modules (48, 24), compose actor step 1.0, the founder arousal) is the
+paired contrast. Arms through `live` with and without the grade (the grade carries no label, so
+`live` takes it), 1920 training episodes with a 480-episode reading as an arm of its own length (the
+same founder through the first 480 episodes of the same schedule) and a `step` control for the
+`delayed` recipe; 200 frozen episodes per mode, `Brain.reset` per episode. Whole-route success and
+first-choice accuracy in %, per founder in brackets. Uniform random completes 7.7% and takes the
+right first collection in 20% of episodes; a constant first collection reads 50 at the first choice.
+A founder passes the control when its greedy first choice is right on both routes and its greedy
+whole-route success is above the founder and random controls.
+
+| Recipe | Arm | Episodes | Success, sampled | Success, greedy | First choice, sampled | First choice, greedy | Greedy first choice right on both routes | Passes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| delayed | Founder | 0 | 9.5 [14 10 4 9 10] | 0 | 21.9 [22 24 16 25 22] | 30.0 [50 0 0 50 50] | none | none |
+| delayed | Natural, live | 480 | 15.2 [28 22 3 9 14] | 0 | 22.2 [32 26 2 31 21] | 20.0 [0 0 0 50 50] | none | none |
+| delayed | Natural, live | 1920 | 42.1 [86 30 0 64 30] | 20.0 [100 0 0 0 0] | 52.0 [78 28 52 50 52] | 80.0 [100 50 50 100 100] | 1001, 1004, 1005 | 1001 |
+| delayed | Grade, live | 480 | 26.3 [35 22 18 22 34] | 0 | 28.5 [36 19 16 31 40] | 70.0 [100 50 0 100 100] | 1001, 1004, 1005 | none |
+| delayed | Grade, live | 1920 | 59.5 [24 96 0 96 82] | 60.0 [0 100 0 100 100] | 62.1 [38 72 50 81 68] | 80.0 [50 100 50 100 100] | 1002, 1004, 1005 | 1002, 1004, 1005 |
+| delayed | Natural, step | 1920 | 40.8 [0 96 4 100 4] | 40.0 [0 100 0 100 0] | 52.9 [0 88 35 92 49] | 60.0 [0 100 50 100 50] | 1002, 1004 | 1002, 1004 |
+| arena | Founder | 0 | 9.5 [14 10 4 9 10] | 0 | 21.9 [22 24 16 25 22] | 30.0 [50 0 0 50 50] | none | none |
+| arena | Natural, live | 480 | 21.8 [29 18 18 23 22] | 0 | 26.8 [30 24 22 28 29] | 30.0 [50 0 0 50 50] | none | none |
+| arena | Natural, live | 1920 | 26.5 [41 16 20 28 28] | 0 | 29.0 [44 16 21 34 30] | 50.0 [50 0 0 100 100] | 1004, 1005 | none |
+| arena | Grade, live | 480 | 29.4 [36 22 32 32 25] | 0 | 29.4 [36 18 23 42 28] | 60.0 [50 50 0 100 100] | 1004, 1005 | none |
+| arena | Grade, live | 1920 | 65.0 [74 40 84 69 57] | 50.0 [100 0 100 50 0] | 46.6 [64 42 48 41 38] | 90.0 [100 50 100 100 100] | 1001, 1003, 1004, 1005 | 1001, 1003, 1004 |
+| historical | Founder | 0 | 12.2 [10 13 10 10 18] | 0 | 20.2 [18 23 26 15 19] | 10.0 [0 0 50 0 0] | none | none |
+| historical | Natural, live | 480 and 1920 | 5.5 [0 0 16 11 0] | 0 | 10.9 [2 0 23 16 14] | 10.0 [0 0 50 0 0] | none | none |
+| historical | Grade, live | 480 and 1920 | 8.9 [0 15 9 8 12] | 0 | 17.6 [2 25 24 14 23] | 30.0 [0 100 0 0 50] | 1002 | none |
+
+Founder-paired differences from uniform random at 1920 episodes (sampled, percentage points,
+bootstrap 95% over founders): `delayed` natural live +34.4 [+9.9, +63.2] (four founders up), grade
+live +51.8 [+15.7, +85.1] (four up), step +33.1 [−5.2, +71.9] (two up); `arena` natural live +18.8
+[+10.7, +26.9] and grade live +57.3 [+42.7, +69.2] (five up each); `historical` natural live −2.2
+[−7.5, +4.0] and grade live +1.2 [−2.9, +5.1]. At 480 episodes the greedy policy of every arm and
+recipe times out in all 1,000 episodes: where its first collection is right, on both routes in three
+founders of the graded `delayed` arm, a later stage fails. The sampled policy of the `arena` arms and
+of the graded `delayed` arm is above random at 480 episodes in five founders of five. The
+`historical` readings at 480 and 1920 episodes are identical in every founder.
+
+The training lives at 1920 episodes: the life's own success over all episodes and over its last
+480, and the share of decisions answered in the aroused mode (%, per founder):
+
+| Recipe, arm | Life success, all | Last 480 | Aroused decisions, all | Last 480 |
+| --- | --- | --- | --- | --- |
+| delayed, natural live | 21.2 [47 16 11 16 17] | 32.5 [100 16 6 19 21] | 94.0 [70 100 100 100 100] | 79.9 [0 100 100 100 100] |
+| delayed, grade live | 27.3 [16 27 8 42 43] | 52.9 [15 59 5 86 100] | 88.6 [100 92 100 78 72] | 59.3 [100 66 100 31 0] |
+| delayed, natural step | 45.3 [2 51 59 64 51] | 73.0 [0 96 87 98 84] | | |
+| arena, natural live | 16.4 [20 14 18 14 16] | 18.6 [25 13 20 15 20] | 100 | 100 |
+| arena, grade live | 30.4 [44 16 53 22 17] | 53.6 [100 18 100 30 20] | 89.6 [81 100 68 100 100] | 59.8 [0 99 0 99 100] |
+| historical, natural live | 0.1 [0 0 0 0 0] | 0.0 | 0.4 [0 0 0 0 0] | 0.0 |
+| historical, grade live | 0.0 [0 0 0 0 0] | 0.0 | 0.3 [0 0 0 0 0] | 0.0 |
+
+Reading: the visible-cue control passes under the delayed-credit live regime on four founders of
+five with the `delayed` recipe (1001 with reward alone, 1002, 1004 and 1005 with the grade) and on
+three of five with `arena` (1001, 1003 and 1004 with the grade; 1004 completes one route), where
+V5's brain fails on every founder as it did in the earlier reading. Through `live`, V5's brain is
+calm after its youth and learns nothing, so its two budget readings are one reading; the regime's
+brains stay aroused through most of their lives and the ones that pass settle into a calm routine
+that completes the route in every one of their last 480 episodes. The passing founders differ by
+arm: the grade carries 1002, 1004 and 1005, reward alone carries 1001, and founder 1003 learns the
+route in no arm of the `delayed` recipe. The `step` control passes on 1002 and 1004; its lives on
+1003 and 1005 reach 95 to 98% success in a 120-episode block and fall to 12 and 46% over their last
+24 episodes, so their seam readings are of a policy that moved late. Every greedy whole-route
+failure of the regime's arms at 1920 episodes is a timeout or a lock at the first collection; no
+arm answers with the founder's constant.
+
+**The vanished cue on the passing founders.** `protocol-p2-route-live.json` (the same regime, arms
+and budgets, the cue at event 0 only), instrument commit `9a39834`, run on the founders whose
+visible control passed: `delayed` on 1001, 1002, 1004 and 1005 and `arena` on 1001, 1003 and 1004.
+Uniform random completes 7.5 and 7.8%.
+
+| Recipe | Arm | Episodes | Success, sampled | Success, greedy | First choice, sampled | First choice, greedy | Greedy first choice per founder |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| delayed | Founder | 0 | 8.8 [12 10 6 8] | 0 | 19.6 [21 18 18 22] | 12.5 [0 0 50 0] | craft fire; warm up; stone; stone on A and wood on B |
+| delayed | Natural, live | 480 | 18.1 [14 22 17 20] | 0 | 16.9 [11 20 16 20] | 0 | craft fire or warm up in every founder |
+| delayed | Natural, live | 1920 | 20.2 [28 20 14 20] | 0 | 17.5 [18 18 14 20] | 0 | craft fire or warm up in every founder |
+| delayed | Grade, live | 480 | 24.5 [34 20 28 17] | 0 | 20.4 [20 21 20 22] | 25.0 [0 50 50 0] | craft fire; wood; wood on A and craft fire on B; warm up |
+| delayed | Grade, live | 1920 | 27.0 [1 42 24 40] | 25.0 [0 50 0 50] | 34.0 [42 24 32 38] | 50.0 [50 50 50 50] | wood in every founder |
+| delayed | Natural, step | 1920 | 35.1 [34 44 34 30] | 12.5 [0 50 0 0] | 18.8 [19 20 17 20] | 12.5 [0 50 0 0] | craft fire; stone; warm up; craft fire |
+| arena | Founder | 0 | 8.0 [12 6 6] | 0 | 18.2 [21 16 18] | 16.7 [0 0 50] | craft fire; craft fire; stone |
+| arena | Natural, live | 480 | 21.3 [23 22 20] | 0 | 17.0 [18 18 15] | 0 | craft fire; craft fire; wait |
+| arena | Natural, live | 1920 | 16.0 [16 20 12] | 0 | 12.7 [14 11 12] | 0 | craft fire; craft fire; warm up |
+| arena | Grade, live | 480 | 28.8 [39 26 22] | 16.7 [50 0 0] | 20.2 [27 14 19] | 16.7 [50 0 0] | stone; craft fire; wait |
+| arena | Grade, live | 1920 | 29.7 [29 37 23] | 0 | 14.3 [18 12 13] | 0 | craft fire in every founder |
+
+The causal probe (`p2_route_probe.py`) on every trained checkpoint: two copies of the frozen brain
+live the cue phase of route A and of route B and face the byte-identical first decision. The
+probability of the route's required first collection, A / B per founder, intact and after a trace
+erase; the sham round trip equals the intact reading in all 24 and 15 checkpoints, and
+`Brain.reset` reads as the trace erase in all 78 readings:
+
+| Recipe, arm, 1920 episodes | Intact, A / B per founder | After a trace erase | Both routes right, greedy |
+| --- | --- | --- | --- |
+| delayed, natural live | 0.19/0.19, 0.17/0.18, 0.16/0.16, 0.19/0.19 | 0.19/0.20, 0.16/0.17, 0.16/0.16, 0.19/0.19 | 0 of 4 |
+| delayed, grade live | 0.69/0.13, 0.35/0.15, 0.68/0.02, 0.38/0.30 | 0.74/0.07, 0.33/0.15, 0.58/0.04, 0.26/0.30 | 0 of 4 |
+| delayed, natural step | 0.18/0.20, 0.20/0.21, 0.14/0.23, 0.19/0.20 | 0.18/0.20, 0.20/0.21, 0.13/0.28, 0.19/0.20 | 0 of 4 |
+| arena, natural live | 0.13/0.15, 0.10/0.09, 0.16/0.16 | 0.16/0.17, 0.14/0.14, 0.16/0.16 | 0 of 3 |
+| arena, grade live | 0.18/0.19, 0.16/0.14, 0.16/0.17 | 0.18/0.19, 0.17/0.18, 0.16/0.17 | 0 of 3 |
+
+Reading: with the cue vanished, no founder of either recipe passes. The reward-only lives stay
+aroused to the end and their greedy first choice is to craft or to warm up, with nothing collected;
+the graded `delayed` lives settle on wood first, the context-blind constant that reads 50 at the
+first choice and completes route A alone (greedy 50 on 1002 and 1005), and the graded `arena` lives
+craft first. The probe finds the first-decision policy the same after cue A
+and after cue B in every checkpoint, within 0.12 of itself after a trace erase, and unmoved by the
+other branch's trace, so the working trace of this regime carries nothing of the cue across the two
+neutral events at the decision, and the lives' first choices over their last 480 episodes are at
+chance and independent of the previous episode's route. The same probe on the brains trained with
+the cue visible finds the cue carried in two checkpoints of 30 in the `delayed` recipe, both
+`step`-trained (founders 1002 and 1004: both routes right intact, 0.85/0.66 and 0.87/0.87; route B
+lost after a trace erase, 0.79/0.03 and 0.80/0.05, and lost with the other branch's trace), and in
+none of 25 in `arena`. The chamber measures memory on these founders under this regime: the visible
+control passes and the vanished cue fails, on the reward path and on the graded path, at 480 and at
+1920 episodes.
+
 ## P1 development on fresh founders
 
 `runner.py --protocol protocol.json`, development founders 1001 to 1005, 120 training episodes
