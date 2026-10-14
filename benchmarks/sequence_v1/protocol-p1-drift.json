@@ -1,0 +1,190 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P1 drift: the taught chain read state by state over the life alone, through live and through step",
+  "credit": "Will Glynn, cadence-teachers EXP-46 and EXP-47 (https://github.com/WGlynn/cadence-teachers): the per-state reading beside whole-chain success, and the two continuations from one taught brain read at 10, 20, 40 and 80 episodes alone",
+  "question": "On fresh founders, with and without the episodic memory: after the caregiver leaves, does each stage of the taught chain hold, read state by state and over time, when the life goes on through live and when the same taught brain goes on through step?",
+  "scope": "component prerequisite behavior in a fully observed world; a memoryless stage-aware policy solves it, so it tests no memory",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "memory": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "V5's layout at the library's defaults with the episodic memory, Brain.compose(..., memory_choice=True)"
+    },
+    "plain": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true
+      },
+      "note": "the same layout without the episodic memory"
+    }
+  },
+  "arms": {
+    "correct_then_live": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "withdrawal_adapter": "live"
+    },
+    "correct_then_step": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "withdrawal_adapter": "step",
+      "twin_of": "correct_then_live",
+      "note": "continues from its twin's taught brain and seam"
+    },
+    "grade_then_live": {
+      "adapter": "step",
+      "caregiver": "grade",
+      "withdrawal_adapter": "live"
+    },
+    "grade_then_step": {
+      "adapter": "step",
+      "caregiver": "grade",
+      "withdrawal_adapter": "step",
+      "twin_of": "grade_then_live",
+      "note": "continues from its twin's taught brain and seam"
+    },
+    "natural_then_live": {
+      "adapter": "step",
+      "caregiver": "none",
+      "withdrawal_adapter": "live"
+    },
+    "natural_then_step": {
+      "adapter": "step",
+      "caregiver": "none",
+      "withdrawal_adapter": "step",
+      "twin_of": "natural_then_live",
+      "note": "continues from its twin's taught brain and seam"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal_checkpoints": [
+    10,
+    20,
+    40
+  ],
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; at each checkpoint it stops at a seam, a frozen copy is read, and the same life resumes",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 300,
+    "note": "frozen copies with their own action stream; per-state reading of every stage from a reset copy, greedy, plus 300 sampled draws per stage for the memoryless prediction"
+  },
+  "seeds": {
+    "historical": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012
+    ],
+    "confirmation": [
+      2101,
+      2102,
+      2103,
+      2104,
+      2105,
+      2106,
+      2107,
+      2108,
+      2109,
+      2110,
+      2111,
+      2112,
+      2113,
+      2114,
+      2115,
+      2116,
+      2117,
+      2118,
+      2119,
+      2120
+    ],
+    "confirmation_note": "unopened until code, protocol digest, genes, thresholds and cost limits are frozen",
+    "development_note": "twelve founders, as the twelve seeds of EXP-46 and EXP-47"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "primary": "per-state accuracy and founders with every stage right after 80 episodes alone, live against step, founder-paired",
+    "pairs": [
+      [
+        "correct_then_live",
+        "correct_then_step"
+      ],
+      [
+        "grade_then_live",
+        "grade_then_step"
+      ],
+      [
+        "natural_then_live",
+        "natural_then_step"
+      ]
+    ]
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}

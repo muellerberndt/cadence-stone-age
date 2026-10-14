@@ -528,3 +528,250 @@ def test_an_arm_may_continue_alone_through_another_interface(tmp_path):
     path.write_text(json.dumps(protocol))
     with pytest.raises(ValueError, match="withdrawal adapter"):
         ru.load_protocol(path)
+
+
+# -- tests adapted from Will Glynn's cadence-teachers (https://github.com/WGlynn/cadence-teachers):
+#    the never-repeat searcher (EXP-45), per-state reading (EXP-45, EXP-46, EXP-48), the weather
+#    split (EXP-48), the random-label null teacher (EXP-52, EXP-53) and the life alone read over
+#    time from one taught brain (EXP-47)
+
+WEATHER = {"kind": "weather_chain", "deadline": 10, "success_reward": 2.0, "failure_reward": -1.0}
+
+
+def _searcher_by_enumeration(actions: int, stages: int, deadline: int) -> Fraction:
+    """Every order in which the searcher can try the actions at every stage, equally likely."""
+    wins = Fraction(0)
+    orders = list(itertools.permutations(range(actions)))
+    for choice in itertools.product(orders, repeat=stages):
+        spent = sum(order.index(0) + 1 for order in choice)  # action 0 is the required one
+        if spent <= deadline:
+            wins += Fraction(1, len(orders) ** stages)
+    return wins
+
+
+def test_never_repeat_searcher_exact_value_of_exp45() -> None:
+    assert me.never_repeat_chain_success_exact(5, 4, 10) == Fraction(190, 625)
+    for actions, stages, deadline in ((3, 2, 3), (3, 3, 5), (4, 2, 4), (2, 4, 6)):
+        assert me.never_repeat_chain_success_exact(actions, stages, deadline) == _searcher_by_enumeration(
+            actions, stages, deadline)
+    analytic = ru.analytic(COLD)
+    assert analytic["never_repeat_searcher_success_fraction"] == "38/125"
+    assert ru.analytic(WEATHER)["never_repeat_searcher_success"] == pytest.approx(0.304)
+
+
+def test_searcher_control_never_repeats_a_failure_and_lands_on_the_exact_rate(monkeypatch) -> None:  # noqa: ANN001
+    tried: list[tuple[int, int, int, bool]] = []
+    original_step, original_make = wo.ColdChain.step, ru.make_world
+    serial = itertools.count()
+
+    def made(spec, cell=None):  # noqa: ANN001, ANN202
+        world = original_make(spec, cell)
+        world.serial = next(serial)  # one number per episode's world
+        return world
+
+    def logged(self, action):  # noqa: ANN001, ANN202
+        before = self.stage
+        outcome = original_step(self, action)
+        tried.append((self.serial, before, int(action), outcome.advanced))
+        return outcome
+
+    monkeypatch.setattr(ru, "make_world", made)
+    monkeypatch.setattr(wo.ColdChain, "step", logged)
+    rows = ru.control_rows("searcher", COLD, episodes=400, seed=3)
+    failures = [(w, s, a) for w, s, a, advanced in tried if not advanced]
+    assert failures and len(failures) == len(set(failures)), "a failed action was tried again at the same stage"
+    assert len({w for w, *_ in tried}) == 400
+    monkeypatch.setattr(wo.ColdChain, "step", original_step)
+    monkeypatch.setattr(ru, "make_world", original_make)
+    rate = np.mean([r["success"] for r in ru.control_rows("searcher", COLD, episodes=20_000, seed=4)])
+    assert abs(rate - 0.304) < 0.01
+    assert all(r["decisions"] <= 10 for r in rows)
+    with pytest.raises(ValueError):
+        ru.control_rows("searcher", {"kind": "route_cue"}, episodes=1, seed=0, routes=[0])
+
+
+def test_weather_chain_keeps_the_chain_rules_and_adds_only_the_weather() -> None:
+    assert set(wo.WEATHER_SEEN).isdisjoint(wo.WEATHER_UNSEEN)
+    assert all(sum(w) % 2 == 0 for w in wo.WEATHER_SEEN) and all(sum(w) % 2 == 1 for w in wo.WEATHER_UNSEEN)
+    for bit in range(wo.WEATHER_BITS):  # every single bit value is taught; only combinations are new
+        assert {w[bit] for w in wo.WEATHER_SEEN} == {0, 1}
+    rng = np.random.default_rng(0)
+    for _ in range(50):
+        weather = wo.WEATHER_UNSEEN[int(rng.integers(4))]
+        plain, dressed = wo.ColdChain(), wo.make_world(WEATHER, {"weather": list(weather)})
+        assert dressed.inputs == 10
+        while not plain.done:
+            assert np.array_equal(dressed.observation()[:, :7], plain.observation())
+            assert np.array_equal(dressed.observation()[0, 7:], np.asarray(weather, dtype=float))
+            action = int(rng.integers(5))
+            assert plain.step(action) == dressed.step(action)
+        assert dressed.done
+    situations = wo.chain_situations(WEATHER, {"weather": [1, 1, 1]})
+    expected = [((0, 0, 0), wo.GATHER_WOOD), ((1, 0, 0), wo.GATHER_STONE), ((1, 1, 0), wo.CRAFT_FIRE),
+                ((1, 1, 1), wo.WARM_UP)]
+    for (stage, x, required), ((w, s, f), right) in zip(situations, expected):
+        v5 = wo.v5_observation(wood=w, stone=s, fire=bool(f))  # EXP-45's obs(w, s, f), built directly
+        assert np.array_equal(x, np.concatenate([v5, [[1.0, 1.0, 1.0]]], axis=1)) and required == right
+    with pytest.raises(ValueError):
+        wo.weather_cell([1, 2, 0])
+
+
+def test_weather_schedules_teach_seen_and_test_unseen_and_never_move_shorter_lives() -> None:
+    protocol = json.loads((HERE / "protocol-p3-generalization.json").read_text())
+    train, after, evaluation = ru.schedules(protocol, 1001, 120)
+    assert len(train) == 120 and after is None
+    assert {tuple(c["weather"]) for c in train} == set(wo.WEATHER_SEEN)
+    assert [tuple(c["weather"]) for c in evaluation[:8]] == list(wo.WEATHER_UNSEEN) * 2
+    assert ru.schedules(protocol, 1001, 240)[0][:120] == train
+    for world in ({"kind": "route_cue"}, {"kind": "recall"}):
+        p = dict(protocol, world=world, withdrawal_episodes=10)
+        assert ru.schedules(p, 7, 240)[0][:120] == ru.schedules(p, 7, 120)[0]
+    assert ru.schedules(dict(protocol, world=COLD), 7, 120) == (None, None, None)
+
+
+def test_random_label_teacher_speaks_at_the_correcting_moments_with_random_content() -> None:
+    correct = _life(ad.StepAdapter(SpyBrain(seed=9), 5), ru.Caregiver("correct", 4, 8), episodes=60)
+    null = _life(ad.StepAdapter(SpyBrain(seed=9), 5),
+                 ru.Caregiver("random_label", 4, 8, rng=np.random.default_rng(1)), episodes=60)
+    # the spy acts on its own stream, so both lives execute the same actions: the twin pairing
+    assert [e["action"] for e in correct.events] == [e["action"] for e in null.events]
+    assert [e["label"] is not None for e in correct.events] == [e["label"] is not None for e in null.events]
+    labels = [e["label"] for e in null.events if e["label"] is not None]
+    assert len(labels) > 100 and set(labels) == set(range(5))
+    assert any(e["label"] != e["required"] for e in null.events if e["label"] is not None)
+    again = _life(ad.StepAdapter(SpyBrain(seed=9), 5),
+                  ru.Caregiver("random_label", 4, 8, rng=np.random.default_rng(1)), episodes=60)
+    assert [e["label"] for e in again.events] == [e["label"] for e in null.events]
+    with pytest.raises(ValueError):
+        _life(ad.StepAdapter(SpyBrain(seed=9), 5), ru.Caregiver("random_label", 4, 8), episodes=5)
+
+
+@pytest.mark.parametrize(
+    "change, message",
+    [
+        ({"arms": {"x": {"adapter": "live", "caregiver": "random_label"}}}, "live takes no teacher"),
+        ({"arms": {"x": {"adapter": "step", "caregiver": "none", "training_episodes": 0}}}, "at least one"),
+        ({"arms": {"x": {"adapter": "step", "caregiver": "none", "twin_of": "y"},
+                   "y": {"adapter": "step", "caregiver": "none"}}}, "earlier arm"),
+        ({"arms": {"y": {"adapter": "step", "caregiver": "none"},
+                   "x": {"adapter": "step", "caregiver": "grade", "twin_of": "y"}}}, "taught exactly"),
+        ({"withdrawal_checkpoints": [10, 80]}, "strictly inside"),
+        ({"withdrawal_checkpoints": [20, 10]}, "increasing"),
+    ],
+)
+def test_protocol_refuses_ill_formed_copies(tmp_path: Path, change: dict, message: str) -> None:
+    protocol = json.loads((HERE / "protocol-p1-drift.json").read_text())
+    protocol.update(change)
+    path = tmp_path / "protocol.json"
+    path.write_text(json.dumps(protocol))
+    with pytest.raises(ValueError, match=message):
+        ru.load_protocol(path)
+
+
+@needs_cadence
+def test_per_state_reading_is_exp45s_reset_greedy_read_and_leaves_the_checkpoint(tmp_path: Path) -> None:
+    from cadence import Brain
+
+    from receipts import sha256_file
+
+    brain = _small_brain(17)
+    ru.run_life(ad.StepAdapter(brain, 5), COLD, ru.Caregiver("correct", 4, 8), 6, life_id="s")
+    path = tmp_path / "trained.npz"
+    brain.save(path)
+    before = sha256_file(path)
+    reading = ru.per_state(path, COLD, samples=20, seed=3)
+    assert sha256_file(path) == before
+    chain = reading["chain"]
+    assert chain["situations"] == 4 and len(chain["stage_p_right"]) == 4
+    reference = Brain.load(path)  # EXP-45's reading, written out
+    answers = []
+    for w, s, f in ((0, 0, 0), (1, 0, 0), (1, 1, 0), (1, 1, 1)):
+        reference.reset()
+        answers.append(int(reference.act(wo.v5_observation(wood=w, stone=s, fire=bool(f)), greedy=True)[0]))
+    assert [r["greedy"] for r in chain["rows"]] == answers
+    assert chain["accuracy"] == np.mean([a == r for a, r in zip(answers, range(4))])
+    assert chain["memoryless_success"] == pytest.approx(me.chain_success(chain["stage_p_right"], 10))
+    assert ru.per_state(path, COLD, samples=20, seed=3) == reading
+
+
+@needs_cadence
+@pytest.mark.parametrize("adapter_name", ["step", "live"])
+def test_reading_the_life_alone_at_checkpoints_leaves_it_as_it_would_have_run(
+        tmp_path: Path, adapter_name: str) -> None:
+    from cadence import Brain
+
+    import probes as pr
+
+    brain = _small_brain(19)
+    taught = ru.run_life(ad.StepAdapter(brain, 5), COLD, ru.Caregiver("correct", 4, 8), 4, life_id="t")
+    path = tmp_path / "taught.npz"
+    brain.save(path)
+    seam = json.dumps(taught.seam.to_dict())
+    one, two = Brain.load(path), Brain.load(path)
+    whole = ru.run_withdrawal(ad.ADAPTERS[adapter_name](one, 5), COLD, 6, life_id="w",
+                              seam=ad.PendingOutcome(**json.loads(seam)))
+    marks: list[int] = []
+
+    def at_mark(mark: int, held: ad.PendingOutcome) -> None:
+        two.save(tmp_path / f"mark-{mark}.npz")
+        ru.per_state(tmp_path / f"mark-{mark}.npz", COLD)
+        marks.append(mark)
+
+    stopped = ru.run_withdrawal(ad.ADAPTERS[adapter_name](two, 5), COLD, 6, life_id="w",
+                                seam=ad.PendingOutcome(**json.loads(seam)), marks=[2, 4], at_mark=at_mark)
+    assert marks == [2, 4] and stopped.counts["checkpoints"] == [2, 4]
+    assert stopped.events == whole.events  # every action, outcome, choice and learning record
+    assert [e["episode"] for e in stopped.episodes] == list(range(6))
+    assert stopped.counts["outcomes_delivered"] == whole.counts["outcomes_delivered"]
+    copier = pr.Copier(tmp_path / "c")
+    assert pr.state_digest(one, copier) == pr.state_digest(two, copier)
+
+
+@needs_cadence
+def test_a_twin_continues_from_its_twins_taught_brain_and_every_reading_lands(tmp_path: Path) -> None:
+    import report as rp
+
+    protocol = json.loads((HERE / "protocol-p1-drift.json").read_text())
+    protocol["recipes"] = {"small": {"compose": {"modules": [12], "arousal": True}}}
+    protocol.update(training_episodes=3, withdrawal_episodes=3, withdrawal_checkpoints=[1, 2])
+    protocol["evaluation"].update(episodes=4, per_state_samples=2)
+    arms = ["correct_then_live", "correct_then_step"]
+    result = ru.run_founder(protocol, 5, arms, "small", tmp_path)
+    a, b = (result["arms"][arm] for arm in arms)
+    assert b["taught_with"] == "correct_then_live" and "taught_with" not in a
+    assert a["trained_digest"] == b["trained_digest"] and a["per_state"] == b["per_state"]
+    assert not (tmp_path / "small" / "founder-5" / "correct_then_step-trained.npz").exists()
+    for arm in (a, b):
+        assert set(arm["withdrawal"]["checkpoints"]) == {"1", "2"}
+        assert arm["withdrawal"]["counts"]["episodes"] == 3
+        assert "chain" in arm["withdrawal"]["checkpoints"]["2"]["per_state"]
+    assert {"founder", "random", "oracle", "searcher"} <= set(result["arms"])
+    assert "per_state" in result["arms"]["founder"]
+    bodies = [json.loads((tmp_path / "small" / "founder-5" / "founder.json").read_text())]
+    assert rp.drift_table("small", bodies, protocol)[2].startswith("| arm | taught | after 1 | after 2 | after 3 |")
+    assert any("correct_then_live-correct_then_step" in line for line in rp.pair_lines(bodies, protocol))
+    assert rp.state_table("small", bodies, protocol)
+
+
+@needs_cadence
+def test_weather_founder_reads_seen_and_unseen_and_a_random_label_arm_runs(tmp_path: Path) -> None:
+    import inspect
+
+    from cadence import Brain
+
+    protocol = json.loads((HERE / "protocol-p3-content.json").read_text())
+    compose = {"modules": [12], "arousal": True}
+    if "memory_choice" in inspect.signature(Brain.compose).parameters:  # the episodic memory, 0.83.0 on
+        compose["memory_choice"] = True
+    protocol["recipes"] = {"small": {"compose": compose}}
+    protocol.update(withdrawal_episodes=2)
+    protocol["evaluation"].update(episodes=4)
+    for spec in protocol["arms"].values():
+        spec["training_episodes"] = 3
+    result = ru.run_founder(protocol, 6, ["correct_40", "random_label_40"], "small", tmp_path)
+    reading = result["arms"]["random_label_40"]["withdrawal"]["per_state"]
+    assert reading["seen"]["situations"] == reading["unseen"]["situations"] == 16
+    assert reading["gap"] == reading["seen"]["accuracy"] - reading["unseen"]["accuracy"]
+    teaching = result["arms"]["random_label_40"]["training"]["counts"]["teaching"]
+    assert teaching["labels"] > 0
+    assert result["arms"]["searcher"]["frozen"]["sampled"]["summary"]["episodes"] == 4
