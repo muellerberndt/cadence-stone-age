@@ -85,5 +85,8 @@ ceiling set by the softmax temperature; greedy success is reported beside it and
 replaced by it. A decision whose motor margin is below the solve tolerance is counted as
 undecided. With the episodic memory (`memory_choice=True`) the memory's vote joins the motor
 readout inside the library: the recorded margins, probabilities and undecided counts are the
-readout's own, without the vote, while the actions and every success reading include it. The
-founder is the unit of every interval.
+readout's own, without the vote, while the actions and every success reading include it. Every
+checkpoint is read at its seam, before its last outcome is delivered; the notebook's scripts and
+V5 read after delivering it. One outcome can change a memory brain's per-state answers, so a
+comparison with them reads both points (`RESULTS.md`). The founder is the unit of every
+interval.

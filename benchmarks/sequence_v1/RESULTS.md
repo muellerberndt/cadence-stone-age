@@ -172,3 +172,128 @@ happen; the price is less further improvement (founder 1003: 37.5 against 53). `
 with reward only learns little at this budget. A motor bias of 0.3 at birth, which makes a taught
 recall chamber recall far better, harms this chain: two founders learn nothing while taught,
 reward alone learns nothing, and even `live` does not keep what was taught.
+
+## Tests adapted from cadence-teachers, Cadence 0.83.0 (14 October 2026)
+
+The tests this instrument adapts from Will Glynn's
+[cadence-teachers](https://github.com/WGlynn/cadence-teachers) (README, "Tests adapted from
+cadence-teachers"), run with their declared protocols on development founders from 1001 on and,
+for the replica check, on the notebook's seeds 42 to 53. Environment: the published
+`cadence-net==0.83.0` wheel (SHA-256 `6ea5eb6b…`), NumPy 2.5.4, Python 3.13.7, macOS arm64,
+one BLAS thread, instrument commits `f42305d` and `4bb77c4`.
+
+**The port is exact.** The chamber rules and observations (2,000 random episodes, plain and
+weather), the weather splits, the memoryless formula, the searcher's value and the per-state
+reads of three checkpoints equal the notebook's code on identical inputs. The drift design run
+in V5's order on EXP-47's seeds equals EXP-47's own script run on this machine in all 240
+readings (per-state answers and greedy success; taught and after 10, 20, 40 and 80 episodes
+alone; both paths, both signals), when both are read at the same point. That script on this
+machine matches its published Windows readings in 48 of 48 taught readings and 44 to 48 of 48
+at each checkpoint.
+
+**Where a reading is taken matters for a memory brain.** This instrument reads a checkpoint at
+its seam, before the last outcome is delivered; the notebook reads after delivering it. One
+outcome changes the memory brain's per-state answers often: on EXP-47's seeds 7 founders have
+every stage right after teaching at the seam and 9 after the delivery. Every result below holds
+at both reading points; the tables give the seam reading unless they say otherwise.
+
+### Generalization under an unseen weather (EXP-48)
+
+`protocol-p3-generalization.json`, twelve founders, 120 training episodes under the four taught
+weathers. Per-state greedy accuracy over the 16 taught and the 16 unseen situations (%),
+founders with every unseen situation right, and whole-chain success under the unseen weathers
+(%). Uniform random 12.4, never-repeat searcher 30.0 (exact 30.4), untaught founder 12.5.
+
+| Arm | Taught weathers | Unseen weathers | Gap, founder-paired | Every unseen situation right | Sampled | Greedy |
+| --- | --- | --- | --- | --- | --- | --- |
+| Untaught founder | 20 | 18 | +2.1 [−0.5, +4.7] | 0 | 12.5 | 0.0 |
+| Corrected, without memory | 54 | 54 | +0.0 [−3.1, +2.6] | 0 | 32.1 | 0.0 |
+| Reward only, without memory | 30 | 29 | +1.0 [+0.0, +3.1] | 0 | 6.2 | 2.1 |
+| Corrected, episodic memory | 87 | 86 | +1.0 [−2.1, +4.2] | 6 | 90.7 | 89.6 |
+| Reward only, episodic memory | 72 | 69 | +3.6 [+0.5, +7.3] | 4 | 56.1 | 39.6 |
+
+Under the unseen weathers the memory adds 32.3 points per state to correction (bootstrap 95%
+[+13.5, +46.9], ten founders up, one down; +43.8 read after the delivery) and 40.1 to reward
+alone ([+21.9, +58.3]).
+
+Reading: what the memory brain learns carries to situations it never met. The gap between
+taught and unseen weathers stays within four points at both reading points, and under unseen
+weathers the corrected memory brain completes the chain three times as often as the searcher.
+Corrected without the memory, the brain reads half the situations right and completes the chain
+as often as the searcher. EXP-48 read 89 and 84 per state and +31 over the plain brain on its
+seeds; the two agree.
+
+### The content of a label (EXP-52, EXP-53)
+
+`protocol-p3-content.json`, twenty-four founders with the episodic memory. Each founder is taught
+three ways at each lesson length: by the correcting caregiver, by its random-label twin (a
+uniformly random action at the same kind of moment) and not at all; every arm then lives 20
+episodes alone through `live`. Per-state greedy accuracy under the unseen weathers (%), with
+founder-paired differences (points, bootstrap 95%, founders up/down):
+
+| Lesson | Reading | Corrected | Random label | Untaught | Content: corrected − random | Corrected − untaught | Random − untaught |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 40 | end of the lesson | 71.1 | 66.7 | 29.9 | +4.4 [−12.8, +21.9], 12/9 | +41.1 [+27.6, +54.4], 20/3 | +36.7 [+22.7, +50.0], 18/5 |
+| 40 | after 20 alone | 72.9 | 56.0 | 38.5 | **+16.9** [+6.2, +28.4], 14/6 | +34.4 [+21.1, +47.7], 20/4 | +17.4 [+2.3, +32.6], 15/6 |
+| 120 | end of the lesson | 83.6 | 68.5 | 58.1 | +15.1 [+4.2, +27.1], 13/7 | +25.5 [+9.6, +40.6], 17/4 | +10.4 [−5.7, +26.8], 11/12 |
+| 120 | after 20 alone | 79.4 | 58.1 | 58.3 | **+21.4** [+9.6, +32.6], 19/4 | +21.1 [+6.2, +36.5], 13/6 | −0.3 [−17.4, +16.9], 12/12 |
+| 240 | end of the lesson | 81.2 | 85.9 | 72.9 | −4.7 [−14.8, +4.9], 11/9 | +8.3 [−5.7, +23.2], 14/10 | +13.0 [+3.1, +23.7], 14/7 |
+| 240 | after 20 alone | 76.8 | 70.6 | 69.0 | +6.2 [−5.7, +18.2], 14/8 | +7.8 [−7.0, +22.9], 13/9 | +1.6 [−9.6, +12.8], 13/9 |
+
+The content after 20 episodes alone, by reading point and order:
+
+| Lesson | Seam order, at the seam | Seam order, after delivery | V5's order (`protocol-p3-content-reset.json`), at the seam | V5's order, after delivery |
+| --- | --- | --- | --- | --- |
+| 40 | +16.9 [+6.2, +28.4] | +16.7 [+5.5, +28.1] | +23.2 [+8.9, +37.5] | +23.7 [+12.5, +34.9] |
+| 120 | +21.4 [+9.6, +32.6] | +22.1 [+9.4, +34.6] | +16.4 [+7.0, +25.8] | +20.8 [+12.0, +29.7] |
+| 240 | +6.2 [−5.7, +18.2] | +2.6 [−8.1, +13.5] | +8.3 [−0.5, +17.4] | +5.7 [−3.9, +15.6] |
+
+Labels given over all founders: corrected 1,149, 2,441 and 3,840; random 1,920, 4,199 and
+6,028 at the three lengths (a randomly labelled student makes more mistakes in guided windows).
+
+Reading: the content of a label reaches the memory brain at 40- and 120-episode lessons, in both
+orders and at both reading points. Being corrected at all lifts a 40-episode student far above
+an untaught one, whatever the label says (+36.7 at the end of the lesson); 20 episodes alone
+through `live` keep what the right labels taught and lose half of what random labels gave. At
+120 episodes the right labels lead at the end of the lesson too. At 240 episodes reward alone
+has taught the untaught brain most of the chain and the three arms lie within noise of one
+another. EXP-53 read the content as +1.3, +10.7 and +6.8 points with standard errors near six.
+EXP-53's own script, run on this machine, reproduces its published 40-episode readings student for
+student (24 of 24; at 120 and 240 episodes the platforms part, 19 and 3 of 24 identical). With 48
+more students it reads +12.5 and +9.9 for the next two groups of 24, and +7.9 (SEM 4.5) over all
+72. The instrument on EXP-53's 24 students' own seeds reads +8.6 [−7.3, +24.2] in V5's order.
+EXP-53's 40-episode null sits at the low end of what samples of 24 students give; across these
+samples the right label adds between 8 and 24 points at 40-episode lessons.
+
+### The life alone, read over time (EXP-46, EXP-47)
+
+`protocol-p1-drift.json` (resumed from the seam) and `protocol-p1-drift-reset.json` (V5's order),
+twelve founders each, 120 training episodes, then 80 episodes alone through `live` and, from the
+same taught brain, through `step`. Corrected memory brain, read after the held outcome is
+delivered (EXP-47's reading point): founders with every stage right after teaching and after 10,
+20, 40 and 80 episodes alone; founders whose greedy policy completes the chain after 80; mean
+per-state accuracy after 80 (%).
+
+| Founders and order | Path | Every stage right | Greedy completes at 80 | Per-state at 80 |
+| --- | --- | --- | --- | --- |
+| 42 to 53, V5's order | `live` | 9, 8, 7, 6, 6 | 12 | 88 |
+| 42 to 53, V5's order | `step` | 9, 8, 8, 6, 9 | 11 | 92 |
+| 1001 to 1012, V5's order | `live` | 9, 8, 9, 9, 9 | 12 | 90 |
+| 1001 to 1012, V5's order | `step` | 9, 9, 9, 9, 6 | 8 | 85 |
+| 1001 to 1012, from the seam | `live` | 9, 10, 10, 10, 10 | 12 | 92 |
+| 1001 to 1012, from the seam | `step` | 9, 10, 10, 9, 5 | 10 | 79 |
+| EXP-47 as published, 42 to 53 | `live` | 9, 8, 6, 5, 5 | 12 | 85 |
+| EXP-47 as published, 42 to 53 | `step` | 9, 8, 8, 6, 9 | 12 | 94 |
+
+Without the memory the same corrections leave 56% per state and whole-chain success at 40.0%
+(EXP-46: 58% and 19.3%); with it, 92% and 99.1% (EXP-46: 94% and 96.3%). Reward-only learners
+with the memory end the 80 episodes alone between 2 points below and 15 points above their
+per-state accuracy after teaching, on either path and at either reading point.
+
+Reading: EXP-47's drift through `live` reproduces on its own seeds, and on twelve fresh founders
+the two paths trade places: `live` keeps all nine fully right founders and `step` loses three.
+Pooled over the 24 founders run in V5's order, both paths end with 15 of 18 fully right founders.
+The greedy policy completes the chain in 22 of 24 after teaching, and after 80 episodes alone in
+24 of 24 through `live` and 19 of 24 through `step`. At this sample size, which stage drifts and
+on which path depends on the founder; the greedy stall through `step` that the episodic memory
+guide describes appears, and through `live` it does not.
