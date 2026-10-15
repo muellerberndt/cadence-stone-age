@@ -918,3 +918,293 @@ def test_view_chain_scorer_controls_and_analytic_values(view: str) -> None:
     assert abs(rate - 0.1208738816) < 0.01
     searched = ru.control_rows("searcher", spec, episodes=200, seed=3)
     assert len(searched) == 200 and all(r["decisions"] <= 10 for r in searched)
+
+
+# -- context rules: which decisions enter the episodic memory's temporal context key. The hold
+#    rule and the in-sequence reading are Will Glynn's, cadence-teachers EXP-56 and EXP-57
+#    (https://github.com/WGlynn/cadence-teachers, exp/EXP-56_ambiguous_chain_trace.py).
+
+import context_rules as cr  # noqa: E402
+
+HIDDEN = {"kind": "view_chain", "view": "hidden", "deadline": 10, "success_reward": 2.0, "failure_reward": -1.0}
+
+
+def test_exact_mcnemar_reproduces_exp56_and_exp57() -> None:
+    assert me.mcnemar_exact(14, 2) == pytest.approx(0.0042, abs=1e-4)  # EXP-56, p = .004
+    assert me.mcnemar_exact(9, 2) == pytest.approx(0.0654, abs=1e-4)  # EXP-57, natural
+    assert me.mcnemar_exact(19, 5) == pytest.approx(0.0066, abs=1e-4)  # EXP-57, 240 pooled
+    assert me.mcnemar_exact(8, 4) == pytest.approx(0.3877, abs=1e-4)
+    assert me.mcnemar_exact(36, 2) < 1e-4 and me.mcnemar_exact(2, 36) == me.mcnemar_exact(36, 2)
+    assert me.mcnemar_exact(0, 0) == 1.0 and me.mcnemar_exact(3, 3) == 1.0
+    with pytest.raises(ValueError):
+        me.mcnemar_exact(-1, 2)
+
+
+def test_in_sequence_summary_counts_first_tries_and_retries() -> None:
+    episodes = [
+        {"success": True, "decisions": 4, "stage_reached": 4, "reason": "success",
+         "first_try": [1, 1, 1, 1], "retries": 0, "retries_right": 0},
+        {"success": False, "decisions": 10, "stage_reached": 1, "reason": "timeout",
+         "first_try": [0, 0, None, None], "retries": 8, "retries_right": 1},
+    ]
+    summary = me.episode_summary(episodes, 4)
+    assert summary["first_try_accuracy"] == [0.5, 0.5, 1.0, 1.0]
+    assert summary["first_try_reached"] == [2, 2, 1, 1]
+    assert summary["retries"] == 8 and summary["retry_accuracy"] == 1 / 8
+    assert summary["exact_minimal_completions"] == 1
+
+
+class _Critic:
+    def __init__(self) -> None:
+        self.config = type("Config", (), {"gamma": 0.9})()
+        self.critic_index = np.array([0])
+        self.w_critic = np.array([1.0])
+        self.b_critic = 0.0
+        self.state = None
+
+    def value(self, state):  # noqa: ANN001, ANN202
+        return state.activation[:, self.critic_index] @ self.w_critic + self.b_critic
+
+
+class _State:
+    def __init__(self, value: float) -> None:
+        self.activation = np.array([[value]])
+
+
+class _ContextSpy:
+    """Only what a rule touches: ``_context``, the critic, ``learn`` and ``_choose``. Each
+    decision adds its observation and action to the context; ``learn`` settles the next
+    state at a scripted value and clears the context at the end of an attempt."""
+
+    def __init__(self) -> None:
+        self._context = None
+        self.basal_ganglia = _Critic()
+        self.keys: list[np.ndarray | None] = []
+        self.next_value = 0.0
+
+    def _choose(self, x, drive, free, *, greedy, temperature=None):  # noqa: ANN001, ANN202
+        self.keys.append(None if self._context is None else self._context.copy())
+        self._context = (np.zeros(2) if self._context is None else self._context * 0.5) + np.asarray(x).reshape(-1)[:2]
+        return np.array([0])
+
+    def learn(self, reward, done, next_observations, **options):  # noqa: ANN001, ANN202
+        self.basal_ganglia.state = _State(self.next_value)
+        if bool(np.asarray(done)[0]):
+            self._context = np.zeros(2)
+        return {"value": self.value_now, "td_error": 0.0, "dopamine": 0.0}
+
+
+def test_context_rule_arithmetic_on_a_spy() -> None:
+    a, b = np.array([[1.0, 0.0]]), np.array([[0.0, 1.0]])
+    for name, judgments in (("hold", [True, True]), ("hold_td", [False, True])):
+        spy = _ContextSpy()
+        rule = cr.ContextRule(spy, name)
+        spy.value_now = 1.0
+        rule.choose(a, None, _State(1.0), greedy=True)
+        first = spy._context.copy()
+        # the outcome: the observation unchanged; the critic's error 0 + 0.9 * 2.0 - 1.0 > 0
+        spy.next_value = 2.0
+        spy.learn(np.array([0.0]), np.array([False]), a)
+        assert rule.last["unchanged"] and rule.last["held"] == judgments[0]
+        assert rule.last["error"] == (None if name == "hold" else pytest.approx(0.8))
+        rule.choose(a, None, _State(2.0), greedy=True)
+        assert (spy.keys[-1] is None) == judgments[0]  # held: the key is the first decision's
+        if not judgments[0]:
+            assert np.array_equal(spy.keys[-1], first)
+        # again unchanged; now the error 0 + 0.9 * 1.0 - 2.0 < 0
+        spy.value_now, spy.next_value = 2.0, 1.0
+        spy.learn(np.array([0.0]), np.array([False]), a)
+        assert rule.last["held"] == judgments[1]
+        # a changed observation is never held
+        rule.choose(a, None, _State(1.0), greedy=True)
+        spy.value_now, spy.next_value = 1.0, 0.0
+        spy.learn(np.array([0.0]), np.array([False]), b)
+        assert not rule.last["unchanged"] and not rule.last["held"]
+        # never across the end of an attempt: the cleared context stays cleared
+        rule.choose(b, None, _State(1.0), greedy=True)
+        spy.learn(np.array([-1.0]), np.array([True]), b)
+        assert not rule.last["held"] and np.array_equal(spy._context, np.zeros(2))
+        assert rule.counts()["rule"] == name and rule.counts()["held"] == sum(judgments)
+    # a frozen reading: no learn, the error is gamma V(next) - V(chosen), with a zero reward
+    spy = _ContextSpy()
+    rule = cr.ContextRule(spy, "hold_td")
+    rule.choose(a, None, _State(1.0), greedy=True)
+    rule.choose(a, None, _State(1.0), greedy=True)
+    assert rule.last["error"] == pytest.approx(-0.1) and rule.last["held"]
+    rule.choose(a, None, _State(2.0), greedy=True)
+    assert rule.last["error"] == pytest.approx(0.8) and not rule.last["held"]
+    untouched = _ContextSpy()
+    assert cr.ContextRule(untouched, "none").rule == "none" and "learn" not in vars(untouched)
+    second = cr.ContextRule(untouched, "hold")
+    third = cr.ContextRule(untouched, "hold_td")  # replaces the second, never wraps it
+    assert untouched.learn.__self__ is third and third._learn.__self__ is untouched
+    cr.ContextRule(untouched, "none")
+    assert "learn" not in vars(untouched) and "_choose" not in vars(untouched) and second.rule == "hold"
+    with pytest.raises(ValueError):
+        cr.ContextRule(_ContextSpy(), "forget")
+
+
+def _memory_brain(seed: int = 29, context: float = 0.5):  # noqa: ANN202
+    from cadence import Brain
+
+    return Brain.compose(inputs=7, actions=5, modules=(12,), seed=seed, arousal=True, memory_choice=True,
+                         memory_context=context)
+
+
+@needs_cadence
+def test_hold_keeps_a_retrys_key_equal_to_the_first_try() -> None:
+    """EXP-56's mechanical check: with hold, a retry's decision key equals the first try's;
+    without, it differs; without a context store the rule has nothing to hold."""
+    x = wo.VIEW_A
+    for rule, same in (("none", False), ("hold", True), ("hold_td", None)):
+        brain = _memory_brain()
+        cr.ContextRule(brain, rule)
+        keys = []
+        for _ in range(3):
+            brain.act(x, greedy=True)
+            keys.append(brain._decision.copy())
+        if same is not None:
+            assert all(np.array_equal(keys[0], k) for k in keys[1:]) == same
+    place = _memory_brain(context=0.0)
+    rule = cr.ContextRule(place, "hold")
+    for _ in range(3):
+        place.act(x, greedy=True)
+    assert place.context_memory is None and rule.held == 0 and rule.unchanged == 0
+
+
+class _Exp56Trace:
+    """Will Glynn's ``Trace`` from cadence-teachers, exp/EXP-56_ambiguous_chain_trace.py, as
+    written there: with hold, a decision whose next observation is unchanged never enters the
+    stream's temporal context; never across a boundary."""
+
+    def __init__(self, brain, hold: bool) -> None:  # noqa: ANN001
+        self.b, self.hold = brain, hold
+        self.prev, self.pre = None, None
+
+    def call(self, fn, x, boundary=False, **kw):  # noqa: ANN001, ANN202
+        b = self.b
+        if self.hold and not boundary and self.prev is not None and np.array_equal(x, self.prev):
+            b._context = None if self.pre is None else self.pre.copy()
+        if boundary:
+            pre = None if b._context is None else np.zeros_like(b._context)
+        else:
+            pre = None if b._context is None else b._context.copy()
+        out = fn(x, **kw)
+        self.prev, self.pre = x.copy(), pre
+        return int(np.asarray(out).reshape(-1)[0])
+
+
+@needs_cadence
+@pytest.mark.parametrize("view", ["hidden", "invisible"])
+def test_the_hold_rule_lives_exactly_as_the_notebooks_trace(tmp_path: Path, view: str) -> None:
+    import probes as pr
+
+    spec = dict(HIDDEN, view=view)
+    instrument = _memory_brain(31)
+    life = ru.run_life(ad.StepAdapter(instrument, 5, context_rule="hold"), spec, ru.Caregiver("correct", 4, 8), 6,
+                       life_id="h")
+    ad.StepAdapter(instrument, 5, context_rule="hold").resume(life.seam, wo.make_world(spec).observation())
+    instrument.reset()
+
+    notebook = _memory_brain(31)  # EXP-56's train(), corrective signal
+    trace = _Exp56Trace(notebook, hold=True)
+    world, g, actions = wo.make_world(spec), 0, []
+    a = trace.call(notebook.step, world.observation())
+    for _ in range(6):
+        while True:
+            guided = (g % 12) < 4
+            right = world.required()
+            outcome = world.step(a)
+            actions.append(a)
+            teacher = np.array([right]) if (guided and not outcome.advanced and not world.done) else None
+            g += 1
+            if world.done:
+                world = wo.make_world(spec)
+                a = trace.call(notebook.step, world.observation(), boundary=True,
+                               reward=np.array([outcome.reward]), done=np.array([True]))
+                break
+            kw = {"reward": np.array([outcome.reward]), "done": np.array([False])}
+            if teacher is not None:
+                kw["teacher"] = teacher
+            a = trace.call(notebook.step, world.observation(), **kw)
+    notebook.reset()
+    assert [e["action"] for e in life.events] == actions
+    assert life.counts["context_rule"]["held"] > 0
+    copier = pr.Copier(tmp_path / "c")
+    assert pr.state_digest(instrument, copier) == pr.state_digest(notebook, copier)
+
+
+@needs_cadence
+def test_the_failure_rule_judges_with_learns_own_td_error() -> None:
+    brain = _memory_brain(37)
+    life = ru.run_life(ad.StepAdapter(brain, 5, context_rule="hold_td"), HIDDEN, ru.Caregiver("none", 0, 1), 8,
+                       life_id="td")
+    judged = 0
+    for event, following in zip(life.events, life.events[1:]):
+        judgment = following["choice"].get("context_rule", {})
+        if judgment.get("error") is None:
+            continue
+        judged += 1
+        learning = event["learning"]
+        assert abs(judgment["error"]) == pytest.approx(learning["td_error"], rel=1e-9, abs=1e-12)
+        assert np.sign(judgment["error"]) == np.sign(learning["dopamine"])
+        if judgment["held"]:
+            assert judgment["unchanged"] and judgment["error"] < 0
+    assert judged > 20 and life.counts["context_rule"]["unchanged"] >= life.counts["context_rule"]["held"]
+
+
+@needs_cadence
+def test_a_reading_under_a_rule_is_seeded_isolated_and_counts_the_rule(tmp_path: Path) -> None:
+    import probes as pr
+
+    brain = _memory_brain(41)
+    ru.run_life(ad.StepAdapter(brain, 5, context_rule="hold"), HIDDEN, ru.Caregiver("correct", 4, 8), 4,
+                life_id="r")
+    path = tmp_path / "trained.npz"
+    brain.save(path)
+    copier = pr.Copier(tmp_path / "c")
+    before = pr.state_digest(brain, copier)
+    rows = ru.evaluate(path, HIDDEN, episodes=8, greedy=False, seed=5, context_rule="hold")
+    assert rows == ru.evaluate(path, HIDDEN, episodes=8, greedy=False, seed=5, context_rule="hold")
+    assert pr.state_digest(brain, copier) == before
+    for row in rows:
+        assert len(row["first_try"]) == 4 and row["rule_held"] <= row["rule_unchanged"]
+        assert row["retries"] == row["decisions"] - sum(v is not None for v in row["first_try"])
+        # on the hidden view the observation stays the same exactly after a miss; the episode's
+        # last decision is judged by no later one
+        misses = row["decisions"] - row["stage_reached"]
+        assert row["rule_unchanged"] in (misses, misses - 1)
+        if row["success"]:
+            assert row["rule_unchanged"] == misses == row["rule_held"]
+    plain = ru.evaluate(path, HIDDEN, episodes=2, greedy=True, seed=5)
+    assert "rule_held" not in plain[0] and plain[0]["first_try"][0] in (0, 1)
+
+
+@needs_cadence
+def test_a_founder_on_the_hidden_view_reads_every_rule_and_pairs_clean_passes(tmp_path: Path) -> None:
+    protocol = json.loads((HERE / "protocol-keys-hidden.json").read_text())
+    protocol["recipes"] = {"small": {"compose": {"modules": [12], "arousal": True, "memory_choice": True}}}
+    protocol["evaluation"].update(episodes=3)
+    arms = ["place_natural_120", "ctx5_natural_120", "hold5_natural_120", "holdtd_natural_120"]
+    for arm in arms:
+        protocol["arms"][arm]["training_episodes"] = 3
+    result = ru.run_founder(protocol, 3, arms, "small", tmp_path)
+    for arm in arms:
+        reading = result["arms"][arm]["frozen"]
+        assert reading["greedy"]["summary"]["episodes"] == 1 and reading["sampled"]["summary"]["episodes"] == 3
+        assert len(reading["sampled"]["summary"]["first_try_accuracy"]) == 4
+        assert "per_state" not in result["arms"][arm]  # a hidden view has no stage-alone reading
+    counts = {arm: result["arms"][arm]["training"]["counts"].get("context_rule") for arm in arms}
+    assert counts["ctx5_natural_120"] is None and counts["hold5_natural_120"]["rule"] == "hold"
+    assert counts["holdtd_natural_120"]["rule"] == "hold_td"
+    assert "rule_held" in result["arms"]["hold5_natural_120"]["frozen"]["sampled"]["summary"]
+    assert result["arms"]["founder"].get("per_state") is None
+    pairs = ru.pair_contrasts([result], dict(protocol, analysis={"pairs": [["hold5_natural_120", "ctx5_natural_120"]]}))
+    clean = pairs["clean:trained:hold5_natural_120-ctx5_natural_120"]
+    assert clean["founders"] == 1 and 0.0 <= clean["mcnemar_p"] <= 1.0
+    assert "first_try_1:trained:hold5_natural_120-ctx5_natural_120" in pairs
+    bad = dict(protocol, arms={"x": {"adapter": "step", "caregiver": "none", "context_rule": "forget"}})
+    path = tmp_path / "bad.json"
+    path.write_text(json.dumps(bad))
+    with pytest.raises(ValueError, match="context rule"):
+        ru.load_protocol(path)

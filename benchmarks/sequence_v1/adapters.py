@@ -14,6 +14,9 @@ with a caregiver label has to declare an ordering first, so the adapter refuses 
 A life ends at a declared seam: the last executed action's outcome is held in a
 ``PendingOutcome`` beside the checkpoint instead of being delivered with a next observation
 whose action would then be discarded. ``resume`` delivers it exactly once.
+
+An adapter may install a ``context_rules`` rule on its brain for the whole life; every record
+then carries the rule's judgment of the previous decision.
 """
 
 from __future__ import annotations
@@ -23,6 +26,7 @@ from typing import Any
 
 import numpy as np
 
+from context_rules import ContextRule
 from worlds import action_id
 
 
@@ -115,8 +119,9 @@ class Adapter:
 
     name = "adapter"
 
-    def __init__(self, brain: Any, actions: int, *, retries: int = 1) -> None:
+    def __init__(self, brain: Any, actions: int, *, retries: int = 1, context_rule: str = "none") -> None:
         self.brain = brain
+        self.rule = ContextRule(brain, context_rule)
         self.actions = int(actions)
         self.retries = int(retries)
         self.ledger = Ledger()
@@ -249,6 +254,8 @@ class Adapter:
         self.current = self.ledger.issue()
         record = {"ledger_id": self.current, "action": index}
         record.update(self._report())
+        if self.rule.rule != "none":
+            record["context_rule"] = dict(self.rule.last)
         return index, record
 
 
@@ -288,8 +295,8 @@ class LiveAdapter(Adapter):
 
     name = "live"
 
-    def __init__(self, brain: Any, actions: int, *, retries: int = 1) -> None:
-        super().__init__(brain, actions, retries=retries)
+    def __init__(self, brain: Any, actions: int, *, retries: int = 1, context_rule: str = "none") -> None:
+        super().__init__(brain, actions, retries=retries, context_rule=context_rule)
         self._owner_decision: int | None = None
 
     def _first(self, x: np.ndarray) -> Any:

@@ -32,9 +32,11 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 from adapters import ADAPTERS, PendingOutcome, readout  # noqa: E402
+from context_rules import RULES, ContextRule  # noqa: E402
 from metrics import (  # noqa: E402
     chain_success,
     episode_summary,
+    mcnemar_exact,
     never_repeat_chain_success_exact,
     paired_bootstrap,
     uniform_chain_success_exact,
@@ -81,6 +83,8 @@ def load_protocol(path: Path) -> tuple[dict[str, Any], str]:
             raise ValueError(f"arm {name}: unknown withdrawal adapter {arm['withdrawal_adapter']!r}")
         if "training_episodes" in arm and int(arm["training_episodes"]) < 1:
             raise ValueError(f"arm {name}: an arm's own training runs at least one episode")
+        if arm.get("context_rule", "none") not in RULES:
+            raise ValueError(f"arm {name}: unknown context rule {arm['context_rule']!r}")
         twin = arm.get("twin_of")
         if twin is not None:
             if twin not in seen:
@@ -96,6 +100,8 @@ def load_protocol(path: Path) -> tuple[dict[str, Any], str]:
         raise ValueError("withdrawal checkpoints are distinct and increasing")
     if int(protocol["evaluation"].get("per_state_samples", 0)) < 0:
         raise ValueError("per-state samples are a nonnegative count")
+    if int(protocol["evaluation"].get("greedy_episodes", 1)) < 1:
+        raise ValueError("a greedy reading runs at least one episode")
     if type(protocol.get("withdrawal_reset", False)) is not bool:
         raise ValueError("withdrawal_reset is true or false")
     return protocol, hashlib.sha256(raw).hexdigest()
@@ -326,6 +332,8 @@ def run_life(
         "outcomes_delivered": len(adapter.ledger.consumed),
         "actions_issued": adapter.ledger.issued,
     }
+    if adapter.rule.rule != "none":
+        counts["context_rule"] = adapter.rule.counts()  # whole-life, the adapter's
     return Life(events, held, summaries, counts)
 
 
@@ -399,15 +407,24 @@ def evaluate(
     seed: int,
     reset: str = "episode",
     routes: list[int] | None = None,
+    context_rule: str = "none",
 ) -> list[dict[str, Any]]:
     """Frozen reading of a checkpoint copy: ``act`` only, so no parameter or store changes;
-    the working trace and settled activity still move within an episode."""
+    the working trace and settled activity still move within an episode. A context rule the
+    arm lived under applies in its reading too (``context_rules``).
+
+    On a chain world every row also carries the reading in sequence of Will Glynn's
+    cadence-teachers, EXP-56 (https://github.com/WGlynn/cadence-teachers): whether the first
+    decision at each stage the episode reached was right (``first_try``, None for a stage not
+    reached), and the decisions taken at a stage after a miss there and how many were right."""
     from cadence import Brain  # noqa: PLC0415
 
     if reset not in ("episode", "continuing"):
         raise ValueError("reset is 'episode' or 'continuing'")
     brain = Brain.load(checkpoint)
     reseed_actions(brain, seed)
+    rule = ContextRule(brain, context_rule)
+    chain = world_spec["kind"] in CHAIN_WORLDS
     rows = []
     for index in range(episodes):
         if reset == "episode" or index == 0:
@@ -415,6 +432,9 @@ def evaluate(
         world = make_world(world_spec, None if routes is None else routes[index])
         undecided = refusals = 0
         first_choice = None
+        first_try: list[int | None] = [None] * world.stages
+        misses = retries = retries_right = 0
+        unchanged, held = rule.unchanged, rule.held
         while not world.done:
             x = world.observation()
             try:
@@ -425,22 +445,33 @@ def evaluate(
             action = action_id(out, world.actions)
             reading = readout(brain)
             undecided += int(reading.get("undecided", False))
+            stage = world.stage
             outcome = world.step(action)
             if outcome.decision and first_choice is None:
                 first_choice = {"action": action, "required": outcome.required}
-        rows.append(
-            {
-                "episode": index,
-                "route": None if routes is None else routes[index],
-                "success": bool(world.success) and refusals == 0,
-                "decisions": world.decisions,
-                "stage_reached": world.stage,
-                "reason": "refused" if refusals else ("success" if world.success else _reason(world)),
-                "refusals": refusals,
-                "undecided": undecided,
-                "first_choice": first_choice,
-            }
-        )
+            if chain and outcome.decision:
+                if misses == 0:
+                    first_try[stage] = int(outcome.advanced)
+                else:
+                    retries += 1
+                    retries_right += int(outcome.advanced)
+                misses = 0 if outcome.advanced else misses + 1
+        row: dict[str, Any] = {
+            "episode": index,
+            "route": None if routes is None else routes[index],
+            "success": bool(world.success) and refusals == 0,
+            "decisions": world.decisions,
+            "stage_reached": world.stage,
+            "reason": "refused" if refusals else ("success" if world.success else _reason(world)),
+            "refusals": refusals,
+            "undecided": undecided,
+            "first_choice": first_choice,
+        }
+        if chain:
+            row.update(first_try=first_try, retries=retries, retries_right=retries_right)
+        if context_rule != "none":
+            row.update(rule_unchanged=rule.unchanged - unchanged, rule_held=rule.held - held)
+        rows.append(row)
     return rows
 
 
@@ -581,7 +612,7 @@ def write_jsonl_gz(path: Path, rows: list[dict[str, Any]]) -> str:
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     if not rows:
         return
-    names = list(rows[0].keys())
+    names = list(dict.fromkeys(name for row in rows for name in row))  # arms may add readings
     with open(path, "w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=names)
         writer.writeheader()
@@ -645,13 +676,18 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
     train_routes, after_routes, eval_routes = schedules(
         protocol, seed, max(lengths.values(), default=protocol["training_episodes"]))
 
-    def frozen(checkpoint: Path) -> dict[str, Any]:
+    def frozen(checkpoint: Path, rule: str = "none") -> dict[str, Any]:
         readings = {}
         for mode in evaluation["modes"]:
+            # every greedy episode from a reset reads the same deterministic answers
+            count = evaluation["episodes"]
+            if mode == "greedy":
+                count = int(evaluation.get("greedy_episodes", count))
             rows = evaluate(
-                checkpoint, world, episodes=evaluation["episodes"], greedy=mode == "greedy",
+                checkpoint, world, episodes=count, greedy=mode == "greedy",
                 seed=stream_seed(STREAM["evaluation"], seed, 0 if mode == "greedy" else 1),
-                reset=evaluation.get("reset", "episode"), routes=eval_routes,
+                reset=evaluation.get("reset", "episode"),
+                routes=None if eval_routes is None else eval_routes[:count], context_rule=rule,
             )
             readings[mode] = {"summary": episode_summary(rows, make_world(world, route=0).stages), "rows": rows}
         return readings
@@ -681,7 +717,7 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
         path = directory / f"{arm}-withdrawal-{mark}.npz"
         living.save(path)
         (directory / f"{arm}-withdrawal-{mark}.seam.json").write_text(json.dumps(held.to_dict()))
-        reading: dict[str, Any] = {"frozen": frozen(path)}
+        reading: dict[str, Any] = {"frozen": frozen(path, protocol["arms"][arm].get("context_rule", "none"))}
         if stagewise:
             reading["per_state"] = states(path)
         store[str(mark)] = reading
@@ -711,7 +747,8 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
                     and np.array_equal(brain.brain.bias, parent.brain.bias)
                 ):
                     raise RuntimeError(f"arm {arm}: its override changed the founder's initial weights")
-            adapter = ADAPTERS[spec["adapter"]](brain, make_world(world, route=0).actions)
+            rule = spec.get("context_rule", "none")
+            adapter = ADAPTERS[spec["adapter"]](brain, make_world(world, route=0).actions, context_rule=rule)
             labels = (np.random.default_rng(stream_seed(STREAM["labels"], seed))
                       if spec["caregiver"] == "random_label" else None)
             caregiver = Caregiver(spec["caregiver"], schedule["guided"], schedule["autonomous"], rng=labels)
@@ -726,7 +763,7 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
                 "training": {"counts": life.counts, "summary": episode_summary(life.episodes, make_world(world, route=0).stages)},
                 "trained_digest": state_digest(brain, copier),
                 "events_sha256": write_jsonl_gz(directory / f"{arm}-train-events.jsonl.gz", life.events),
-                "frozen": frozen(trained),
+                "frozen": frozen(trained, rule),
             }
             if stagewise:
                 arm_result["per_state"] = states(trained)
@@ -739,12 +776,14 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
                 # last outcome arrives through the teaching interface with a fresh episode's first
                 # observation, the action that call issues is discarded, and Brain.reset starts the
                 # stream afresh before the life alone begins.
-                closing = ADAPTERS[spec["adapter"]](living, make_world(world, route=0).actions)
+                closing = ADAPTERS[spec["adapter"]](living, make_world(world, route=0).actions,
+                                                    context_rule=spec.get("context_rule", "none"))
                 closing.resume(seam, make_world(world, None if after_routes is None else after_routes[0]).observation())
                 living.reset()
                 seam = None
             # the life after the caregiver leaves may go on through another interface
-            follow = ADAPTERS[spec.get("withdrawal_adapter", spec["adapter"])](living, make_world(world, route=0).actions)
+            follow = ADAPTERS[spec.get("withdrawal_adapter", spec["adapter"])](
+                living, make_world(world, route=0).actions, context_rule=spec.get("context_rule", "none"))
             checkpoints: dict[str, Any] = {}
             after = run_withdrawal(follow, world, protocol["withdrawal_episodes"],
                                    life_id=f"{recipe_name}/{seed}/{arm}/withdrawal", seam=seam,
@@ -758,7 +797,7 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
                 "counts": after.counts,
                 "summary": episode_summary(after.episodes, make_world(world, route=0).stages),
                 "events_sha256": write_jsonl_gz(directory / f"{arm}-withdrawal-events.jsonl.gz", after.events),
-                "frozen": frozen(withdrawn),
+                "frozen": frozen(withdrawn, spec.get("context_rule", "none")),
             }
             if stagewise:
                 arm_result["withdrawal"]["per_state"] = states(withdrawn)
@@ -911,7 +950,34 @@ def pair_contrasts(results: list[dict[str, Any]], protocol: dict[str, Any]) -> d
                 if any(v is None for v in va + vb):
                     continue
                 out[f"{mode}:{phase}:{candidate}-{control}"] = paired_bootstrap(va, vb)
+            # a founder's clean greedy pass: every greedy episode completed in one decision per
+            # stage (EXP-57's primary reading), compared by exact McNemar over the founders
+            clean_a = [_clean(x) for x in a]
+            clean_b = [_clean(x) for x in b]
+            if None not in clean_a + clean_b:
+                only_a = sum(1 for u, v in zip(clean_a, clean_b) if u and not v)
+                only_b = sum(1 for u, v in zip(clean_a, clean_b) if v and not u)
+                out[f"clean:{phase}:{candidate}-{control}"] = {
+                    "founders": len(a), "candidate": sum(map(bool, clean_a)), "control": sum(map(bool, clean_b)),
+                    "candidate_only": only_a, "control_only": only_b, "mcnemar_p": mcnemar_exact(only_a, only_b)}
+            first_a = [x["frozen"].get("sampled", {}).get("summary", {}).get("first_try_accuracy") for x in a]
+            first_b = [x["frozen"].get("sampled", {}).get("summary", {}).get("first_try_accuracy") for x in b]
+            if all(v is not None for v in first_a + first_b):
+                for stage in range(len(first_a[0])):
+                    pairs = [(u[stage], v[stage]) for u, v in zip(first_a, first_b)
+                             if u[stage] is not None and v[stage] is not None]
+                    if pairs:
+                        out[f"first_try_{stage + 1}:{phase}:{candidate}-{control}"] = paired_bootstrap(
+                            [u for u, _ in pairs], [v for _, v in pairs])
     return out
+
+
+def _clean(reading: dict[str, Any]) -> bool | None:
+    """Whether every greedy episode of a reading was a clean pass; None without a greedy one."""
+    summary = reading.get("frozen", {}).get("greedy", {}).get("summary")
+    if not summary or not summary.get("episodes"):
+        return None
+    return summary["exact_minimal_completions"] == summary["episodes"]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -919,6 +985,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--protocol", type=Path, default=HERE / "protocol.json")
     parser.add_argument("--out", type=Path)
     parser.add_argument("--seeds", type=int, nargs="*")
+    parser.add_argument("--seed-set", default="development",
+                        help="the protocol's named founder set when --seeds is not given")
     parser.add_argument("--arms", nargs="*")
     parser.add_argument("--recipes", nargs="*")
     parser.add_argument("--wheel-sha256", default=None)
@@ -947,7 +1015,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.evaluation_episodes is not None:
         overridden["evaluation.episodes"] = args.evaluation_episodes
         protocol["evaluation"]["episodes"] = args.evaluation_episodes
-    seeds = args.seeds or protocol["seeds"]["development"]
+    seeds = args.seeds or protocol["seeds"][args.seed_set]
     arms = args.arms or list(protocol["arms"])
     recipes = args.recipes or list(protocol["recipes"])
     if args.out is None:

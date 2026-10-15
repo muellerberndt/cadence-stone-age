@@ -173,8 +173,13 @@ def pair_lines(bodies: list[dict[str, Any]], protocol: dict[str, Any]) -> list[s
     pairs = pair_contrasts(bodies, protocol)
     if not pairs:
         return []
-    lines = ["Declared pairs (percentage points, bootstrap 95% over founders):", ""]
+    lines = ["Declared pairs (percentage points, bootstrap 95% over founders; clean greedy passes by "
+             "exact McNemar):", ""]
     for key, c in pairs.items():
+        if "mcnemar_p" in c:
+            lines.append(f"- {key}: {c['candidate']} against {c['control']} of {c['founders']}, "
+                         f"{c['candidate_only']} / {c['control_only']} discordant, p {c['mcnemar_p']:.4f}")
+            continue
         lines.append(f"- {key}: {c['mean_difference'] * 100:+.1f} [{c['bootstrap_95'][0] * 100:+.1f}, "
                      f"{c['bootstrap_95'][1] * 100:+.1f}], {c['positive']} up / {c['negative']} down / "
                      f"{c['zero']} equal")

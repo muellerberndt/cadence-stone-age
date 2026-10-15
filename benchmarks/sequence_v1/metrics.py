@@ -111,7 +111,47 @@ def episode_summary(episodes: Sequence[dict[str, Any]], stages: int) -> dict[str
         "refusals": int(sum(int(e.get("refusals", 0)) for e in episodes)),
         "undecided": int(sum(int(e.get("undecided", 0)) for e in episodes)),
         **_first_choice(episodes),
+        **_in_sequence(episodes),
     }
+
+
+def _in_sequence(episodes: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    """The reading in sequence of Will Glynn's cadence-teachers, EXP-56: per stage, the share of
+    the episodes reaching it whose first decision there was right; and the share of right
+    decisions among those taken at a stage after a miss there, pooled over the episodes. With
+    a context rule, how many decisions left the observation unchanged and how many it held.
+    Empty when the episodes carry no such reading."""
+    rows = [e for e in episodes if e.get("first_try") is not None]
+    if not rows:
+        return {}
+    stages = len(rows[0]["first_try"])
+    first = []
+    for stage in range(stages):
+        reached = [int(e["first_try"][stage]) for e in rows if e["first_try"][stage] is not None]
+        first.append(sum(reached) / len(reached) if reached else None)
+    retries = sum(int(e["retries"]) for e in rows)
+    out: dict[str, Any] = {
+        "first_try_accuracy": first,
+        "first_try_reached": [sum(1 for e in rows if e["first_try"][s] is not None) for s in range(stages)],
+        "retries": retries,
+        "retry_accuracy": sum(int(e["retries_right"]) for e in rows) / retries if retries else None,
+    }
+    if any("rule_held" in e for e in rows):
+        out["rule_unchanged"] = int(sum(int(e.get("rule_unchanged", 0)) for e in rows))
+        out["rule_held"] = int(sum(int(e.get("rule_held", 0)) for e in rows))
+    return out
+
+
+def mcnemar_exact(only_a: int, only_b: int) -> float:
+    """Exact two-sided McNemar p of paired binary readings from the discordant counts: twice the
+    smaller binomial tail at one half, capped at one (EXP-57's test)."""
+    if only_a < 0 or only_b < 0:
+        raise ValueError("discordant counts are nonnegative")
+    n = only_a + only_b
+    if n == 0:
+        return 1.0
+    tail = sum(math.comb(n, k) for k in range(min(only_a, only_b) + 1))
+    return min(1.0, float(Fraction(2 * tail, 2**n)))
 
 
 def _first_choice(episodes: Sequence[dict[str, Any]]) -> dict[str, Any]:

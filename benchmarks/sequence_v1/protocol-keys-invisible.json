@@ -1,0 +1,259 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "Context keys, an invisible step: which decisions enter the episodic memory's temporal context",
+  "credit": "Will Glynn, cadence-teachers EXP-56, EXP-57, EXP-59 and EXP-60 (https://github.com/WGlynn/cadence-teachers): the chain seen three ways after the ambiguous chain Huncho reported on the Stone Age world, the hold rule, the reading in sequence, the boundary of the rule; the queued EXP-63 proposed the outcome gate",
+  "question": "With Brain.compose(..., memory_choice=True): which rule for the decisions that enter the temporal context key gains where progress is hidden and costs nothing where it is visible or invisible?",
+  "scope": "component: the episodic memory's context key in V5's four-stage chain; the rule is applied by the instrument (context_rules.py), not by the library",
+  "world": {
+    "kind": "view_chain",
+    "view": "invisible",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "note": "A, A, B, C: cadence-teachers EXP-59; the first right action changes nothing seen, so only the brain's own correct first action tells stage 2 from stage 1"
+  },
+  "recipes": {
+    "memory": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "Brain.compose(7, 5, modules=(48, 24), arousal=True, memory_choice=True): the notebook's brain, memory_context 0.5 by default"
+    }
+  },
+  "arms": {
+    "place_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "place_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "ctx5_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "context_rule": "none"
+    },
+    "ctx5_natural_240": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 240,
+      "context_rule": "none"
+    },
+    "ctx5_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "context_rule": "none"
+    },
+    "ctx5_corrective_240": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 240,
+      "context_rule": "none"
+    },
+    "hold5_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "context_rule": "hold"
+    },
+    "hold5_natural_240": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 240,
+      "context_rule": "hold"
+    },
+    "hold5_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "context_rule": "hold"
+    },
+    "hold5_corrective_240": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 240,
+      "context_rule": "hold"
+    },
+    "holdtd_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "context_rule": "hold_td"
+    },
+    "holdtd_natural_240": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 240,
+      "context_rule": "hold_td"
+    },
+    "holdtd_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "context_rule": "hold_td"
+    },
+    "holdtd_corrective_240": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 240,
+      "context_rule": "hold_td"
+    }
+  },
+  "context_rules": {
+    "none": "the library's key: every decision enters the temporal context (ctx5, the founder memory_context 0.5)",
+    "hold": "a decision after which the observation is unchanged never enters the key (EXP-57's rule)",
+    "hold_td": "such a decision is held only when the signed temporal-difference error of its outcome is below zero: learn's own error during training, the frozen critic's with a zero reward in a reading"
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "label": "natural: none; corrective: the required action of the observation shown now, after an executed nonterminal mistake in a guided window (V5's corrective teacher)"
+  },
+  "training_episodes": 120,
+  "evaluation": {
+    "episodes": 100,
+    "greedy_episodes": 1,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 0,
+    "note": "a frozen copy read at the arm's seam under its own rule: 100 sampled episodes from a reset each, the reading in sequence (first try per stage, retries), and one greedy episode (a clean pass: four stages in four decisions)"
+  },
+  "seeds": {
+    "screen": [
+      202001,
+      202002,
+      202003,
+      202004,
+      202005,
+      202006,
+      202007,
+      202008,
+      202009,
+      202010,
+      202011,
+      202012,
+      202013,
+      202014,
+      202015,
+      202016,
+      202017,
+      202018,
+      202019,
+      202020,
+      202021,
+      202022,
+      202023,
+      202024,
+      202025,
+      202026,
+      202027,
+      202028,
+      202029,
+      202030,
+      202031,
+      202032,
+      202033,
+      202034,
+      202035,
+      202036,
+      202037,
+      202038,
+      202039,
+      202040,
+      202041,
+      202042,
+      202043,
+      202044,
+      202045,
+      202046,
+      202047,
+      202048
+    ]
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder and signal",
+    "primary": "clean greedy passes, rule against ctx5, exact two-sided McNemar on the discordant pairs, pooled over both signals",
+    "pairs": [
+      [
+        "hold5_natural_120",
+        "ctx5_natural_120"
+      ],
+      [
+        "holdtd_natural_120",
+        "ctx5_natural_120"
+      ],
+      [
+        "hold5_corrective_120",
+        "ctx5_corrective_120"
+      ],
+      [
+        "holdtd_corrective_120",
+        "ctx5_corrective_120"
+      ],
+      [
+        "hold5_natural_240",
+        "ctx5_natural_240"
+      ],
+      [
+        "holdtd_natural_240",
+        "ctx5_natural_240"
+      ],
+      [
+        "hold5_corrective_240",
+        "ctx5_corrective_240"
+      ],
+      [
+        "holdtd_corrective_240",
+        "ctx5_corrective_240"
+      ],
+      [
+        "place_natural_120",
+        "ctx5_natural_120"
+      ],
+      [
+        "place_corrective_120",
+        "ctx5_corrective_120"
+      ]
+    ]
+  }
+}
