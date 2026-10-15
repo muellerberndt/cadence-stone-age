@@ -410,7 +410,7 @@ def evaluate(
     context_rule: str = "none",
 ) -> list[dict[str, Any]]:
     """Frozen reading of a checkpoint copy: ``act`` only, so no parameter or store changes;
-    the working trace and settled activity still move within an episode. A context rule the
+    the working trace and settled activity move within an episode. A context rule the
     arm lived under applies in its reading too (``context_rules``).
 
     On a chain world every row also carries the reading in sequence of Will Glynn's

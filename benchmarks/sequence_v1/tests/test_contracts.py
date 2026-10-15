@@ -1022,7 +1022,7 @@ def test_context_rule_arithmetic_on_a_spy() -> None:
         assert (spy.keys[-1] is None) == judgments[0]  # held: the key is the first decision's
         if not judgments[0]:
             assert np.array_equal(spy.keys[-1], first)
-        # again unchanged; now the error 0 + 0.9 * 1.0 - 2.0 < 0
+        # again unchanged; this time the error 0 + 0.9 * 1.0 - 2.0 < 0
         spy.value_now, spy.next_value = 2.0, 1.0
         spy.learn(np.array([0.0]), np.array([False]), a)
         assert rule.last["held"] == judgments[1]
