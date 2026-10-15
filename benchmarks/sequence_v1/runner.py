@@ -49,6 +49,7 @@ from worlds import (  # noqa: E402
     chain_situations,
     make_world,
     recall_schedule,
+    views_distinct,
     weather_cell,
     weather_cycle,
     weather_schedule,
@@ -58,7 +59,7 @@ SCHEMA = "stone-age-sequence/1"
 CONTROLS = ("founder", "random", "oracle", "searcher")
 STREAM = {"evaluation": 1, "random": 2, "routes": 3, "withdrawal_routes": 4, "searcher": 5,
           "labels": 6, "per_state": 7}
-CHAIN_WORLDS = ("cold_chain", "weather_chain")
+CHAIN_WORLDS = ("cold_chain", "weather_chain", "view_chain")  # V5's chain rules
 CAREGIVERS = ("none", "grade", "correct", "guide", "random_label")
 TEACHING_KEYS = ("adapter", "caregiver", "compose", "training_episodes")
 
@@ -655,14 +656,18 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
             readings[mode] = {"summary": episode_summary(rows, make_world(world, route=0).stages), "rows": rows}
         return readings
 
+    # a stage is read alone from a reset copy only where every stage shows its own observation:
+    # on a hidden view a reset brain at A cannot know which A it is at
+    stagewise = kind in CHAIN_WORLDS and views_distinct(world)
+
     def states(checkpoint: Path) -> dict[str, Any] | None:
-        if kind not in CHAIN_WORLDS:
+        if not stagewise:
             return None
         return per_state(checkpoint, world, samples=int(evaluation.get("per_state_samples", 0)),
                          seed=stream_seed(STREAM["per_state"], seed))
 
     result["arms"]["founder"] = {"frozen": frozen(founder_path)}
-    if kind in CHAIN_WORLDS:
+    if stagewise:
         result["arms"]["founder"]["per_state"] = states(founder_path)
     for control in ("random", "oracle", "searcher") if kind in CHAIN_WORLDS else ("random", "oracle"):
         stream = STREAM["searcher"] if control == "searcher" else STREAM["random"]
@@ -677,7 +682,7 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
         living.save(path)
         (directory / f"{arm}-withdrawal-{mark}.seam.json").write_text(json.dumps(held.to_dict()))
         reading: dict[str, Any] = {"frozen": frozen(path)}
-        if kind in CHAIN_WORLDS:
+        if stagewise:
             reading["per_state"] = states(path)
         store[str(mark)] = reading
 
@@ -723,7 +728,7 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
                 "events_sha256": write_jsonl_gz(directory / f"{arm}-train-events.jsonl.gz", life.events),
                 "frozen": frozen(trained),
             }
-            if kind in CHAIN_WORLDS:
+            if stagewise:
                 arm_result["per_state"] = states(trained)
             taught[arm] = {"checkpoint": trained, "seam": seam_path, "result": arm_result}
         if protocol.get("withdrawal_episodes", 0) > 0:
@@ -755,7 +760,7 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
                 "events_sha256": write_jsonl_gz(directory / f"{arm}-withdrawal-events.jsonl.gz", after.events),
                 "frozen": frozen(withdrawn),
             }
-            if kind in CHAIN_WORLDS:
+            if stagewise:
                 arm_result["withdrawal"]["per_state"] = states(withdrawn)
             if checkpoints:
                 arm_result["withdrawal"]["checkpoints"] = checkpoints
@@ -799,14 +804,20 @@ def analytic(world: dict[str, Any]) -> dict[str, Any]:
     probe = make_world(world, route=0)
     exact = uniform_chain_success_exact(probe.actions, probe.stages, probe.deadline)
     if world["kind"] in CHAIN_WORLDS:
-        searcher = never_repeat_chain_success_exact(probe.actions, probe.stages, probe.deadline)
-        return {
+        out: dict[str, Any] = {
             "uniform_random_success": float(exact),
             "uniform_random_success_fraction": f"{exact.numerator}/{exact.denominator}",
             "uniform_random_dp": chain_success([1 / probe.actions] * probe.stages, probe.deadline),
-            "never_repeat_searcher_success": float(searcher),
-            "never_repeat_searcher_success_fraction": f"{searcher.numerator}/{searcher.denominator}",
         }
+        if not views_distinct(world):
+            # the searcher remembers failures by observation, so on a view where two stages look
+            # alike a failure at one stage excludes the action at the other: its rate is measured
+            out["note"] = "stages look alike: the never-repeat searcher is measured, not exact"
+            return out
+        searcher = never_repeat_chain_success_exact(probe.actions, probe.stages, probe.deadline)
+        out["never_repeat_searcher_success"] = float(searcher)
+        out["never_repeat_searcher_success_fraction"] = f"{searcher.numerator}/{searcher.denominator}"
+        return out
     return {"note": "route cue: the context-blind ceiling at the first decision is 0.5"}
 
 

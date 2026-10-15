@@ -823,3 +823,98 @@ def test_a_reset_withdrawal_begins_afresh_and_the_flag_is_checked(tmp_path: Path
     path.write_text(json.dumps(protocol))
     with pytest.raises(ValueError, match="withdrawal_reset"):
         ru.load_protocol(path)
+
+
+# -- the chain seen three ways, adapted from Will Glynn's cadence-teachers
+#    (https://github.com/WGlynn/cadence-teachers): the ambiguous chain Huncho reported on the Stone
+#    Age world as EXP-56 and EXP-57 rebuilt it (progress hidden), EXP-59's invisible step and
+#    EXP-60's visible chain. The arrays below are the notebook's own literals.
+
+EXP56_OBS_A = np.array([[0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]])  # stages 1 and 3 of EXP-56
+EXP56_OBS_B = np.array([[0.35, 1.0, 0.0, 0.0, 0.5, 0.0, 1.0]])  # stages 2 and 4 of EXP-56
+EXP59_OBS_C = np.array([[0.35, 1.0, 1.0, 0.0, 0.5, 0.5, 1.0]])  # stage 4 of EXP-59
+EXP60_STAGES = [(0, 0, 0), (1, 0, 0), (1, 1, 0), (1, 1, 1)]  # (wood, stone, fire), EXP-45's obs()
+
+
+def _exp60_visible(stage: int) -> np.ndarray:
+    w, s, f = EXP60_STAGES[stage]
+    return np.array([[0.35, float(w), float(s), float(f), w / 2.0, s / 2.0, 1.0]])
+
+
+def _views_along_the_chain(view: str) -> list[np.ndarray]:
+    world = wo.make_world({"kind": "view_chain", "view": view})
+    seen = []
+    while not world.done:
+        seen.append(world.observation())
+        world.step(world.required())
+    return seen
+
+
+def test_view_chains_show_the_notebooks_observations_byte_for_byte() -> None:
+    hidden = _views_along_the_chain("hidden")
+    assert [x.tobytes() for x in hidden] == [x.tobytes() for x in
+                                             (EXP56_OBS_A, EXP56_OBS_B, EXP56_OBS_A, EXP56_OBS_B)]
+    assert hidden[0].tobytes() == hidden[2].tobytes() and hidden[1].tobytes() == hidden[3].tobytes()
+    assert hidden[0].tobytes() != hidden[1].tobytes()
+    invisible = _views_along_the_chain("invisible")
+    assert [x.tobytes() for x in invisible] == [x.tobytes() for x in
+                                                (EXP56_OBS_A, EXP56_OBS_A, EXP56_OBS_B, EXP59_OBS_C)]
+    visible = _views_along_the_chain("visible")
+    cold = wo.ColdChain()
+    for stage, x in enumerate(visible):
+        assert x.tobytes() == _exp60_visible(stage).tobytes() == cold.observation().tobytes(), stage
+        cold.step(cold.required())
+    for x in hidden + invisible + visible:
+        assert x.dtype == np.float64 and x.shape == (1, wo.V5_INPUTS)
+    assert not wo.views_distinct({"kind": "view_chain", "view": "hidden"})
+    assert not wo.views_distinct({"kind": "view_chain", "view": "invisible"})
+    assert wo.views_distinct({"kind": "view_chain", "view": "visible"}) and wo.views_distinct(COLD)
+
+
+@pytest.mark.parametrize("view", sorted(wo.CHAIN_VIEWS))
+def test_view_chains_keep_v5s_rules_and_pay(view: str) -> None:
+    rng = np.random.default_rng(202)
+    for _ in range(300):
+        plain = wo.ColdChain()
+        seen = wo.make_world({"kind": "view_chain", "view": view, "deadline": 10,
+                              "success_reward": 2.0, "failure_reward": -1.0})
+        while not plain.done:
+            before = seen.observation()
+            action = int(rng.integers(5))
+            right = action == plain.required()
+            outcome = seen.step(action)
+            assert plain.step(action) == outcome  # stage, required action, reward, reason
+            if not right and not outcome.done:  # a wrong action changes nothing the brain sees
+                assert seen.observation().tobytes() == before.tobytes()
+        assert seen.done and seen.success == plain.success and seen.decisions == plain.decisions
+    with pytest.raises(ValueError):
+        wo.make_world({"kind": "view_chain", "view": "foggy"})
+
+
+def test_the_invisible_steps_right_action_changes_nothing_seen() -> None:
+    world = wo.make_world({"kind": "view_chain", "view": "invisible"})
+    before = world.observation()
+    outcome = world.step(wo.GATHER_WOOD)
+    assert outcome.advanced and world.stage == 1 and world.observation().tobytes() == before.tobytes()
+    assert world.required() == wo.GATHER_STONE
+    hidden = wo.make_world({"kind": "view_chain", "view": "hidden"})
+    hidden.step(wo.GATHER_WOOD)
+    assert hidden.observation().tobytes() != before.tobytes()  # on the hidden view it does
+
+
+@pytest.mark.parametrize("view", sorted(wo.CHAIN_VIEWS))
+def test_view_chain_scorer_controls_and_analytic_values(view: str) -> None:
+    spec = {"kind": "view_chain", "view": view, "deadline": 10, "success_reward": 2.0,
+            "failure_reward": -1.0}
+    analytic = ru.analytic(spec)
+    assert analytic["uniform_random_success_fraction"] == ru.analytic(COLD)["uniform_random_success_fraction"]
+    if view == "visible":
+        assert analytic["never_repeat_searcher_success_fraction"] == "38/125"
+    else:
+        assert "never_repeat_searcher_success" not in analytic and "measured" in analytic["note"]
+    rows = ru.control_rows("oracle", spec, episodes=10, seed=0)
+    assert all(r["success"] and r["decisions"] == 4 for r in rows)
+    rate = np.mean([r["success"] for r in ru.control_rows("random", spec, episodes=20_000, seed=2)])
+    assert abs(rate - 0.1208738816) < 0.01
+    searched = ru.control_rows("searcher", spec, episodes=200, seed=3)
+    assert len(searched) == 200 and all(r["decisions"] <= 10 for r in searched)
