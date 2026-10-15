@@ -859,15 +859,19 @@ def test_view_chains_show_the_notebooks_observations_byte_for_byte() -> None:
     invisible = _views_along_the_chain("invisible")
     assert [x.tobytes() for x in invisible] == [x.tobytes() for x in
                                                 (EXP56_OBS_A, EXP56_OBS_A, EXP56_OBS_B, EXP59_OBS_C)]
+    consecutive = _views_along_the_chain("consecutive")  # Huncho's Stone Age V7.4 topology
+    assert [x.tobytes() for x in consecutive] == [x.tobytes() for x in
+                                                  (EXP56_OBS_A, EXP56_OBS_A, EXP56_OBS_B, EXP56_OBS_B)]
     visible = _views_along_the_chain("visible")
     cold = wo.ColdChain()
     for stage, x in enumerate(visible):
         assert x.tobytes() == _exp60_visible(stage).tobytes() == cold.observation().tobytes(), stage
         cold.step(cold.required())
-    for x in hidden + invisible + visible:
+    for x in hidden + invisible + visible + consecutive:
         assert x.dtype == np.float64 and x.shape == (1, wo.V5_INPUTS)
     assert not wo.views_distinct({"kind": "view_chain", "view": "hidden"})
     assert not wo.views_distinct({"kind": "view_chain", "view": "invisible"})
+    assert not wo.views_distinct({"kind": "view_chain", "view": "consecutive"})
     assert wo.views_distinct({"kind": "view_chain", "view": "visible"}) and wo.views_distinct(COLD)
 
 
@@ -900,6 +904,13 @@ def test_the_invisible_steps_right_action_changes_nothing_seen() -> None:
     hidden = wo.make_world({"kind": "view_chain", "view": "hidden"})
     hidden.step(wo.GATHER_WOOD)
     assert hidden.observation().tobytes() != before.tobytes()  # on the hidden view it does
+    consecutive = wo.make_world({"kind": "view_chain", "view": "consecutive"})
+    seen = []
+    for action in (wo.GATHER_WOOD, wo.GATHER_STONE, wo.CRAFT_FIRE):
+        x = consecutive.observation()
+        assert consecutive.step(action).advanced
+        seen.append(consecutive.observation().tobytes() == x.tobytes())
+    assert seen == [True, False, True]  # the first and third right actions change nothing seen
 
 
 @pytest.mark.parametrize("view", sorted(wo.CHAIN_VIEWS))

@@ -2,13 +2,14 @@
 
 An auditable harness for the COLD chain of `benchmarks/cadence_081/v5_mochi_style.py`, for
 a vanished route cue, for the chain under a weather that has nothing to do with it, and for the
-chain seen three ways: progress hidden, an invisible step, progress visible. The
+chain seen four ways: progress hidden, an invisible step, progress visible, two consecutive
+aliases. The
 V4.2 to V5 scripts stay byte-for-byte as they were; this directory measures the same questions
 with explicit custody, separate random streams and complete receipts.
 
 | File | Responsibility |
 | --- | --- |
-| `worlds.py` | The COLD chain (V5's rules and seven inputs), the route cue, the weather chain (the COLD chain with three irrelevant weather bits, taught under four combinations and tested under the other four), and the view chain (the COLD chain's rules with the observation of each stage taken from a declared view: `hidden` A, B, A, B; `invisible` A, A, B, C; `visible` V5's own). Correctness lives here, independent of any brain. Invalid outputs raise `InvalidAction`; nothing is clamped. |
+| `worlds.py` | The COLD chain (V5's rules and seven inputs), the route cue, the weather chain (the COLD chain with three irrelevant weather bits, taught under four combinations and tested under the other four), and the view chain (the COLD chain's rules with the observation of each stage taken from a declared view: `hidden` A, B, A, B; `invisible` A, A, B, C; `visible` V5's own; `consecutive` A, A, B, B). Correctness lives here, independent of any brain. Invalid outputs raise `InvalidAction`; nothing is clamped. |
 | `context_rules.py` | Instrument-level rules for which decisions enter the episodic memory's temporal context key (`Brain.compose(..., memory_choice=True)`): `none` (the library's key), `hold` (a decision after which the observation is unchanged never enters it) and `hold_td` (such a decision is held only when the signed temporal-difference error of its outcome is below zero). An arm's rule is installed on its brain for the whole life and on every frozen copy read for it. |
 | `adapters.py` | `StepAdapter` (historical control, `Brain.step`) and `LiveAdapter` (continuing life, `Brain.live` with `decision_id`). A ledger gives every issued action one outcome, exactly once. Refusals follow the library's contracts: an answer refused after an accepted outcome is retried without the outcome; a refused outcome is offered again a bounded number of times. |
 | `runner.py` | Lives, the caregiver schedule (including a random-label null teacher), frozen evaluation on reseeded checkpoint copies, per-state readings, the never-repeat searcher control, the withdrawal branch read at checkpoints, twin arms that continue from one taught brain, an arm's own lesson length, founder-paired contrasts and declared pairs, per-founder files. |
@@ -19,7 +20,7 @@ with explicit custody, separate random streams and complete receipts.
 | `protocol-p1-drift.json` | The taught chain read state by state over 80 episodes alone, through `live` and, from the same taught brain, through `step`; with and without the episodic memory. |
 | `protocol-p3-generalization.json` | The weather chain: taught under the even-parity weathers, read under the odd-parity ones, with and without the episodic memory. |
 | `protocol-p3-content.json` | The weather chain: a correcting caregiver against a random-label twin and an untaught twin, at lessons of 40, 120 and 240 episodes, then 20 episodes alone through `live`. |
-| `protocol-keys-hidden.json`, `protocol-keys-invisible.json`, `protocol-keys-visible.json` | The context-key screen on the three views of the chain: place records alone, the founder key and the two rules, natural and corrective, at 120 and 240 episodes, on fresh founders 202001 to 202048 (`--seed-set screen`); one greedy episode and 100 sampled episodes per reading. |
+| `protocol-keys-hidden.json`, `protocol-keys-invisible.json`, `protocol-keys-visible.json`, `protocol-keys-consecutive.json` | The context-key screen on the four views of the chain: place records alone, the founder key and the two rules, natural and corrective, at 120 and 240 episodes, on fresh founders 202001 to 202048 (`--seed-set screen`); one greedy episode and 100 sampled episodes per reading. |
 | `protocol-p1-drift-reset.json`, `protocol-p3-content-reset.json` | The same designs in V5's order (`withdrawal_reset`), as the notebook ran them; the drift protocol names EXP-47's seeds 42 to 53 for the replica check. |
 | `tests/test_contracts.py` | Scorer, world rules, custody with a spy brain, probe isolation, seeded evaluation and exact save/load continuation on real brains; the searcher's exact value against enumeration, the weather chain's rules and splits, the random-label teacher's moments, the per-state reading against a direct reset-and-act read, an unchanged life when read at checkpoints, twin arms, the three views of the chain against the notebook's own arrays, the rules' arithmetic on a spy, the instrument's hold against the notebook's own trace loop, and the failure rule's error against `learn`'s. |
 
@@ -69,6 +70,15 @@ receipts; the code credits each one where it lives.
 On a view where two stages look alike, a stage cannot be read alone from a reset copy (a reset
 brain at A cannot know which A it is at), so the per-state reading runs only where every stage
 shows its own observation, and the never-repeat searcher's rate there is measured, not exact.
+
+## Adapted from the Stone Age V7 series
+
+One chamber comes from Huncho's Stone Age V7 series on Cadence 0.83.0. The hidden view above is
+that series' A-B-A-B chain, as cadence-teachers rebuilt it.
+
+| Chamber | Source | Here |
+| --- | --- | --- |
+| Two consecutive aliases: A, A, B, B, each pair byte-identical, so the right first and third actions change nothing seen; V7.4 found that temporal context raised the second occurrence of each observation and sampled success, while exact greedy chains stayed rare | [V7.4](https://github.com/ali12mahmood12345-boop/cadence-stone-age/blob/main/docs/V7_RESULTS.md) | `worlds.CHAIN_VIEWS["consecutive"]` (A and B are the hidden view's vectors; V7.4's archives do not publish its own), `protocol-keys-consecutive.json`; the tests check the topology byte for byte |
 
 Where this instrument departs from the notebook's scripts, its own semantics apply (below): the
 life ends at seams, the withdrawal resumes from the seam, and the lesson lengths of the content

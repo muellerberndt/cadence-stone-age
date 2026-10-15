@@ -1,6 +1,6 @@
 """Worlds of the sequence instrument: the V5 COLD chain, the vanished route cue, the COLD
-chain under a weather that has nothing to do with it, and the COLD chain seen three ways
-(progress hidden, an invisible step, progress visible).
+chain under a weather that has nothing to do with it, and the COLD chain seen four ways
+(progress hidden, an invisible step, progress visible, two consecutive aliases).
 
 A world defines what is correct independently of the brain. Its observation never carries
 the required action, the hidden route, the step count or the remaining deadline; those live
@@ -216,8 +216,12 @@ def weather_cycle(episodes: int, weathers: tuple[tuple[int, ...], ...] = WEATHER
 # the two A observations are byte-identical, and so are the two B observations. The invisible
 # view is EXP-59's chamber (exp/EXP-59_hold_boundary.py), where the first right action changes
 # nothing the brain sees. The visible view is EXP-60's (exp/EXP-60_hold_on_visible_chain.py):
-# V5's own inventory, a distinct observation per stage. The rules, the deadline and the pay are
-# ColdChain's; only what the brain sees at each stage changes.
+# V5's own inventory, a distinct observation per stage. The consecutive view is the alias
+# topology of Huncho's Stone Age V7 series, V7.4 (https://github.com/ali12mahmood12345-boop/
+# cadence-stone-age, docs/V7_RESULTS.md): two consecutive A observations, then two consecutive B
+# observations, each pair byte-identical; V7.4's archives do not publish its vectors, so A and B
+# here are the hidden view's. The rules, the deadline and the pay are ColdChain's; only what the
+# brain sees at each stage changes.
 
 VIEW_A = v5_observation(wood=0, stone=0, fire=False)  # EXP-56's OBS_A: the empty inventory
 VIEW_B = v5_observation(wood=1, stone=0, fire=False)  # EXP-56's OBS_B
@@ -227,6 +231,7 @@ CHAIN_VIEWS = {
     "hidden": (VIEW_A, VIEW_B, VIEW_A, VIEW_B),  # stages 1 and 3 look alike, and 2 and 4
     "invisible": (VIEW_A, VIEW_A, VIEW_B, VIEW_C),  # the first right action changes nothing seen
     "visible": (VIEW_A, VIEW_B, VIEW_C, VIEW_D),  # V5's observations, one per stage
+    "consecutive": (VIEW_A, VIEW_A, VIEW_B, VIEW_B),  # the first and third right actions change nothing seen
 }
 
 
@@ -237,8 +242,10 @@ class ViewChain(ColdChain):
     leaves the stage unchanged. ``hidden`` shows A, B, A, B at the four stages, so the brain's
     history has to tell stage 3 from stage 1; ``invisible`` shows A, A, B, C, so the brain's own
     correct first action is the only thing that tells stage 2 from stage 1; ``visible`` shows
-    V5's inventory, byte-identical to ColdChain at every stage. The success observation is never
-    shown to a brain (a new episode begins); it is ColdChain's."""
+    V5's inventory, byte-identical to ColdChain at every stage; ``consecutive`` shows A, A, B, B,
+    so the brain's own correct first and third actions are the only things that tell stage 2
+    from stage 1 and stage 4 from stage 3. The success observation is never shown to a brain (a
+    new episode begins); it is ColdChain's."""
 
     name = "view_chain"
 
