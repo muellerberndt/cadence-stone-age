@@ -198,7 +198,34 @@
       202046,
       202047,
       202048
-    ]
+    ],
+    "screen_long": [
+      202001,
+      202002,
+      202003,
+      202004,
+      202005,
+      202006,
+      202007,
+      202008,
+      202009,
+      202010,
+      202011,
+      202012,
+      202013,
+      202014,
+      202015,
+      202016,
+      202017,
+      202018,
+      202019,
+      202020,
+      202021,
+      202022,
+      202023,
+      202024
+    ],
+    "note": "the rule arms at 120 episodes (ctx5, hold5, holdtd) run on screen, 48 founders; the arms at 240 episodes and the place arms on screen_long, its first 24 (cadence-teachers EXP-57's 48 and 24 seeds per signal)"
   },
   "streams": {
     "evaluation": 1,
