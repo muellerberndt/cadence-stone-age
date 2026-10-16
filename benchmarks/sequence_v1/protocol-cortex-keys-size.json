@@ -1,0 +1,31 @@
+{
+  "schema": "cadence-key-size/1",
+  "name": "The episodic memory's stores at pixel scale, keyed on the senses and on the cortex",
+  "question": "With Brain.compose(12824, 75, modules=(512,), arousal=True, memory_choice=True): how many bytes do the episodic memory's stores and separators hold under memory_key=\"sensory\" and \"cortex\", and what does a live moment cost on random inputs?",
+  "scope": "storage and work of the library's episodic memory at a pixel-sized input; random inputs carry no task, so nothing here measures behavior",
+  "brain": {
+    "inputs": 12824,
+    "actions": 75,
+    "modules": [512],
+    "seed": 1,
+    "compose": {"arousal": true, "memory_choice": true},
+    "keys": ["sensory", "cortex"],
+    "note": "75 motor neurons in one slot; every other setting at the composed founder with the episodic memory's defaults"
+  },
+  "life": {
+    "moments": 300,
+    "observations": "each moment a fresh (1, 12824) row of uniform values in [0, 1) from numpy.random.default_rng(12824)",
+    "rewards": "from the same generator after each observation: +1 below .1, -1 from .1 to .2, else 0; the first moment has none; no done",
+    "refusals": "a refused moment is counted and the life continues with the next observation and no reward"
+  },
+  "readings": [
+    "bytes of each store before and after the life: separator projection and mean, strength, consolidated, mass",
+    "checkpoint file bytes after the life",
+    "wall seconds per live call: mean, median, 90th percentile, over all moments and over routine and aroused moments",
+    "seconds and calls in the stores' reads (recall) and writes (observe)",
+    "free-solve and learning sweeps per moment, routine moments, refusals",
+    "peak resident memory of the process"
+  ],
+  "procedure": "each key in its own process, one after the other, one BLAS thread, on a machine shared with other work; wall times are indicative",
+  "report": "a table of bytes per store and key, and a table of time per decision per key"
+}
