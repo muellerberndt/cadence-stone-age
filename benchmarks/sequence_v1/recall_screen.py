@@ -254,6 +254,9 @@ def control_check(runs: Path, control: Path, views: list[str]) -> tuple[list[str
     for rerun, original in pairs:
         for seed, body in founder_files(runs / rerun, "founder").items():
             path = control / original / "sensory" / f"founder-{seed}" / "founder.json"
+            if not path.exists() and original == "sk-control-p1":
+                # the extension founders: the earlier lane's full P1 run of the dense founder
+                path = control / "ck-p1" / "sensory" / f"founder-{seed}" / "founder.json"
             if not path.exists():
                 lines.append(f"| {rerun} | {seed} | no control file | - | - | - |")
                 report[f"{rerun}/{seed}"] = {"control": None}
