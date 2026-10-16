@@ -1,0 +1,193 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "Sparse separator, progress visible (V5's own observations): the founder key with memory_fan_in 4 and 2 against the dense founder",
+  "credit": "Will Glynn, cadence-teachers EXP-56, EXP-57, EXP-59 and EXP-60 (https://github.com/WGlynn/cadence-teachers): the chain seen three ways after the ambiguous chain Huncho reported on the Stone Age world, the hold rule, the reading in sequence, the boundary of the rule; the queued EXP-63 proposed the outcome gate",
+  "question": "With Brain.compose(..., memory_choice=True) and the founder key (the observation): do the place and ctx5 arms of the context-key screen keep their clean greedy passes, sampled success and first-try accuracy when the episodic memory's pattern separator is sparse (memory_fan_in 4 or 2) instead of dense?",
+  "scope": "component: the episodic memory's pattern separator in V5's four-stage chain seen with progress visible (V5's own observations); the brain, chamber, founders, signals and readings of the context-key screen",
+  "fan_in_note": "The setting in question is memory_fan_in=16 against the dense founder. These witnesses have 7 inputs and 5 actions, so the place key has 7 neurons and the context key 12, and the library refuses a fan-in above a key's width; a code neuron cannot read 16 of 7. The reading tests the sparse separator on these keys at two declared fan-ins below their width, 4 and 2, each against the dense founder. A fan-in of 16 reads 0.1% of 12,824 inputs; neither arm reaches that sparsity, and the separation-quality evidence covers wide keys.",
+  "world": {
+    "kind": "view_chain",
+    "view": "visible",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "note": "V5's own observations, one per stage (cadence-teachers EXP-60); the place records alone can key every stage"
+  },
+  "recipes": {
+    "sensory": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "the dense founder: the observation keys the records, memory_fan_in 0; reading 2's sensory recipe, its lives reused (see analysis.control)"
+    },
+    "sparse4": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "memory_fan_in": 4
+      },
+      "note": "the same with memory_fan_in=4: each of the 1,024 code neurons reads 4 of the place key's 7 sensory neurons and 4 of the context key's 12"
+    },
+    "sparse2": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "memory_fan_in": 2
+      },
+      "note": "the same with memory_fan_in=2: 2 of 7 and 2 of 12"
+    }
+  },
+  "arms": {
+    "place_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "place_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "ctx5_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "context_rule": "none"
+    },
+    "ctx5_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "context_rule": "none"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "label": "natural: none; corrective: the required action of the observation shown now, after an executed nonterminal mistake in a guided window (V5's corrective teacher)"
+  },
+  "training_episodes": 120,
+  "evaluation": {
+    "episodes": 100,
+    "greedy_episodes": 1,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 0,
+    "note": "a frozen copy read at the arm's seam under its own rule: 100 sampled episodes from a reset each, the reading in sequence (first try per stage, retries), and one greedy episode (a clean pass: four stages in four decisions)"
+  },
+  "seeds": {
+    "screen": [
+      202001,
+      202002,
+      202003,
+      202004,
+      202005,
+      202006,
+      202007,
+      202008,
+      202009,
+      202010,
+      202011,
+      202012,
+      202013,
+      202014,
+      202015,
+      202016,
+      202017,
+      202018,
+      202019,
+      202020,
+      202021,
+      202022,
+      202023,
+      202024,
+      202025,
+      202026,
+      202027,
+      202028,
+      202029,
+      202030,
+      202031,
+      202032,
+      202033,
+      202034,
+      202035,
+      202036,
+      202037,
+      202038,
+      202039,
+      202040,
+      202041,
+      202042,
+      202043,
+      202044,
+      202045,
+      202046,
+      202047,
+      202048
+    ],
+    "note": "reading 2's 48 founders (202001 to 202048), reused: they are needed for nothing else, and the dense founder's lives on them are reading 2's"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder and signal; a pair is one arm on one founder under one signal, sensory recipe against a sparse recipe",
+    "pooled": "both signals, 96 pairs per arm",
+    "readings": "a frozen copy of each arm at its seam, Brain.reset before each episode: one greedy episode (a clean pass is four stages in four decisions), 100 sampled episodes (success within 10 decisions), first-try accuracy at each stage in sequence",
+    "gate": "for each sparse recipe and each arm kind (place, ctx5): sparse minus sensory, paired means pooled over both signals, at least -.05 for the clean greedy pass rate, for sampled success and for first-try accuracy at each of the four stages; a sparse recipe meets this view when all twelve differences meet the margin",
+    "pairs": [
+      [
+        "place_natural_120",
+        "ctx5_natural_120"
+      ],
+      [
+        "place_corrective_120",
+        "ctx5_corrective_120"
+      ]
+    ],
+    "control": "The sensory recipe's readings are reading 2's (protocol-cortex-keys-*.json, sensory recipe, the same compose, arms, founders, streams and evaluation; library 88f9d81, whose founder key is byte-identical to the library under test). Before the sparse runs, the sensory recipe is rerun here under the library under test on a declared subset (screen founders 202001 and 202025 on every view, P1 founder 1001, drift founder 1001); every reading and trained-state digest must equal reading 2's, or the sensory recipe is rerun in full before any comparison.",
+    "verdict": "a sparse recipe passes the reading when it meets every screen view, P1 and the drift design",
+    "report": "as reading 2: paired means with SEM, clean passes as discordant pairs with exact McNemar"
+  }
+}

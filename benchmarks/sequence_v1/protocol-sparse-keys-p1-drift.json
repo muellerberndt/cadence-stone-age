@@ -1,0 +1,179 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P1 drift with the episodic memory's sparse separator (memory_fan_in 4 and 2) against the dense founder",
+  "credit": "Will Glynn, cadence-teachers EXP-46 and EXP-47 (https://github.com/WGlynn/cadence-teachers): the per-state reading beside whole-chain success, and the two continuations from one taught brain read at 10, 20, 40 and 80 episodes alone",
+  "question": "On reading 2's founders, with Brain.compose(..., memory_choice=True) and the founder key: is the per-state accuracy of the taught chain after 80 episodes alone, through live and through step, at or above the dense founder's when the episodic memory's pattern separator is sparse (memory_fan_in 4 or 2)?",
+  "scope": "component prerequisite behavior in a fully observed world; a memoryless stage-aware policy solves it, so it tests no memory",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "sensory": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "the dense founder: the observation keys the records, memory_fan_in 0; reading 2's sensory recipe, its lives reused (see analysis.control)"
+    },
+    "sparse4": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "memory_fan_in": 4
+      },
+      "note": "the same with memory_fan_in=4: each of the 1,024 code neurons reads 4 of the place key's 7 sensory neurons and 4 of the context key's 12"
+    },
+    "sparse2": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "memory_fan_in": 2
+      },
+      "note": "the same with memory_fan_in=2: 2 of 7 and 2 of 12"
+    }
+  },
+  "arms": {
+    "correct_then_live": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "withdrawal_adapter": "live"
+    },
+    "correct_then_step": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "withdrawal_adapter": "step",
+      "twin_of": "correct_then_live",
+      "note": "continues from its twin's taught brain and seam"
+    },
+    "grade_then_live": {
+      "adapter": "step",
+      "caregiver": "grade",
+      "withdrawal_adapter": "live"
+    },
+    "grade_then_step": {
+      "adapter": "step",
+      "caregiver": "grade",
+      "withdrawal_adapter": "step",
+      "twin_of": "grade_then_live",
+      "note": "continues from its twin's taught brain and seam"
+    },
+    "natural_then_live": {
+      "adapter": "step",
+      "caregiver": "none",
+      "withdrawal_adapter": "live"
+    },
+    "natural_then_step": {
+      "adapter": "step",
+      "caregiver": "none",
+      "withdrawal_adapter": "step",
+      "twin_of": "natural_then_live",
+      "note": "continues from its twin's taught brain and seam"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal_checkpoints": [
+    10,
+    20,
+    40
+  ],
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; at each checkpoint it stops at a seam, a frozen copy is read, and the same life resumes",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 300,
+    "note": "frozen copies with their own action stream; per-state reading of every stage from a reset copy, greedy, plus 300 sampled draws per stage for the memoryless prediction; one greedy episode, since every greedy episode from a reset reads the same deterministic answers",
+    "greedy_episodes": 1
+  },
+  "seeds": {
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012
+    ],
+    "note": "reading 2's founders, reused: they are needed for nothing else, and the dense founder's lives on them are reading 2's"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder; a pair is one arm on one founder, sensory recipe against a sparse recipe",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "gate": "for each of the six arms: sparse minus sensory in per-state greedy accuracy after 80 episodes alone, founder-paired; a sparse recipe meets the drift design when the upper end of every interval is at or above zero",
+    "report": "per-state accuracy after teaching and at 10, 20 and 40 episodes alone, founders with every stage right, frozen sampled and greedy success at each reading; within each recipe the live and step continuations as the drift design pairs them",
+    "pairs": [
+      [
+        "correct_then_live",
+        "correct_then_step"
+      ],
+      [
+        "grade_then_live",
+        "grade_then_step"
+      ],
+      [
+        "natural_then_live",
+        "natural_then_step"
+      ]
+    ],
+    "control": "The sensory recipe's readings are reading 2's (protocol-cortex-keys-*.json, sensory recipe, the same compose, arms, founders, streams and evaluation; library 88f9d81, whose founder key is byte-identical to the library under test). Before the sparse runs, the sensory recipe is rerun here under the library under test on a declared subset (screen founders 202001 and 202025 on every view, P1 founder 1001, drift founder 1001); every reading and trained-state digest must equal reading 2's, or the sensory recipe is rerun in full before any comparison.",
+    "verdict": "a sparse recipe passes the reading when it meets every screen view, P1 and the drift design"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  },
+  "fan_in_note": "The setting in question is memory_fan_in=16 against the dense founder. These witnesses have 7 inputs and 5 actions, so the place key has 7 neurons and the context key 12, and the library refuses a fan-in above a key's width; a code neuron cannot read 16 of 7. The reading tests the sparse separator on these keys at two declared fan-ins below their width, 4 and 2, each against the dense founder. A fan-in of 16 reads 0.1% of 12,824 inputs; neither arm reaches that sparsity, and the separation-quality evidence covers wide keys."
+}
