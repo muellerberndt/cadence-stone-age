@@ -118,3 +118,67 @@ the first run (18:06:18), by a commit of another session that changed two notes 
 `ca9b124`, clean, with the same 56 package file digests (package digest `c022362d`), which equal
 `a7c6c14`'s blobs file for file; and the instrument at `85956c4`, clean, the declaration commit.
 The commits after it on this branch amend the analysis script only.
+
+## Follow-up reading: context in the key
+
+Declared 2026-10-16, after the first reading's results and before any run of this one. Nothing
+below changes after the first run starts. The same kind of witness, not a gate.
+
+### Question
+
+A moment's key and address are the event heard; with `recall_context` above zero they also
+carry the fading history of the events before it (`history = context_decay * history + event`
+after each witnessed moment; `key = heard * x + context * history`; the address adds the learned
+map's terms). Does that context keep the sampled success and clean passes of the `place` and
+`ctx5` arms against the founder, and does it raise them over the plain recall recipe on the
+views where the stream's history has to tell a stage?
+
+### Recipes, witnesses, readings
+
+| Recipe | Compose |
+| --- | --- |
+| `founder`, `recall` | the first reading's, retained from its runs (`rs-<view>`, `rs-p1`), not rerun |
+| `recall_ctx05` | the recall recipe plus `recall_context=0.5, recall_context_decay=0.5` |
+| `recall_ctx10` | the same with `recall_context=1.0` |
+
+Construction check before the declaration: both context recipes build; their efficacy and bias
+equal the recall recipe's (context is a saved setting that changes no weight); the `place` arms'
+`memory_context=0.0` override keeps them; after two moments of events e0 then e1 the second slot's
+key is `e1 + e0` under context 1.0 and `e1` under context 0.0; `Brain.reset` empties the slots,
+the cortex of the moment before and the history.
+
+Protocols: `protocol-recall-context.json` (master, views hidden, invisible, visible; derived files
+`protocol-recall-context-<view>.json`) and `protocol-recall-context-p1.json`. Founders 202001 and
+202025, the first reading's arms, controls, schedule, streams and evaluation; the context recipes
+run with `--recipes recall_ctx05 recall_ctx10` into `rc-<view>`; 8 pairs per view and recipe.
+
+| Reading | Rule |
+| --- | --- |
+| Per view and recipe | sampled success and clean passes per arm and founder; the paired mean against the founder with its SEM, up/down/equal, clean counts with discordant pairs |
+| Preservation | per view and context recipe, the paired mean against the founder at or above -.05 |
+| Benefit | per view, the context recipes above the founder, and whether each is above the plain recall recipe's paired mean on that view |
+| Hidden stage 3 | first-try accuracy at stage 3 (the second A) per recipe, arm and founder, and its mean over the 8 |
+| The better recipe | the context recipe with the higher mean paired difference against the founder over the three views' 24 pairs; a tie goes to more clean passes |
+| P1 | if time allows: founder 1001, the better recipe alone (`rc-p1`), all six arms read as `step` and `live`: sampled, greedy and per-state after teaching and after 80 alone, against the retained founder and recall rows; point readings |
+
+### Expected outcome, stated before the run
+
+On the hidden view the first A's key is A; after a right action B's key is B plus context times
+A; the second A's address is A plus context times (half A plus B), and an A repeated after a
+wrong action at stage 1 has address A plus context times A. So with context the address itself
+tells A-after-B from A-after-A and from the first A before any lesson, and the slots a moment
+finds depend on the history it shares with them; with context 1.0 the history weighs as much as
+the event, so at the second A the B moment is addressed more than the first A. The projections
+from the recall and next regions have to learn to read that in 120 episodes, and under reward
+alone no address lesson runs. Expected: on the hidden view a gain over the plain recall recipe
+in the corrective arms is possible, and so is no change; a heavier history makes like moments'
+keys less alike and the address less selective, so a loss against the plain recipe is possible
+on every view, most likely at context 1.0; on the visible view no change or a small change. An
+unchanged result is possible.
+
+### Runs
+
+`run_recall_context.sh`: queue 1 hidden then visible, queue 2 invisible (two runner processes);
+then P1 for the better recipe on founder 1001 alone. Wall times from the manifests, `uptime`
+before and after. Analysis: `recall_screen.py analyze` appends the follow-up sections to
+`RECALL_RESULTS.md` and a `context` entry to `recall-summary.json`.
