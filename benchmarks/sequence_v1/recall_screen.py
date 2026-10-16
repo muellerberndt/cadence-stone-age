@@ -7,7 +7,7 @@ master declaration, and read the runs.
 ``derive`` writes one runnable protocol per entry of the master's ``views``: the master's
 ``world`` with that view and its note, the master's name with the view named, everything else
 unchanged. ``analyze`` reads ``RUNS/rs-<view>/<recipe>/founder-<seed>/founder.json`` and
-``RUNS/rs-p1/...`` and, when ``CONTROL_RUNS`` is given, checks the founder recipe against the
+``RUNS/rs-p1*/...`` (founder 1001 and the extension founders' runs) and, when ``CONTROL_RUNS`` is given, checks the founder recipe against the
 dense founder's earlier control runs there (``sk-control-<view>/sensory``, ``sk-control-p1``).
 """
 
@@ -174,10 +174,13 @@ def screen(runs: Path, views: list[str]) -> tuple[list[str], dict[str, Any]]:
 
 
 def p1(runs: Path) -> tuple[list[str], dict[str, Any]]:
-    run = runs / "rs-p1"
-    if not run.exists():
+    parts = sorted(runs.glob("rs-p1*"))  # founder 1001's run and the extension founders' runs
+    if not parts:
         return ["## P1: no run directory", ""], {}
-    bodies = {recipe: founder_files(run, recipe) for recipe in RECIPES}
+    bodies: dict[str, dict[int, dict[str, Any]]] = {recipe: {} for recipe in RECIPES}
+    for run in parts:
+        for recipe in RECIPES:
+            bodies[recipe].update(founder_files(run, recipe))
     seeds = sorted(set(bodies["founder"]) & set(bodies["recall"]))
     if not seeds:
         return ["## P1: no founder read under both recipes", ""], {}
@@ -215,36 +218,60 @@ def p1(runs: Path) -> tuple[list[str], dict[str, Any]]:
 
 
 def strip(value: Any) -> Any:
+    """An arm's record without its wall seconds and without the event digest, which covers the
+    life id (``<recipe>/<seed>/<arm>/train``) and so differs between recipe names; the event
+    streams are compared on their own with the life id removed."""
     if isinstance(value, dict):
-        return {k: strip(v) for k, v in value.items() if k != "seconds"}
+        return {k: strip(v) for k, v in value.items() if k not in ("seconds", "events_sha256")}
     if isinstance(value, list):
         return [strip(v) for v in value]
     return value
 
 
+def events_equal(mine: Path, other: Path) -> bool | None:
+    """Whether two event logs hold the same events once the life id is removed."""
+    import gzip  # noqa: PLC0415
+
+    if not mine.exists() or not other.exists():
+        return None
+    a = [json.loads(line) for line in gzip.open(mine, "rt")]
+    b = [json.loads(line) for line in gzip.open(other, "rt")]
+    for event in a + b:
+        event.pop("life", None)
+    return a == b
+
+
 def control_check(runs: Path, control: Path, views: list[str]) -> tuple[list[str], dict[str, Any]]:
-    """The founder recipe against the dense founder's earlier control runs, arm for arm."""
+    """The founder recipe against the dense founder's earlier control runs, arm for arm: every
+    arm record (readings, digests, counts) and every training and withdrawal event stream."""
     lines = ["## Control check: the founder recipe against the earlier dense-founder runs", "",
-             "| run | founder | founder digest same | arms compared | different |", "| --- | --- | --- | --- | --- |"]
+             "| run | founder | founder digest same | arms compared | different records | event streams equal (life id removed) |",
+             "| --- | --- | --- | --- | --- | --- |"]
     report: dict[str, Any] = {}
     same_all = True
-    pairs = [(f"rs-{view}", f"sk-control-{view}") for view in views] + [("rs-p1", "sk-control-p1")]
+    pairs = [(f"rs-{view}", f"sk-control-{view}") for view in views]
+    pairs += [(run.name, "sk-control-p1") for run in sorted(runs.glob("rs-p1*"))]
     for rerun, original in pairs:
         for seed, body in founder_files(runs / rerun, "founder").items():
             path = control / original / "sensory" / f"founder-{seed}" / "founder.json"
             if not path.exists():
-                lines.append(f"| {rerun} | {seed} | no control file | - | - |")
+                lines.append(f"| {rerun} | {seed} | no control file | - | - | - |")
                 report[f"{rerun}/{seed}"] = {"control": None}
                 continue
             other = json.loads(path.read_text())
             arms = sorted(set(body["arms"]) | set(other["arms"]))
             different = [arm for arm in arms if strip(body["arms"].get(arm)) != strip(other["arms"].get(arm))]
             same = body["founder_digest"] == other["founder_digest"]
-            same_all &= same and not different
-            report[f"{rerun}/{seed}"] = {"founder_digest_same": same, "arms": len(arms), "different": different}
-            lines.append(f"| {rerun} | {seed} | {same} | {len(arms)} | {different or 'none'} |")
+            streams: dict[str, bool | None] = {}
+            for log in sorted(path.parent.glob("*-events.jsonl.gz")):
+                streams[log.name] = events_equal(runs / rerun / "founder" / f"founder-{seed}" / log.name, log)
+            equal = sum(1 for v in streams.values() if v)
+            same_all &= same and not different and equal == len(streams) > 0
+            report[f"{rerun}/{seed}"] = {"founder_digest_same": same, "arms": len(arms), "different": different,
+                                         "event_streams": streams}
+            lines.append(f"| {rerun} | {seed} | {same} | {len(arms)} | {different or 'none'} | {equal} of {len(streams)} |")
     report["all_same"] = same_all
-    lines += ["", f"All readings and digests equal the control runs: {same_all}", ""]
+    lines += ["", f"All readings, digests and event streams equal the control runs: {same_all}", ""]
     return lines, report
 
 
