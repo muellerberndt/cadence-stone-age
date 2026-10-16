@@ -1,0 +1,36 @@
+{
+  "schema": "cadence-key-drift/1",
+  "name": "Key drift: how far a cortex-keyed record's code moves as the cortex learns",
+  "question": "With Brain.compose(..., memory_choice=True, memory_key=\"cortex\") over the drift design's life: when a stored decision is keyed again with the present cortex, how far has its code moved from the code it was written under, and how often does the place records' vote on it pick the chain's required action under the old key and under the new one?",
+  "scope": "the episodic memory's place key over one life of V5's COLD chain: 120 episodes taught through step, then 80 alone through live; the sensory recipe is the reference whose key never moves",
+  "world": {"kind": "cold_chain", "deadline": 10, "success_reward": 2.0, "failure_reward": -1.0},
+  "recipes": {
+    "sensory": {"compose": {"modules": [48, 24], "arousal": true, "memory_choice": true},
+                "note": "the founder key, the observation"},
+    "cortex": {"compose": {"modules": [48, 24], "arousal": true, "memory_choice": true, "memory_key": "cortex"},
+               "note": "the place key is the association activity the decision settled to"}
+  },
+  "arms": {
+    "correct_then_live": {"adapter": "step", "caregiver": "correct", "withdrawal_adapter": "live"},
+    "natural_then_live": {"adapter": "step", "caregiver": "none", "withdrawal_adapter": "live"}
+  },
+  "schedule": {"guided": 4, "autonomous": 8, "unit": "executed decisions of the whole life"},
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "seeds": {"development": [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012],
+            "note": "the drift design's twelve development founders"},
+  "sample": "every place-record write outside replay: an outcome written for its decision, or a demonstration written for the observation shown",
+  "readings": {
+    "points": [10, 40, 80, 120, 160, 200],
+    "note": "before episode 10, 40 and 80 of the lesson, at the lesson's seam (120), before episode 40 of the life alone (160) and at its end (200); each point reads every write made before it, between two episodes, and changes nothing the life uses"
+  },
+  "rekey": "the decision's drive and the warm state its settle started from, settled again with the present graph under the learner's own qualification; the new key is the association activity of that settle. The old key is the one the write used.",
+  "measures": {
+    "overlap": "shared winners of the place separator's codes of the old and the new key, over the 24 winners",
+    "cosine": "the cosine of the two unit codes, the weight a delta read gives one under the other",
+    "accuracy": "the place read under a key picks the chain's required action for the decision's observation: its record strictly above every other action's",
+    "agreement": "the place read's best action is the same under the old and the new key"
+  },
+  "report": "by reading point and by the age of the write (episodes since it was written: under 10, 10 to 39, 40 to 79, 80 and more): mean overlap and cosine, accuracy under the old and the new key, agreement; the sensory recipe's accuracy under the observation beside them; refused settles counted",
+  "check": "founder 1001's correct_then_live life under the cortex recipe runs once with the readings and once without them, and ends in the same brain (state digest)"
+}
