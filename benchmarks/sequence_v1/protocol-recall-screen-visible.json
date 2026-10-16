@@ -1,0 +1,153 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "The recall memory, progress visible (V5's own observations): Brain.compose(..., recall=True) at the founder genes against the founder with it off",
+  "credit": "Will Glynn, cadence-teachers EXP-56, EXP-57, EXP-59 and EXP-60 (https://github.com/WGlynn/cadence-teachers): the chain seen three ways after the ambiguous chain Huncho reported on the Stone Age world, the hold rule, the reading in sequence, the boundary of the rule; the consecutive-alias topology is Huncho's Stone Age V7.4 (https://github.com/ali12mahmood12345-boop/cadence-stone-age/blob/main/docs/V7_RESULTS.md)",
+  "question": "With Brain.compose(7, 5, modules=(48, 24), arousal=True, memory_choice=True): do the place and ctx5 arms of the context-key screen keep their sampled success and clean greedy passes when the recall memory is added (recall=True at the founder genes), and on which views does the memory raise them?",
+  "scope": "component witness of the recall memory in a world: V5's four-stage chain seen four ways, two screen founders, the brain, chamber, signals and readings of the context-key screen; a witness, not a gate of the library branch",
+  "world": {
+    "kind": "view_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "view": "visible",
+    "note": "V5's own observations, one per stage (cadence-teachers EXP-60); the place records alone can key every stage"
+  },
+  "recipes": {
+    "founder": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "Brain.compose(7, 5, modules=(48, 24), arousal=True, memory_choice=True): the context-key screen's sensory recipe with the recall memory off (recall=False, byte-identical to the brain before the option)"
+    },
+    "recall": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_address_prior": 1.0,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_code": 0
+      },
+      "note": "the same plus recall=True at the founder genes (the library's defaults, written out; their checkpoint digest equals the defaults'): a recall and a next region of 7 neurons each, addressed by the observation heard before each settle, written after each act, the stream's slots emptied at an episode's end and by Brain.reset; the founder's wiring and initial weights, plus the two regions' projections at scale 1.2"
+    }
+  },
+  "arms": {
+    "place_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "place_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "ctx5_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "context_rule": "none"
+    },
+    "ctx5_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "context_rule": "none"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "label": "natural: none; corrective: the required action of the observation shown now, after an executed nonterminal mistake in a guided window (V5's corrective teacher)"
+  },
+  "training_episodes": 120,
+  "evaluation": {
+    "episodes": 100,
+    "greedy_episodes": 1,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 0,
+    "note": "a frozen copy read at the arm's seam under its own rule, Brain.reset before each episode (the recall slots emptied, the address map kept): 100 sampled episodes, the reading in sequence (first try per stage, retries), and one greedy episode (a clean pass: four stages in four decisions)"
+  },
+  "seeds": {
+    "screen": [
+      202001,
+      202025
+    ],
+    "note": "the context-key screen's declared control subset (its 48 founders are 202001 to 202048); both recipes on each"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder and signal; a pair is one arm on one founder under one signal, recall recipe against founder recipe",
+    "pairs_per_view": "two founders x two signals x two arm kinds: 8 pairs per view, 4 per arm kind",
+    "readings": "per view, recipe, arm and founder: sampled success (100 episodes) and the clean greedy pass (one greedy episode, four stages in four decisions); first-try accuracy per stage beside them",
+    "preservation": "per view, recall minus founder in sampled success, the paired mean over the 8 pairs, at or above -.05; the memory preserves the screen when every view meets it; the same difference per arm kind (4 pairs) and the clean passes as counts with their discordant pairs are reported beside it",
+    "benefit": "views where the paired mean difference in sampled success is above zero, with the sign count; hidden and invisible are the views where the stream's history has to tell a stage, visible the view where the observation alone does, consecutive the view where only the brain's own actions do",
+    "report": "paired means with their SEM over the 8 pairs and per arm kind over 4; no interval is claimed on two founders; each recipe's place against ctx5 as the screen reported it",
+    "control_check": "the founder recipe's readings, trained-state digests and event digests on these founders must equal the dense founder's earlier control runs (the sparse reading's sk-control-<view>, sensory recipe, library c231f5c) arm for arm; a difference is reported, not repaired",
+    "pairs": [
+      [
+        "place_natural_120",
+        "ctx5_natural_120"
+      ],
+      [
+        "place_corrective_120",
+        "ctx5_corrective_120"
+      ]
+    ]
+  },
+  "derived_from": {
+    "file": "protocol-recall-screen.json",
+    "view": "visible",
+    "note": "written by recall_screen.py derive; the master declares all four views"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P1 with the recall memory against the founder with it off",
+  "question": "On P1's development founder 1001, with Brain.compose(..., memory_choice=True): is frozen whole-chain success after teaching, and after 80 episodes alone, at or above the founder's when the recall memory is added (recall=True at the founder genes)?",
+  "scope": "component prerequisite behavior in a fully observed world; a memoryless stage-aware policy solves it, so it tests no memory; a witness that the added regions leave the fully observed chain as it was, not a gate of the library branch",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "founder": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "V5's layout with the episodic memory at the library's defaults, the recall memory off"
+    },
+    "recall": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_address_prior": 1.0,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_code": 0
+      },
+      "note": "the same plus recall=True at the founder genes (the library's defaults, written out)"
+    }
+  },
+  "arms": {
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none"
+    },
+    "grade_step": {
+      "adapter": "step",
+      "caregiver": "grade"
+    },
+    "correct_step": {
+      "adapter": "step",
+      "caregiver": "correct"
+    },
+    "correct_step_qualified": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "compose": {
+        "learning_qualified": true
+      },
+      "note": "the same caregiver with qualified teaching; a separately named numerical arm, refusals counted at the fixed budget"
+    },
+    "natural_live": {
+      "adapter": "live",
+      "caregiver": "none"
+    },
+    "grade_live": {
+      "adapter": "live",
+      "caregiver": "grade"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; a separate frozen copy is read at the end",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader; one greedy episode, since every greedy episode from a reset reads the same deterministic answers",
+    "greedy_episodes": 1
+  },
+  "seeds": {
+    "development": [
+      1001
+    ],
+    "extension": [
+      1002,
+      1003,
+      1004,
+      1005
+    ],
+    "note": "founder 1001 is the witness, run after the screen if time allows; the extension founders are P1's other development founders, run only if time allows after 1001, and only then does the founder-paired bootstrap of the earlier lane apply (five founders)"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder; a pair is one arm on one founder, recall recipe against founder recipe",
+    "readings": "per arm: sampled and greedy success after teaching and after 80 episodes alone, per-state greedy accuracy at both points, recall minus founder",
+    "report": "on one founder the differences are point readings; with the extension founders a percentile bootstrap (10,000 resamples) over founders as in the earlier lane",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "control_check": "the founder recipe's readings and digests on founder 1001 must equal the dense founder's earlier control run (sk-control-p1, sensory recipe); a difference is reported, not repaired"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}
