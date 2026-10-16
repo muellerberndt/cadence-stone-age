@@ -1,0 +1,178 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "Cortex keys, two consecutive aliases (A, A, B, B): the episodic memory keyed on the cortex against the founder key",
+  "credit": "Will Glynn, cadence-teachers EXP-56, EXP-57, EXP-59 and EXP-60 (https://github.com/WGlynn/cadence-teachers): the chain seen three ways after the ambiguous chain Huncho reported on the Stone Age world, the hold rule, the reading in sequence, the boundary of the rule; the queued EXP-63 proposed the outcome gate; the consecutive-alias topology is Huncho's Stone Age V7.4 (https://github.com/ali12mahmood12345-boop/cadence-stone-age/blob/main/docs/V7_RESULTS.md)",
+  "question": "With Brain.compose(..., memory_choice=True): do the place and ctx5 arms of the context-key screen keep their clean greedy passes, sampled success and first-try accuracy when the episodic records are keyed on the cortex state of each decision (memory_key=\"cortex\") instead of the observation?",
+  "scope": "component: the episodic memory's key source in V5's four-stage chain seen two consecutive aliases (A, A, B, B); the brain, chamber, founders, signals and readings of the context-key screen",
+  "world": {
+    "kind": "view_chain",
+    "view": "consecutive",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "note": "A, A, B, B: Huncho's Stone Age V7.4 topology with the hidden view's A and B; the right first and third actions change nothing seen, so only the brain's own correct actions tell stage 2 from stage 1 and stage 4 from stage 3"
+  },
+  "recipes": {
+    "sensory": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "Brain.compose(7, 5, modules=(48, 24), arousal=True, memory_choice=True): the founder key, the observation (memory_key=\"sensory\")"
+    },
+    "cortex": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "memory_key": "cortex"
+      },
+      "note": "the same brain with memory_key=\"cortex\": the place records keyed by the association activity each decision settled to, the context built from those keys; the founder's wiring and initial weights"
+    }
+  },
+  "arms": {
+    "place_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "place_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "ctx5_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "context_rule": "none"
+    },
+    "ctx5_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "context_rule": "none"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "label": "natural: none; corrective: the required action of the observation shown now, after an executed nonterminal mistake in a guided window (V5's corrective teacher)"
+  },
+  "training_episodes": 120,
+  "evaluation": {
+    "episodes": 100,
+    "greedy_episodes": 1,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 0,
+    "note": "a frozen copy read at the arm's seam under its own rule: 100 sampled episodes from a reset each, the reading in sequence (first try per stage, retries), and one greedy episode (a clean pass: four stages in four decisions)"
+  },
+  "seeds": {
+    "screen": [
+      202001,
+      202002,
+      202003,
+      202004,
+      202005,
+      202006,
+      202007,
+      202008,
+      202009,
+      202010,
+      202011,
+      202012,
+      202013,
+      202014,
+      202015,
+      202016,
+      202017,
+      202018,
+      202019,
+      202020,
+      202021,
+      202022,
+      202023,
+      202024,
+      202025,
+      202026,
+      202027,
+      202028,
+      202029,
+      202030,
+      202031,
+      202032,
+      202033,
+      202034,
+      202035,
+      202036,
+      202037,
+      202038,
+      202039,
+      202040,
+      202041,
+      202042,
+      202043,
+      202044,
+      202045,
+      202046,
+      202047,
+      202048
+    ],
+    "note": "the 48 fresh founders of the context-key screen (202001 to 202048), every arm under both recipes: 96 founder-signal pairs per arm and recipe"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder and signal; a pair is one arm on one founder under one signal, sensory recipe against cortex recipe",
+    "pooled": "both signals, 96 pairs per arm",
+    "readings": "a frozen copy of each arm at its seam, Brain.reset before each episode: one greedy episode (a clean pass is four stages in four decisions), 100 sampled episodes (success within 10 decisions), first-try accuracy at each stage in sequence",
+    "gate": "for each arm kind (place, ctx5): cortex minus sensory, paired means pooled over both signals, at least -.05 for the clean greedy pass rate, for sampled success and for first-try accuracy at each of the four stages (the screen's margins, point estimates); the cortex key meets this view when all twelve differences meet the margin",
+    "report": "paired means with their SEM over the 96 pairs; clean passes as discordant pairs with exact two-sided McNemar; each recipe's place against ctx5 as the screen reported it; the sensory recipe against the 15 October screen's ctx5 (48 founders) and place (24 founders) readings as a reproduction check",
+    "pairs": [
+      [
+        "place_natural_120",
+        "ctx5_natural_120"
+      ],
+      [
+        "place_corrective_120",
+        "ctx5_corrective_120"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "P1 with the episodic memory keyed on the cortex against the founder key",
+  "question": "On P1's development founders, with Brain.compose(..., memory_choice=True): is frozen whole-chain success after teaching at or above the founder key's when the episodic records are keyed on the cortex state of each decision (memory_key=\"cortex\")?",
+  "scope": "component prerequisite behavior in a fully observed world; a memoryless stage-aware policy solves it, so it tests no memory",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "sensory": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "V5's layout with the episodic memory at the library's defaults: the founder key, the observation"
+    },
+    "cortex": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "memory_key": "cortex"
+      },
+      "note": "the same with memory_key=\"cortex\""
+    }
+  },
+  "arms": {
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none"
+    },
+    "grade_step": {
+      "adapter": "step",
+      "caregiver": "grade"
+    },
+    "correct_step": {
+      "adapter": "step",
+      "caregiver": "correct"
+    },
+    "correct_step_qualified": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "compose": {
+        "learning_qualified": true
+      },
+      "note": "the same caregiver with qualified teaching; a separately named numerical arm, refusals counted at the fixed budget"
+    },
+    "natural_live": {
+      "adapter": "live",
+      "caregiver": "none"
+    },
+    "grade_live": {
+      "adapter": "live",
+      "caregiver": "grade"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; a separate frozen copy is read at the end",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader; one greedy episode, since every greedy episode from a reset reads the same deterministic answers",
+    "greedy_episodes": 1
+  },
+  "seeds": {
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005
+    ],
+    "note": "P1's five development founders, every arm under both recipes"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder; a pair is one arm on one founder, sensory recipe against cortex recipe",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "gate": "for each of the six arms: cortex minus sensory in immediate frozen sampled success (P1's primary reading), founder-paired; the cortex key meets P1 when the upper end of every interval is at or above zero",
+    "report": "greedy success after teaching, sampled and greedy success after the life alone, each arm against random and the frozen founder within each recipe"
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  }
+}
