@@ -109,3 +109,12 @@ with `PYTHONPATH` at the library worktree's `src`:
 Wall times from each run's `manifest.json`; `uptime` before and after. Analysis:
 `recall_screen.py analyze <runs> <control runs>` writes `RECALL_RESULTS.md` and
 `recall-summary.json` beside the runs.
+
+## Custody note, written after the runs
+
+The library worktree's branch `r3-library` moved from `a7c6c14` to `ca9b124` at 18:02:27, before
+the first run (18:06:18), by a commit of another session that changed two notes under
+`benchmarks/binding/` and no file under `src/`. Every run's manifest records the library at
+`ca9b124`, clean, with the same 56 package file digests (package digest `c022362d`), which equal
+`a7c6c14`'s blobs file for file; and the instrument at `85956c4`, clean, the declaration commit.
+The commits after it on this branch amend the analysis script only.
