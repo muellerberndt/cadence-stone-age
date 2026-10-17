@@ -419,15 +419,19 @@ def evaluate(
     reached), and the decisions taken at a stage after a miss there and how many were right."""
     from cadence import Brain  # noqa: PLC0415
 
-    if reset not in ("episode", "continuing"):
-        raise ValueError("reset is 'episode' or 'continuing'")
+    if reset not in ("episode", "continuing", "episode_keep"):
+        raise ValueError("reset is 'episode', 'continuing' or 'episode_keep'")
     brain = Brain.load(checkpoint)
     reseed_actions(brain, seed)
     rule = ContextRule(brain, context_rule)
     chain = world_spec["kind"] in CHAIN_WORLDS
     rows = []
     for index in range(episodes):
-        if reset == "episode" or index == 0:
+        if reset == "episode_keep":
+            # every episode starts afresh but the recall memory's slots, which a brain whose
+            # memory keeps its episodes carries from its life into its reading
+            brain.reset(keep_memory=True)
+        elif reset == "episode" or index == 0:
             brain.reset()
         world = make_world(world_spec, None if routes is None else routes[index])
         undecided = refusals = 0
@@ -542,13 +546,15 @@ def situation_sets(world_spec: dict[str, Any]) -> dict[str, list[Any]]:
 
 
 def per_state(checkpoint: Path, world_spec: dict[str, Any], *, samples: int = 0,
-              seed: int = 0) -> dict[str, Any]:
+              seed: int = 0, keep_memory: bool = False) -> dict[str, Any]:
     """Per-state greedy accuracy of a frozen copy: for every situation, ``Brain.reset`` and one
     greedy ``act``. With ``samples``, also each stage's sampled probability of the required
     action (``samples`` reset draws, EXP-45's 300) and the success a memoryless policy with those
     probabilities would have, to set beside the sampled whole-chain success."""
     from cadence import Brain  # noqa: PLC0415
 
+    if keep_memory and samples:
+        raise ValueError("per-state samples are not read with a kept memory")
     brain = Brain.load(checkpoint)
     reseed_actions(brain, seed)
     probe = make_world(world_spec, None)
@@ -563,7 +569,13 @@ def per_state(checkpoint: Path, world_spec: dict[str, Any], *, samples: int = 0,
                 row: dict[str, Any] = {"stage": stage, "required": required,
                                        "weather": None if cell is None else cell["weather"]}
                 try:
-                    brain.reset()
+                    if keep_memory:
+                        # the life's memory kept, and no situation's act read by the next one
+                        brain = Brain.load(checkpoint)
+                        reseed_actions(brain, seed)
+                        brain.reset(keep_memory=True)
+                    else:
+                        brain.reset()
                     row["greedy"] = action_id(brain.act(x, greedy=True), actions)
                     row["right"] = row["greedy"] == required
                 except RuntimeError:
@@ -686,7 +698,7 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
             rows = evaluate(
                 checkpoint, world, episodes=count, greedy=mode == "greedy",
                 seed=stream_seed(STREAM["evaluation"], seed, 0 if mode == "greedy" else 1),
-                reset=evaluation.get("reset", "episode"),
+                reset=recipe.get("evaluation_reset", evaluation.get("reset", "episode")),
                 routes=None if eval_routes is None else eval_routes[:count], context_rule=rule,
             )
             readings[mode] = {"summary": episode_summary(rows, make_world(world, route=0).stages), "rows": rows}
@@ -700,7 +712,8 @@ def run_founder(protocol: dict[str, Any], seed: int, arms: list[str], recipe_nam
         if not stagewise:
             return None
         return per_state(checkpoint, world, samples=int(evaluation.get("per_state_samples", 0)),
-                         seed=stream_seed(STREAM["per_state"], seed))
+                         seed=stream_seed(STREAM["per_state"], seed),
+                         keep_memory=recipe.get("evaluation_reset") == "episode_keep")
 
     result["arms"]["founder"] = {"frozen": frozen(founder_path)}
     if stagewise:

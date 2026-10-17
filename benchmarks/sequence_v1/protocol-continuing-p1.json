@@ -1,0 +1,249 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "The recall memory kept across episodes and keyed by its predecessor: six recipes on P1's first 12 founders",
+  "question": "Does a recall memory whose slots outlive an episode (recall_episodes keep), keyed by the event heard together with the previous moment and the last command (recall_key predecessor), raise sampled success on the aliased views and on P1 against the same memory that forgets its episodes or keys on the event alone?",
+  "scope": "component witness of two recall options in a world; not a gate of the library branch",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "founder": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "recall off"
+    },
+    "recall": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true
+      },
+      "note": "the recall memory at the pull request's founder genes (episodes forgotten, the key the event heard)"
+    },
+    "base": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": null,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 256,
+        "recall_value": "event",
+        "recall_next": true
+      },
+      "note": "recall with the power-law recency (recall_recency None) and 256 slots, episodes forgotten, the key the event heard"
+    },
+    "keep": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": null,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 256,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_episodes": "keep"
+      },
+      "evaluation_reset": "episode_keep",
+      "note": "base with recall_episodes keep: the slots outlive every episode's end, in the life and in its reading (Brain.reset(keep_memory=True) before each read episode)"
+    },
+    "pred": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": null,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 256,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_key": "predecessor"
+      },
+      "note": "base with recall_key predecessor: the key carries the previous moment's event and the last command"
+    },
+    "keep_pred": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": null,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 256,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_episodes": "keep",
+        "recall_key": "predecessor"
+      },
+      "evaluation_reset": "episode_keep",
+      "note": "base with kept episodes and the predecessor key"
+    }
+  },
+  "arms": {
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none"
+    },
+    "grade_step": {
+      "adapter": "step",
+      "caregiver": "grade"
+    },
+    "correct_step": {
+      "adapter": "step",
+      "caregiver": "correct"
+    },
+    "correct_step_qualified": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "compose": {
+        "learning_qualified": true
+      },
+      "note": "the same caregiver with qualified teaching; a separately named numerical arm, refusals counted at the fixed budget"
+    },
+    "natural_live": {
+      "adapter": "live",
+      "caregiver": "none"
+    },
+    "grade_live": {
+      "adapter": "live",
+      "caregiver": "grade"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; a separate frozen copy is read at the end",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader; one greedy episode, since every greedy episode from a reset reads the same deterministic answers",
+    "greedy_episodes": 1
+  },
+  "seeds": {
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012
+    ],
+    "note": "one runner process per view (or P1) and founder, every recipe in each"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder; a pair is one arm on one founder, one recipe against another",
+    "C1": "keep_pred - base per view (founder-resampled 95% intervals, each founder's arms averaged on the screen)",
+    "C2": "keep - base, pred - base: the two options alone",
+    "C3": "keep_pred - founder per view at or above -.05 (preservation) and the P1 gate (every arm's upper interval end of keep_pred - founder in sampled success after teaching at or above zero)",
+    "reference": "base - recall (the power-law recency and 256 slots) and recall - founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95",
+    "analysis_seed": 31012
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  },
+  "declaration": "WORLDS_PROTOCOL.md, SHA-256 7f81e80567f6bfd75bc8944c2b8a72ed2e294de7e58bc86ed0d9563ab893c2c1, with the continuing reading declared in CONTINUING_PROTOCOL.md before any run (17 October 2026)"
+}
