@@ -1,0 +1,277 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "The recall memory's four options, progress hidden (A, B, A, B): four recipes on the screen's 48 founders",
+  "credit": "Will Glynn, cadence-teachers EXP-56, EXP-57, EXP-59 and EXP-60 (https://github.com/WGlynn/cadence-teachers): the chain seen three ways after the ambiguous chain Huncho reported on the Stone Age world, the hold rule, the reading in sequence, the boundary of the rule; the consecutive-alias topology is Huncho's Stone Age V7.4 (https://github.com/ali12mahmood12345-boop/cadence-stone-age/blob/main/docs/V7_RESULTS.md)",
+  "question": "With Brain.compose(7, 5, modules=(48, 24), arousal=True, memory_choice=True): on each view of the context-key screen, does the recall memory with its four options (improved) keep the founder's sampled success (S1), and how do the options move it against the memory at the pull request's founder genes (recall) and against aroused writes alone (aroused)?",
+  "scope": "component witness of the recall memory's options in a world: V5's four-stage chain seen four ways, the screen's 48 founders, its brain, chamber, signals and readings; a witness, not a gate of the library branch",
+  "world": {
+    "kind": "view_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0,
+    "view": "hidden",
+    "note": "A, B, A, B: the ambiguous chain Huncho reported on the Stone Age world, as cadence-teachers EXP-56 and EXP-57 rebuilt it; the two A and the two B observations are byte-identical, so only the stream's history tells stage 3 from stage 1"
+  },
+  "recipes": {
+    "founder": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "Brain.compose(7, 5, modules=(48, 24), arousal=True, memory_choice=True): the screen's sensory recipe with the recall memory off, byte-identical to the brain before the memory"
+    },
+    "recall": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "lms",
+        "recall_write": "always",
+        "recall_null": null,
+        "recall_address_reward": 0.0
+      },
+      "note": "the same plus the recall memory at the pull request's founder genes, written out (the options at their founder values): a recall and a next region of 7 neurons each, addressed before each settle by the observation heard, written after each accepted moment, the stream's slots emptied at an episode's end and by Brain.reset"
+    },
+    "aroused": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "lms",
+        "recall_write": "aroused",
+        "recall_null": null,
+        "recall_address_reward": 0.0
+      },
+      "note": "recall with write='aroused': a moment is written only when its act was sampled (live: aroused; step: the act's own flag)"
+    },
+    "rewarded": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "lms",
+        "recall_write": "always",
+        "recall_null": null,
+        "recall_address_reward": 1.0
+      },
+      "note": "recall with address_reward 1.0 alone: the address map's reward eligibility, one lesson's step per unit of dopamine, every other setting at the pull request's founder value"
+    },
+    "improved": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": null,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "toward",
+        "recall_write": "aroused",
+        "recall_null": 0.5,
+        "recall_address_reward": 1.0
+      },
+      "note": "recall with the four options: the address step toward the named keys away from the attended ones, the power-law recency charge (recency None), a null slot at half the logit of a full match (0.5 at heard 1), aroused writes, and the reward eligibility of the address map at one lesson's step per unit of dopamine (address_reward 1.0)"
+    }
+  },
+  "arms": {
+    "place_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "place_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "compose": {
+        "memory_context": 0.0
+      },
+      "note": "place records alone (memory_context 0): the reference"
+    },
+    "ctx5_natural_120": {
+      "adapter": "step",
+      "caregiver": "none",
+      "training_episodes": 120,
+      "context_rule": "none"
+    },
+    "ctx5_corrective_120": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "training_episodes": 120,
+      "context_rule": "none"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle",
+    "searcher"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "label": "natural: none; corrective: the required action of the observation shown now, after an executed nonterminal mistake in a guided window (V5's corrective teacher)"
+  },
+  "training_episodes": 120,
+  "evaluation": {
+    "episodes": 100,
+    "greedy_episodes": 1,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "per_state_samples": 0,
+    "note": "a frozen copy read at the arm's seam under its own rule, Brain.reset before each episode (the recall slots emptied, the address map kept): 100 sampled episodes, the reading in sequence (first try per stage, retries), and one greedy episode (a clean pass: four stages in four decisions)"
+  },
+  "seeds": {
+    "screen": [
+      202001,
+      202002,
+      202003,
+      202004,
+      202005,
+      202006,
+      202007,
+      202008,
+      202009,
+      202010,
+      202011,
+      202012,
+      202013,
+      202014,
+      202015,
+      202016,
+      202017,
+      202018,
+      202019,
+      202020,
+      202021,
+      202022,
+      202023,
+      202024,
+      202025,
+      202026,
+      202027,
+      202028,
+      202029,
+      202030,
+      202031,
+      202032,
+      202033,
+      202034,
+      202035,
+      202036,
+      202037,
+      202038,
+      202039,
+      202040,
+      202041,
+      202042,
+      202043,
+      202044,
+      202045,
+      202046,
+      202047,
+      202048
+    ],
+    "note": "the context-key screen's 48 founders; every recipe on each; one runner process per view and founder"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012,
+    "searcher": 5,
+    "labels": 6,
+    "per_state": 7
+  },
+  "analysis": {
+    "unit": "founder; a pair is one arm on one founder under one signal, one recipe against another",
+    "readings": "per view, recipe, arm and founder: sampled success (100 episodes) and the clean greedy pass; first-try accuracy per stage beside them",
+    "S1": "preservation: per view, improved minus founder in sampled success, the mean over the 48 founders and 4 arms, at or above -.05",
+    "S3": "the options: improved minus recall and aroused minus recall and rewarded minus recall per view and arm kind, with founder-resampled intervals",
+    "reference": "recall minus founder per view, the pull request's memory against the founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95, founders resampled, each founder's arms averaged",
+    "analysis_seed": 31012
+  },
+  "declaration": "WORLDS_PROTOCOL.md, SHA-256 7f81e80567f6bfd75bc8944c2b8a72ed2e294de7e58bc86ed0d9563ab893c2c1 (the private declaration of the world readings, 17 October 2026); the rewarded recipe by addendum 1 (WORLDS_PROTOCOL_ADDENDUM_1.md), before any run",
+  "derived_from": {
+    "file": "protocol-options-screen.json",
+    "view": "hidden",
+    "note": "written by recall_screen.py derive; the master declares every view"
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "schema": "stone-age-sequence/1",
+  "name": "The recall memory's four options on P1, the fully observed chain: four recipes on 24 founders",
+  "question": "On P1, does the recall memory with its four options (improved) meet the P1 gate against the founder (S2: every arm's upper interval end of improved minus founder in sampled success after teaching at or above zero), and how do the options move the six arms against the pull request's memory (recall) and against aroused writes alone (aroused)?",
+  "scope": "component witness of the recall memory's options on P1's six arms, 24 founders; not a gate of the library branch",
+  "world": {
+    "kind": "cold_chain",
+    "deadline": 10,
+    "success_reward": 2.0,
+    "failure_reward": -1.0
+  },
+  "recipes": {
+    "founder": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true
+      },
+      "note": "Brain.compose(7, 5, modules=(48, 24), arousal=True, memory_choice=True): the screen's sensory recipe with the recall memory off, byte-identical to the brain before the memory"
+    },
+    "recall": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "lms",
+        "recall_write": "always",
+        "recall_null": null,
+        "recall_address_reward": 0.0
+      },
+      "note": "the same plus the recall memory at the pull request's founder genes, written out (the options at their founder values): a recall and a next region of 7 neurons each, addressed before each settle by the observation heard, written after each accepted moment, the stream's slots emptied at an episode's end and by Brain.reset"
+    },
+    "aroused": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "lms",
+        "recall_write": "aroused",
+        "recall_null": null,
+        "recall_address_reward": 0.0
+      },
+      "note": "recall with write='aroused': a moment is written only when its act was sampled (live: aroused; step: the act's own flag)"
+    },
+    "rewarded": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": 0.25,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "lms",
+        "recall_write": "always",
+        "recall_null": null,
+        "recall_address_reward": 1.0
+      },
+      "note": "recall with address_reward 1.0 alone: the address map's reward eligibility, one lesson's step per unit of dopamine, every other setting at the pull request's founder value"
+    },
+    "improved": {
+      "compose": {
+        "modules": [
+          48,
+          24
+        ],
+        "arousal": true,
+        "memory_choice": true,
+        "recall": true,
+        "recall_scale": 1.2,
+        "recall_amplitude": 3.0,
+        "recall_temperature": 0.25,
+        "recall_heard": 1.0,
+        "recall_recency": null,
+        "recall_address": 0.01,
+        "recall_address_temperature": 0.1,
+        "recall_context": 0.0,
+        "recall_context_decay": 0.5,
+        "recall_capacity": 64,
+        "recall_value": "event",
+        "recall_next": true,
+        "recall_address_step": "toward",
+        "recall_write": "aroused",
+        "recall_null": 0.5,
+        "recall_address_reward": 1.0
+      },
+      "note": "recall with the four options: the address step toward the named keys away from the attended ones, the power-law recency charge (recency None), a null slot at half the logit of a full match (0.5 at heard 1), aroused writes, and the reward eligibility of the address map at one lesson's step per unit of dopamine (address_reward 1.0)"
+    }
+  },
+  "arms": {
+    "natural_step": {
+      "adapter": "step",
+      "caregiver": "none"
+    },
+    "grade_step": {
+      "adapter": "step",
+      "caregiver": "grade"
+    },
+    "correct_step": {
+      "adapter": "step",
+      "caregiver": "correct"
+    },
+    "correct_step_qualified": {
+      "adapter": "step",
+      "caregiver": "correct",
+      "compose": {
+        "learning_qualified": true
+      },
+      "note": "the same caregiver with qualified teaching; a separately named numerical arm, refusals counted at the fixed budget"
+    },
+    "natural_live": {
+      "adapter": "live",
+      "caregiver": "none"
+    },
+    "grade_live": {
+      "adapter": "live",
+      "caregiver": "grade"
+    }
+  },
+  "controls": [
+    "founder",
+    "random",
+    "oracle"
+  ],
+  "schedule": {
+    "guided": 4,
+    "autonomous": 8,
+    "unit": "executed decisions of the whole life"
+  },
+  "caregiver": {
+    "grade_right": 0.5,
+    "grade_wrong": -0.5,
+    "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+  },
+  "training_episodes": 120,
+  "withdrawal_episodes": 80,
+  "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; a separate frozen copy is read at the end",
+  "evaluation": {
+    "episodes": 200,
+    "modes": [
+      "sampled",
+      "greedy"
+    ],
+    "reset": "episode",
+    "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader; one greedy episode, since every greedy episode from a reset reads the same deterministic answers",
+    "greedy_episodes": 1
+  },
+  "seeds": {
+    "development": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019,
+      1020,
+      1021,
+      1022,
+      1023,
+      1024
+    ],
+    "note": "P1's development founders 1001 to 1005 and the next 19; every recipe on each; one runner process per founder"
+  },
+  "streams": {
+    "evaluation": 1,
+    "random": 2,
+    "routes": 3,
+    "withdrawal_routes": 4,
+    "analysis_seed": 31012
+  },
+  "analysis": {
+    "unit": "founder; a pair is one arm on one founder, one recipe against another",
+    "readings": "per arm: sampled and greedy success after teaching and after the episodes alone, per-state greedy accuracy at both points",
+    "S2": "the P1 gate: for every arm, the upper end of the percentile 95 interval of improved minus founder in sampled success after teaching at or above zero",
+    "S3": "the options: improved minus recall and aroused minus recall and rewarded minus recall per arm and reading, with intervals",
+    "reference": "recall minus founder per arm, the pull request's memory against the founder",
+    "bootstrap_resamples": 10000,
+    "interval": "percentile 95, founders resampled",
+    "analysis_seed": 31012
+  },
+  "caps": {
+    "per_founder_arm_seconds": 1800,
+    "rss_bytes": 2147483648,
+    "output_bytes": 262144000
+  },
+  "declaration": "WORLDS_PROTOCOL.md, SHA-256 7f81e80567f6bfd75bc8944c2b8a72ed2e294de7e58bc86ed0d9563ab893c2c1 (the private declaration of the world readings, 17 October 2026); the rewarded recipe by addendum 1 (WORLDS_PROTOCOL_ADDENDUM_1.md), before any run"
+}
