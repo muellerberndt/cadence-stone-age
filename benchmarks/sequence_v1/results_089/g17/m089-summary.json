@@ -1,0 +1,427 @@
+{
+ "view17-hidden": {
+  "uniform_random": 0.1208738816,
+  "arms": {
+   "founder": {
+    "recall": {
+     "founders": 160,
+     "sampled": 0.08887500000000001,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.2054375,
+      0.19246423075580776,
+      0.20272342709856533,
+      0.21682186786654212
+     ]
+    },
+    "recall_nopos": {
+     "founders": 160,
+     "sampled": 0.08887500000000001,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.2054375,
+      0.19246423075580776,
+      0.20272342709856533,
+      0.21682186786654212
+     ]
+    },
+    "episodic_recall": {
+     "founders": 160,
+     "sampled": 0.08887500000000001,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.2054375,
+      0.19246423075580776,
+      0.20272342709856533,
+      0.21682186786654212
+     ]
+    },
+    "episodic_recall_nopos": {
+     "founders": 160,
+     "sampled": 0.08887500000000001,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.2054375,
+      0.19246423075580776,
+      0.20272342709856533,
+      0.21682186786654212
+     ]
+    }
+   },
+   "random": {
+    "recall": {
+     "founders": 160,
+     "sampled": 0.11975000000000002,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 160,
+     "sampled": 0.11975000000000002,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 160,
+     "sampled": 0.11975000000000002,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_nopos": {
+     "founders": 160,
+     "sampled": 0.11975000000000002,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "recall": {
+     "founders": 160,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 160,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 160,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_nopos": {
+     "founders": 160,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "searcher": {
+    "recall": {
+     "founders": 160,
+     "sampled": 0.22756249999999997,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 160,
+     "sampled": 0.22756249999999997,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 160,
+     "sampled": 0.22756249999999997,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_nopos": {
+     "founders": 160,
+     "sampled": 0.22756249999999997,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "corrective_step_120": {
+    "recall": {
+     "founders": 160,
+     "sampled": 0.3405,
+     "greedy": 0.25,
+     "vs_base": -0.024312499999999997,
+     "ci": [
+      -0.07881562499999999,
+      0.028437499999999994
+     ],
+     "up": 77,
+     "down": 75,
+     "labels": 263.8375,
+     "sweeps": 4108.74375,
+     "first_try": [
+      0.5050000000000001,
+      0.156689375915611,
+      0.2893096375889529,
+      0.34613443455019305
+     ]
+    },
+    "recall_nopos": {
+     "founders": 160,
+     "sampled": 0.3648125,
+     "greedy": 0.2375,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 266.75,
+     "sweeps": 4019.79375,
+     "first_try": [
+      0.49381249999999993,
+      0.1579925909046796,
+      0.24792901120477503,
+      0.3584725009488585
+     ]
+    },
+    "episodic_recall": {
+     "founders": 160,
+     "sampled": 0.750625,
+     "greedy": 0.475,
+     "vs_base": 0.38581249999999995,
+     "ci": [
+      0.3270609375,
+      0.44325000000000003
+     ],
+     "up": 131,
+     "down": 28,
+     "labels": 160.825,
+     "sweeps": 2432.63125,
+     "first_try": [
+      0.66225,
+      0.5404679918203781,
+      0.7959674620276248,
+      0.7509880160395619
+     ]
+    },
+    "episodic_recall_nopos": {
+     "founders": 160,
+     "sampled": 0.7389375,
+     "greedy": 0.475,
+     "vs_base": 0.37412500000000004,
+     "ci": [
+      0.31462187500000005,
+      0.43287499999999995
+     ],
+     "up": 131,
+     "down": 28,
+     "labels": 159.7375,
+     "sweeps": 2422.9625,
+     "first_try": [
+      0.640875,
+      0.562177859484642,
+      0.7445795214476296,
+      0.7573498658003133
+     ]
+    }
+   },
+   "corrective_step_480": {
+    "recall": {
+     "founders": 160,
+     "sampled": 0.5664374999999999,
+     "greedy": 0.4375,
+     "vs_base": 0.004687500000000002,
+     "ci": [
+      -0.06974999999999999,
+      0.07906718749999996
+     ],
+     "up": 84,
+     "down": 69,
+     "labels": 835.2,
+     "sweeps": 13109.625,
+     "first_try": [
+      0.5686249999999999,
+      0.24009957342334792,
+      0.5001100307594256,
+      0.5235539260309225
+     ]
+    },
+    "recall_nopos": {
+     "founders": 160,
+     "sampled": 0.56175,
+     "greedy": 0.425,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 836.36875,
+     "sweeps": 12914.125,
+     "first_try": [
+      0.6001875,
+      0.24436684280760623,
+      0.5048231919775314,
+      0.51390799801966
+     ]
+    },
+    "episodic_recall": {
+     "founders": 160,
+     "sampled": 0.915875,
+     "greedy": 0.85,
+     "vs_base": 0.354125,
+     "ci": [
+      0.2878109375,
+      0.41706562499999994
+     ],
+     "up": 130,
+     "down": 23,
+     "labels": 404.80625,
+     "sweeps": 5953.65625,
+     "first_try": [
+      0.8178124999999999,
+      0.7281861212382095,
+      0.8816930787638316,
+      0.9450462806917569
+     ]
+    },
+    "episodic_recall_nopos": {
+     "founders": 160,
+     "sampled": 0.9192500000000001,
+     "greedy": 0.83125,
+     "vs_base": 0.35750000000000004,
+     "ci": [
+      0.29068281250000005,
+      0.422003125
+     ],
+     "up": 134,
+     "down": 18,
+     "labels": 393.34375,
+     "sweeps": 5760.43125,
+     "first_try": [
+      0.8509374999999999,
+      0.8180724527277654,
+      0.8899866100926623,
+      0.9096551826797048
+     ]
+    }
+   }
+  }
+ }
+}

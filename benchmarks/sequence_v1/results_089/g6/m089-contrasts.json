@@ -1,0 +1,272 @@
+{
+ "route6-delay8": {
+  "episodic_recall - episodic": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.007250000000000012,
+    "ci": [
+     -0.057256249999999995,
+     0.08475000000000002
+    ],
+    "up": 9,
+    "down": 11
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": -0.07875000000000001,
+    "ci": [
+     -0.182,
+     0.030506249999999915
+    ],
+    "up": 7,
+    "down": 12
+   }
+  },
+  "episodic_recall - episodic_recall_nopos": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.009750000000000005,
+    "ci": [
+     -0.05974999999999999,
+     0.08700000000000001
+    ],
+    "up": 10,
+    "down": 10
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0
+   }
+  },
+  "episodic_recall_h2 - episodic_recall": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.020749999999999987,
+    "ci": [
+     -0.05300625000000002,
+     0.08399999999999999
+    ],
+    "up": 12,
+    "down": 8
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.047,
+    "ci": [
+     -0.045,
+     0.1387562499999999
+    ],
+    "up": 11,
+    "down": 9
+   }
+  },
+  "recall - recall_nopos": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.27375,
+    "ci": [
+     0.12149999999999998,
+     0.4377624999999998
+    ],
+    "up": 13,
+    "down": 7
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0
+   }
+  }
+ },
+ "route6-delay4": {
+  "episodic_recall - episodic": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.06799999999999999,
+    "ci": [
+     -0.02150625,
+     0.16599999999999998
+    ],
+    "up": 11,
+    "down": 9
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.10049999999999999,
+    "ci": [
+     -0.01000625,
+     0.2045
+    ],
+    "up": 14,
+    "down": 6
+   }
+  },
+  "episodic_recall - episodic_recall_nopos": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": -0.03325000000000001,
+    "ci": [
+     -0.15800625000000001,
+     0.08624999999999998
+    ],
+    "up": 11,
+    "down": 9
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0
+   }
+  },
+  "episodic_recall_h2 - episodic_recall": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.057999999999999996,
+    "ci": [
+     -0.08225,
+     0.20375624999999994
+    ],
+    "up": 9,
+    "down": 11
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": -0.09024999999999998,
+    "ci": [
+     -0.19500625,
+     0.014756249999999917
+    ],
+    "up": 8,
+    "down": 12
+   }
+  },
+  "recall - recall_nopos": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.10125000000000002,
+    "ci": [
+     -0.10100625000000002,
+     0.307
+    ],
+    "up": 10,
+    "down": 10
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0
+   }
+  }
+ },
+ "route6-delay2": {
+  "episodic_recall - episodic": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.10325,
+    "ci": [
+     -0.02099999999999999,
+     0.24301249999999985
+    ],
+    "up": 12,
+    "down": 7
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.1355,
+    "ci": [
+     0.011743749999999999,
+     0.2525
+    ],
+    "up": 13,
+    "down": 7
+   }
+  },
+  "episodic_recall - episodic_recall_nopos": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.009500000000000014,
+    "ci": [
+     -0.15525,
+     0.16500624999999988
+    ],
+    "up": 10,
+    "down": 9
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0
+   }
+  },
+  "episodic_recall_h2 - episodic_recall": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": 0.06649999999999999,
+    "ci": [
+     -0.09200000000000001,
+     0.23025624999999988
+    ],
+    "up": 11,
+    "down": 9
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": -0.0735,
+    "ci": [
+     -0.17875,
+     0.0335
+    ],
+    "up": 6,
+    "down": 14
+   }
+  },
+  "recall - recall_nopos": {
+   "guide_step_1920": {
+    "founders": 20,
+    "mean": -0.014749999999999996,
+    "ci": [
+     -0.20599999999999996,
+     0.19201874999999977
+    ],
+    "up": 7,
+    "down": 13
+   },
+   "natural_live_1920": {
+    "founders": 20,
+    "mean": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0
+   }
+  }
+ }
+}

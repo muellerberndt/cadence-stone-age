@@ -1,0 +1,108 @@
+{
+ "recall13-order": {
+  "founder": {
+   "recall": {
+    "ask-first": 0.49196428571428574,
+    "ask-first-gap": 0.5205357142857143,
+    "ask-latest": 0.49375,
+    "ask-latest-gap": 0.4839285714285714
+   },
+   "recall_nopos": {
+    "ask-first": 0.49196428571428574,
+    "ask-first-gap": 0.5205357142857143,
+    "ask-latest": 0.49375,
+    "ask-latest-gap": 0.4839285714285714
+   },
+   "recall_h2": {
+    "ask-first": 0.48035714285714287,
+    "ask-first-gap": 0.5044642857142857,
+    "ask-latest": 0.48839285714285713,
+    "ask-latest-gap": 0.4821428571428571
+   },
+   "recall_h2_nopos": {
+    "ask-first": 0.48035714285714287,
+    "ask-first-gap": 0.5044642857142857,
+    "ask-latest": 0.48839285714285713,
+    "ask-latest-gap": 0.4821428571428571
+   }
+  },
+  "reward_live": {
+   "recall": {
+    "ask-first": 0.4991071428571428,
+    "ask-first-gap": 0.5089285714285714,
+    "ask-latest": 0.4883928571428572,
+    "ask-latest-gap": 0.5035714285714286
+   },
+   "recall_nopos": {
+    "ask-first": 0.4991071428571428,
+    "ask-first-gap": 0.5089285714285714,
+    "ask-latest": 0.4883928571428572,
+    "ask-latest-gap": 0.5035714285714286
+   },
+   "recall_h2": {
+    "ask-first": 0.5080357142857144,
+    "ask-first-gap": 0.5071428571428572,
+    "ask-latest": 0.4750000000000001,
+    "ask-latest-gap": 0.4741071428571428
+   },
+   "recall_h2_nopos": {
+    "ask-first": 0.5080357142857144,
+    "ask-first-gap": 0.5071428571428572,
+    "ask-latest": 0.4750000000000001,
+    "ask-latest-gap": 0.4741071428571428
+   }
+  },
+  "reward_step": {
+   "recall": {
+    "ask-first": 0.49910714285714297,
+    "ask-first-gap": 0.5160714285714286,
+    "ask-latest": 0.49196428571428574,
+    "ask-latest-gap": 0.5008928571428571
+   },
+   "recall_nopos": {
+    "ask-first": 0.49910714285714297,
+    "ask-first-gap": 0.5160714285714286,
+    "ask-latest": 0.49196428571428574,
+    "ask-latest-gap": 0.5008928571428571
+   },
+   "recall_h2": {
+    "ask-first": 0.4955357142857143,
+    "ask-first-gap": 0.5142857142857142,
+    "ask-latest": 0.49017857142857146,
+    "ask-latest-gap": 0.49821428571428567
+   },
+   "recall_h2_nopos": {
+    "ask-first": 0.4955357142857143,
+    "ask-first-gap": 0.5142857142857142,
+    "ask-latest": 0.49017857142857146,
+    "ask-latest-gap": 0.49821428571428567
+   }
+  },
+  "teach_step": {
+   "recall": {
+    "ask-first": 0.9214285714285715,
+    "ask-first-gap": 0.9464285714285714,
+    "ask-latest": 0.9678571428571429,
+    "ask-latest-gap": 0.925
+   },
+   "recall_nopos": {
+    "ask-first": 0.6544642857142857,
+    "ask-first-gap": 0.5133928571428572,
+    "ask-latest": 0.649107142857143,
+    "ask-latest-gap": 0.5116071428571429
+   },
+   "recall_h2": {
+    "ask-first": 0.99375,
+    "ask-first-gap": 0.9973214285714287,
+    "ask-latest": 0.9919642857142857,
+    "ask-latest-gap": 0.9982142857142857
+   },
+   "recall_h2_nopos": {
+    "ask-first": 0.7669642857142858,
+    "ask-first-gap": 0.5705357142857144,
+    "ask-latest": 0.7928571428571429,
+    "ask-latest-gap": 0.6196428571428572
+   }
+  }
+ }
+}

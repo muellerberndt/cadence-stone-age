@@ -1,0 +1,230 @@
+{
+ "schema": "stone-age-sequence/1",
+ "name": "Cadence 0.89 memory on the chain seen hidden: eight recipes, 20 founders",
+ "question": "Do the recall memory with its position term, two heads, a two-event window, the learned-code recipe and the episodic vote raise frozen success over the base where the stream's history has to tell a stage?",
+ "scope": "component reading of the memory options in a world; development founders",
+ "world": {
+  "kind": "view_chain",
+  "deadline": 10,
+  "success_reward": 2.0,
+  "failure_reward": -1.0,
+  "view": "hidden"
+ },
+ "recipes": {
+  "defaults": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true
+   },
+   "note": "the base: Brain.compose(7, 5, modules=(48, 24), arousal=True)"
+  },
+  "episodic": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true
+   },
+   "note": "the episodic memory votes in the choice"
+  },
+  "recall": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true
+   },
+   "note": "the recall memory with its default position term (32 exact ages)"
+  },
+  "recall_nopos": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_position": 0
+   },
+   "note": "the recall memory without the position term"
+  },
+  "recall_h2": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_heads": 2
+   },
+   "note": "the recall memory read by two heads"
+  },
+  "recall_w2": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_window": 2
+   },
+   "note": "the recall memory keyed on the last two events"
+  },
+  "attention": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "attention": true,
+    "learned_code": 8
+   },
+   "note": "the learned-code contextual recipe (recall, window 2, learned code of 8 units)"
+  },
+  "episodic_recall": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true,
+    "recall": true
+   },
+   "note": "the episodic vote and the recall memory"
+  }
+ },
+ "arms": {
+  "natural_step_120": {
+   "adapter": "step",
+   "caregiver": "none",
+   "training_episodes": 120
+  },
+  "corrective_step_120": {
+   "adapter": "step",
+   "caregiver": "correct",
+   "training_episodes": 120
+  },
+  "corrective_step_480": {
+   "adapter": "step",
+   "caregiver": "correct",
+   "training_episodes": 480
+  },
+  "natural_live_480": {
+   "adapter": "live",
+   "caregiver": "none",
+   "training_episodes": 480
+  }
+ },
+ "controls": [
+  "founder",
+  "random",
+  "oracle",
+  "searcher"
+ ],
+ "schedule": {
+  "guided": 4,
+  "autonomous": 8,
+  "unit": "executed decisions of the whole life"
+ },
+ "caregiver": {
+  "label": "natural: none; corrective: the required action of the observation shown now, after an executed nonterminal mistake in a guided window (V5's corrective teacher)"
+ },
+ "training_episodes": 120,
+ "evaluation": {
+  "episodes": 100,
+  "greedy_episodes": 1,
+  "modes": [
+   "sampled",
+   "greedy"
+  ],
+  "reset": "episode",
+  "per_state_samples": 0,
+  "note": "a frozen copy read at the arm's seam under its own rule, Brain.reset before each episode (the recall slots emptied, the address map kept): 100 sampled episodes, the reading in sequence (first try per stage, retries), and one greedy episode (a clean pass: four stages in four decisions)"
+ },
+ "seeds": {
+  "screen": [
+   202001,
+   202002,
+   202003,
+   202004,
+   202005,
+   202006,
+   202007,
+   202008,
+   202009,
+   202010,
+   202011,
+   202012,
+   202013,
+   202014,
+   202015,
+   202016,
+   202017,
+   202018,
+   202019,
+   202020
+  ],
+  "development": [
+   202001,
+   202002,
+   202003,
+   202004,
+   202005,
+   202006,
+   202007,
+   202008,
+   202009,
+   202010,
+   202011,
+   202012,
+   202013,
+   202014,
+   202015,
+   202016,
+   202017,
+   202018,
+   202019,
+   202020
+  ]
+ },
+ "streams": {
+  "evaluation": 1,
+  "random": 2,
+  "routes": 3,
+  "withdrawal_routes": 4,
+  "analysis_seed": 31012,
+  "searcher": 5,
+  "labels": 6,
+  "per_state": 7
+ },
+ "analysis": {
+  "unit": "founder and signal; a pair is one arm on one founder under one signal, recall recipe against founder recipe",
+  "pairs_per_view": "two founders x two signals x two arm kinds: 8 pairs per view, 4 per arm kind",
+  "readings": "per view, recipe, arm and founder: sampled success (100 episodes) and the clean greedy pass (one greedy episode, four stages in four decisions); first-try accuracy per stage beside them",
+  "preservation": "per view, recall minus founder in sampled success, the paired mean over the 8 pairs, at or above -.05; the memory preserves the screen when every view meets it; the same difference per arm kind (4 pairs) and the clean passes as counts with their discordant pairs are reported beside it",
+  "benefit": "views where the paired mean difference in sampled success is above zero, with the sign count; hidden and invisible are the views where the stream's history has to tell a stage, visible the view where the observation alone does, consecutive the view where only the brain's own actions do",
+  "report": "paired means with their SEM over the 8 pairs and per arm kind over 4; no interval is claimed on two founders; each recipe's place against ctx5 as the screen reported it",
+  "control_check": "the founder recipe's readings, trained-state digests and event digests on these founders must equal the dense founder's earlier control runs (the sparse reading's sk-control-<view>, sensory recipe, library c231f5c) arm for arm; a difference is reported, not repaired",
+  "pairs": [
+   [
+    "place_natural_120",
+    "ctx5_natural_120"
+   ],
+   [
+    "place_corrective_120",
+    "ctx5_corrective_120"
+   ]
+  ]
+ }
+}

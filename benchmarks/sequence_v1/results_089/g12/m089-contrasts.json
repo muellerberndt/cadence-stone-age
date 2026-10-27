@@ -1,0 +1,154 @@
+{
+ "route12-16-hidden": {
+  "recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": -0.09775000000000003,
+    "ci": [
+     -0.2645,
+     0.08125624999999988
+    ],
+    "up": 7,
+    "down": 13
+   }
+  },
+  "recall_h2_r0 - recall_r0": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": 0.10600000000000001,
+    "ci": [
+     -0.16800625,
+     0.36275
+    ],
+    "up": 12,
+    "down": 8
+   }
+  },
+  "episodic_recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": 0.00575,
+    "ci": [
+     -0.03425,
+     0.04425
+    ],
+    "up": 9,
+    "down": 10
+   }
+  }
+ },
+ "route12-16-visible": {
+  "recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 19,
+    "mean": -0.5528947368421053,
+    "ci": [
+     -0.7047368421052632,
+     -0.3889473684210526
+    ],
+    "up": 2,
+    "down": 17
+   }
+  },
+  "recall_h2_r0 - recall_r0": {
+   "guide_step_3840": {
+    "founders": 19,
+    "mean": -0.017368421052631578,
+    "ci": [
+     -0.21896052631578947,
+     0.17579605263157888
+    ],
+    "up": 9,
+    "down": 9
+   }
+  },
+  "episodic_recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": -0.001749999999999996,
+    "ci": [
+     -0.01399999999999999,
+     0.008250000000000007
+    ],
+    "up": 9,
+    "down": 8
+   }
+  }
+ },
+ "route12-8-hidden": {
+  "recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": 0.13374999999999998,
+    "ci": [
+     -0.01125,
+     0.28575624999999993
+    ],
+    "up": 10,
+    "down": 10
+   }
+  },
+  "recall_h2_r0 - recall_r0": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": -0.11424999999999999,
+    "ci": [
+     -0.33150624999999995,
+     0.11000000000000001
+    ],
+    "up": 10,
+    "down": 10
+   }
+  },
+  "episodic_recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": 0.07050000000000001,
+    "ci": [
+     0.012750000000000011,
+     0.15899999999999997
+    ],
+    "up": 15,
+    "down": 5
+   }
+  }
+ },
+ "route12-8-visible": {
+  "recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": -0.5005,
+    "ci": [
+     -0.64175625,
+     -0.34624375
+    ],
+    "up": 3,
+    "down": 17
+   }
+  },
+  "recall_h2_r0 - recall_r0": {
+   "guide_step_3840": {
+    "founders": 19,
+    "mean": -0.11973684210526316,
+    "ci": [
+     -0.2965855263157895,
+     0.06869736842105241
+    ],
+    "up": 6,
+    "down": 13
+   }
+  },
+  "episodic_recall_r0 - episodic": {
+   "guide_step_3840": {
+    "founders": 20,
+    "mean": 0.0072500000000000064,
+    "ci": [
+     -0.023999999999999987,
+     0.0355
+    ],
+    "up": 13,
+    "down": 5
+   }
+  }
+ }
+}

@@ -1,0 +1,775 @@
+{
+ "recall-order": {
+  "uniform_random": null,
+  "arms": {
+   "founder": {
+    "carried": {
+     "founders": 20,
+     "sampled": 0.4977678571428571,
+     "greedy": 0.5,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "retained": {
+     "founders": 20,
+     "sampled": 0.49799107142857146,
+     "greedy": 0.5,
+     "vs_base": 0.00022321428571428216,
+     "ci": [
+      -0.0008928571428571452,
+      0.0013392857142857095
+     ],
+     "up": 4,
+     "down": 3,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall": {
+     "founders": 20,
+     "sampled": 0.4919642857142857,
+     "greedy": 0.50625,
+     "vs_base": -0.005803571428571422,
+     "ci": [
+      -0.015853794642857143,
+      0.003794642857142869
+     ],
+     "up": 5,
+     "down": 11,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 20,
+     "sampled": 0.4919642857142857,
+     "greedy": 0.50625,
+     "vs_base": -0.005803571428571422,
+     "ci": [
+      -0.015853794642857143,
+      0.003794642857142869
+     ],
+     "up": 5,
+     "down": 11,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.49419642857142854,
+     "greedy": 0.5,
+     "vs_base": -0.003571428571428567,
+     "ci": [
+      -0.014955357142857154,
+      0.007589285714285718
+     ],
+     "up": 7,
+     "down": 11,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos_r0": {
+     "founders": 20,
+     "sampled": 0.49419642857142854,
+     "greedy": 0.5,
+     "vs_base": -0.003571428571428567,
+     "ci": [
+      -0.014955357142857154,
+      0.007589285714285718
+     ],
+     "up": 7,
+     "down": 11,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.49397321428571433,
+     "greedy": 0.49375,
+     "vs_base": -0.0037946428571428493,
+     "ci": [
+      -0.012723214285714268,
+      0.0031250000000000167
+     ],
+     "up": 6,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_nopos": {
+     "founders": 20,
+     "sampled": 0.49397321428571433,
+     "greedy": 0.49375,
+     "vs_base": -0.0037946428571428493,
+     "ci": [
+      -0.012723214285714268,
+      0.0031250000000000167
+     ],
+     "up": 6,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "attention": {
+     "founders": 20,
+     "sampled": 0.5033482142857142,
+     "greedy": 0.5151785714285714,
+     "vs_base": 0.0055803571428571395,
+     "ci": [
+      -0.0026785714285714494,
+      0.015401785714285701
+     ],
+     "up": 11,
+     "down": 5,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "random": {
+    "carried": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "retained": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos_r0": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_nopos": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "attention": {
+     "founders": 20,
+     "sampled": 0.49330357142857145,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "carried": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "retained": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_nopos": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "attention": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "teach_step": {
+    "carried": {
+     "founders": 20,
+     "sampled": 0.49866071428571423,
+     "greedy": 0.5,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 1536.0,
+     "sweeps": 147366.4
+    },
+    "retained": {
+     "founders": 20,
+     "sampled": 0.4982142857142856,
+     "greedy": 0.5,
+     "vs_base": -0.00044642857142857537,
+     "ci": [
+      -0.0015625000000000055,
+      0.00044642857142856984
+     ],
+     "up": 1,
+     "down": 2,
+     "labels": 1536.0,
+     "sweeps": 147369.6
+    },
+    "recall": {
+     "founders": 20,
+     "sampled": 0.971875,
+     "greedy": 0.9625,
+     "vs_base": 0.47321428571428575,
+     "ci": [
+      0.4372767857142857,
+      0.5040234375
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 1536.0,
+     "sweeps": 65928.0
+    },
+    "recall_nopos": {
+     "founders": 20,
+     "sampled": 0.6707589285714285,
+     "greedy": 0.71875,
+     "vs_base": 0.17209821428571428,
+     "ci": [
+      0.1138392857142857,
+      0.2410714285714286
+     ],
+     "up": 16,
+     "down": 3,
+     "labels": 1536.0,
+     "sweeps": 127297.6
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.9814732142857142,
+     "greedy": 0.975,
+     "vs_base": 0.4828125000000001,
+     "ci": [
+      0.44910714285714287,
+      0.5109375
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 1536.0,
+     "sweeps": 65928.0
+    },
+    "recall_nopos_r0": {
+     "founders": 20,
+     "sampled": 0.6444196428571429,
+     "greedy": 0.7,
+     "vs_base": 0.14575892857142855,
+     "ci": [
+      0.08794642857142856,
+      0.20960379464285708
+     ],
+     "up": 17,
+     "down": 1,
+     "labels": 1536.0,
+     "sweeps": 130336.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.9674107142857142,
+     "greedy": 0.975,
+     "vs_base": 0.46875,
+     "ci": [
+      0.4109375,
+      0.5058035714285714
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 1536.0,
+     "sweeps": 63486.4
+    },
+    "recall_h2_nopos": {
+     "founders": 20,
+     "sampled": 0.7198660714285715,
+     "greedy": 0.75,
+     "vs_base": 0.2212053571428571,
+     "ci": [
+      0.15870535714285713,
+      0.2877343749999998
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 1536.0,
+     "sweeps": 121814.4
+    },
+    "attention": {
+     "founders": 20,
+     "sampled": 0.4973214285714286,
+     "greedy": 0.4973214285714286,
+     "vs_base": -0.0013392857142857234,
+     "ci": [
+      -0.0053571428571428745,
+      0.0020089285714285617
+     ],
+     "up": 7,
+     "down": 8,
+     "labels": 1536.0,
+     "sweeps": 143161.6
+    }
+   },
+   "reward_step": {
+    "carried": {
+     "founders": 20,
+     "sampled": 0.49642857142857133,
+     "greedy": 0.5,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "retained": {
+     "founders": 20,
+     "sampled": 0.49464285714285705,
+     "greedy": 0.5,
+     "vs_base": -0.0017857142857142822,
+     "ci": [
+      -0.008482142857142855,
+      0.004017857142857151
+     ],
+     "up": 3,
+     "down": 3,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall": {
+     "founders": 20,
+     "sampled": 0.4919642857142857,
+     "greedy": 0.5125,
+     "vs_base": -0.004464285714285724,
+     "ci": [
+      -0.013169642857142866,
+      0.004241071428571411
+     ],
+     "up": 8,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 20,
+     "sampled": 0.4919642857142857,
+     "greedy": 0.5125,
+     "vs_base": -0.004464285714285724,
+     "ci": [
+      -0.013169642857142866,
+      0.004241071428571411
+     ],
+     "up": 8,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.49419642857142854,
+     "greedy": 0.5,
+     "vs_base": -0.0022321428571428605,
+     "ci": [
+      -0.009375,
+      0.00446428571428571
+     ],
+     "up": 6,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos_r0": {
+     "founders": 20,
+     "sampled": 0.49419642857142854,
+     "greedy": 0.5,
+     "vs_base": -0.0022321428571428605,
+     "ci": [
+      -0.009375,
+      0.00446428571428571
+     ],
+     "up": 6,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.49910714285714286,
+     "greedy": 0.50625,
+     "vs_base": 0.0026785714285714273,
+     "ci": [
+      -0.011160714285714282,
+      0.01919642857142858
+     ],
+     "up": 4,
+     "down": 9,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_nopos": {
+     "founders": 20,
+     "sampled": 0.49910714285714286,
+     "greedy": 0.50625,
+     "vs_base": 0.0026785714285714273,
+     "ci": [
+      -0.011160714285714282,
+      0.01919642857142858
+     ],
+     "up": 4,
+     "down": 9,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "attention": {
+     "founders": 20,
+     "sampled": 0.500892857142857,
+     "greedy": 0.5,
+     "vs_base": 0.0044642857142857175,
+     "ci": [
+      -0.00825892857142856,
+      0.01964285714285714
+     ],
+     "up": 6,
+     "down": 8,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "reward_live": {
+    "carried": {
+     "founders": 20,
+     "sampled": 0.4970982142857142,
+     "greedy": 0.5,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "retained": {
+     "founders": 20,
+     "sampled": 0.4991071428571428,
+     "greedy": 0.5,
+     "vs_base": 0.0020089285714285756,
+     "ci": [
+      -0.01294642857142857,
+      0.015848214285714275
+     ],
+     "up": 8,
+     "down": 6,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall": {
+     "founders": 20,
+     "sampled": 0.49821428571428567,
+     "greedy": 0.5125,
+     "vs_base": 0.0011160714285714218,
+     "ci": [
+      -0.013839285714285717,
+      0.013616071428571418
+     ],
+     "up": 7,
+     "down": 6,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos": {
+     "founders": 20,
+     "sampled": 0.49821428571428567,
+     "greedy": 0.5125,
+     "vs_base": 0.0011160714285714218,
+     "ci": [
+      -0.013839285714285717,
+      0.013616071428571418
+     ],
+     "up": 7,
+     "down": 6,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.49799107142857146,
+     "greedy": 0.50625,
+     "vs_base": 0.0008928571428571507,
+     "ci": [
+      -0.008035714285714285,
+      0.010491071428571438
+     ],
+     "up": 6,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_nopos_r0": {
+     "founders": 20,
+     "sampled": 0.49799107142857146,
+     "greedy": 0.50625,
+     "vs_base": 0.0008928571428571507,
+     "ci": [
+      -0.008035714285714285,
+      0.010491071428571438
+     ],
+     "up": 6,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.4928571428571429,
+     "greedy": 0.50625,
+     "vs_base": -0.00424107142857143,
+     "ci": [
+      -0.018749999999999996,
+      0.009151785714285718
+     ],
+     "up": 5,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_nopos": {
+     "founders": 20,
+     "sampled": 0.4928571428571429,
+     "greedy": 0.50625,
+     "vs_base": -0.00424107142857143,
+     "ci": [
+      -0.018749999999999996,
+      0.009151785714285718
+     ],
+     "up": 5,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "attention": {
+     "founders": 20,
+     "sampled": 0.49955357142857154,
+     "greedy": 0.4993303571428571,
+     "vs_base": 0.0024553571428571424,
+     "ci": [
+      -0.014508928571428572,
+      0.018080357142857127
+     ],
+     "up": 9,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,187 @@
+{
+ "schema": "stone-age-sequence/1",
+ "name": "Cadence 0.89 memory on P1, the observed cold chain: eight recipes, 10 founders",
+ "question": "On the fully observed chain, where memory should not matter, does any memory recipe cost success?",
+ "scope": "control reading of the memory options; development founders",
+ "world": {
+  "kind": "cold_chain",
+  "deadline": 10,
+  "success_reward": 2.0,
+  "failure_reward": -1.0
+ },
+ "recipes": {
+  "defaults": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true
+   },
+   "note": "the base: Brain.compose(7, 5, modules=(48, 24), arousal=True)"
+  },
+  "episodic": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true
+   },
+   "note": "the episodic memory votes in the choice"
+  },
+  "recall": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true
+   },
+   "note": "the recall memory with its default position term (32 exact ages)"
+  },
+  "recall_nopos": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_position": 0
+   },
+   "note": "the recall memory without the position term"
+  },
+  "recall_h2": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_heads": 2
+   },
+   "note": "the recall memory read by two heads"
+  },
+  "recall_w2": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_window": 2
+   },
+   "note": "the recall memory keyed on the last two events"
+  },
+  "attention": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "attention": true,
+    "learned_code": 8
+   },
+   "note": "the learned-code contextual recipe (recall, window 2, learned code of 8 units)"
+  },
+  "episodic_recall": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true,
+    "recall": true
+   },
+   "note": "the episodic vote and the recall memory"
+  }
+ },
+ "arms": {
+  "natural_step": {
+   "adapter": "step",
+   "caregiver": "none"
+  },
+  "grade_step": {
+   "adapter": "step",
+   "caregiver": "grade"
+  },
+  "correct_step": {
+   "adapter": "step",
+   "caregiver": "correct"
+  },
+  "correct_step_qualified": {
+   "adapter": "step",
+   "caregiver": "correct",
+   "compose": {
+    "learning_qualified": true
+   },
+   "note": "the same caregiver with qualified teaching; a separately named numerical arm, refusals counted at the fixed budget"
+  }
+ },
+ "controls": [
+  "founder",
+  "random",
+  "oracle"
+ ],
+ "schedule": {
+  "guided": 4,
+  "autonomous": 8,
+  "unit": "executed decisions of the whole life"
+ },
+ "caregiver": {
+  "grade_right": 0.5,
+  "grade_wrong": -0.5,
+  "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+ },
+ "training_episodes": 120,
+ "withdrawal_episodes": 80,
+ "withdrawal": "the acquired life resumes from its seam with the caregiver gone and learning on; a separate frozen copy is read at the end",
+ "evaluation": {
+  "episodes": 200,
+  "modes": [
+   "sampled",
+   "greedy"
+  ],
+  "reset": "episode",
+  "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader"
+ },
+ "seeds": {
+  "development": [
+   1001,
+   1002,
+   1003,
+   1004,
+   1005,
+   1006,
+   1007,
+   1008,
+   1009,
+   1010
+  ]
+ },
+ "streams": {
+  "evaluation": 1,
+  "random": 2,
+  "routes": 3,
+  "withdrawal_routes": 4,
+  "analysis_seed": 31012
+ },
+ "analysis": {
+  "unit": "founder",
+  "bootstrap_resamples": 10000,
+  "interval": "percentile 95",
+  "primary": "immediate sampled success minus random and minus founder, founder-paired"
+ },
+ "caps": {
+  "per_founder_arm_seconds": 1800,
+  "rss_bytes": 2147483648,
+  "output_bytes": 262144000
+ }
+}

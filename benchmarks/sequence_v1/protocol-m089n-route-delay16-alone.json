@@ -1,0 +1,177 @@
+{
+ "schema": "stone-age-sequence/1",
+ "name": "Cadence 0.89 memory on the route cue across 16 neutral events: guided, then 1920 alone",
+ "question": "With the cue shown once and then gone, does any memory recipe carry it across the neutral events to the first decision, against the cue kept visible?",
+ "scope": "component reading of the memory options in a world; development founders",
+ "world": {
+  "kind": "route_cue",
+  "neutral": 16,
+  "deadline": 10,
+  "success_reward": 2.0,
+  "failure_reward": -1.0,
+  "cue_persists": false
+ },
+ "recipes": {
+  "episodic": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true
+   },
+   "note": "the episodic vote"
+  },
+  "episodic_recall": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true,
+    "recall": true
+   },
+   "note": "the vote and the recall memory"
+  },
+  "episodic_recall_r0": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true,
+    "recall": true,
+    "recall_recency": 0.0
+   },
+   "note": "the vote and the recall memory at recency 0"
+  },
+  "episodic_recall_h2": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true,
+    "recall": true,
+    "recall_heads": 2
+   },
+   "note": "the vote and two recall heads"
+  },
+  "recall_r0": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_recency": 0.0
+   },
+   "note": "the recall memory at recency 0"
+  },
+  "recall_h2_r0": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_heads": 2,
+    "recall_recency": 0.0
+   },
+   "note": "two heads at recency 0"
+  }
+ },
+ "arms": {
+  "guide_step_1920": {
+   "adapter": "step",
+   "caregiver": "guide",
+   "training_episodes": 1920,
+   "withdrawal_adapter": "live"
+  },
+  "natural_live_1920": {
+   "adapter": "live",
+   "caregiver": "none",
+   "training_episodes": 1920
+  }
+ },
+ "controls": [
+  "founder",
+  "random",
+  "oracle"
+ ],
+ "schedule": {
+  "guided": 4,
+  "autonomous": 8,
+  "unit": "executed decisions of the whole life"
+ },
+ "caregiver": {
+  "grade_right": 0.5,
+  "grade_wrong": -0.5,
+  "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+ },
+ "caregiver_note": "a wrong first collection ends the episode, so a corrective label never reaches the decision that needs history; the arms are reward-only and graded",
+ "training_episodes": 480,
+ "budget_readings": [
+  120,
+  480,
+  1920
+ ],
+ "withdrawal_episodes": 1920,
+ "evaluation": {
+  "episodes": 200,
+  "modes": [
+   "sampled",
+   "greedy"
+  ],
+  "reset": "episode",
+  "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader"
+ },
+ "seeds": {
+  "development": [
+   1041,
+   1042,
+   1043,
+   1044,
+   1045,
+   1046,
+   1047,
+   1048,
+   1049,
+   1050,
+   1051,
+   1052,
+   1053,
+   1054,
+   1055,
+   1056,
+   1057,
+   1058,
+   1059,
+   1060
+  ]
+ },
+ "streams": {
+  "evaluation": 1,
+  "random": 2,
+  "routes": 3,
+  "withdrawal_routes": 4,
+  "analysis_seed": 31012
+ },
+ "analysis": {
+  "unit": "founder",
+  "bootstrap_resamples": 10000,
+  "interval": "percentile 95",
+  "primary": "first-choice accuracy and whole-route success; context-blind ceiling 0.5 at the first choice"
+ },
+ "caps": {
+  "per_founder_arm_seconds": 1800,
+  "rss_bytes": 2147483648,
+  "output_bytes": 262144000
+ }
+}

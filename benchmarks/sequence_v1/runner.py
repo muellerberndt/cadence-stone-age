@@ -44,6 +44,7 @@ from metrics import (  # noqa: E402
 from probes import Copier, reseed_actions, state_digest  # noqa: E402
 from receipts import Manifest, canonical  # noqa: E402
 from worlds import (  # noqa: E402
+    ORDER_CONDITIONS,
     WEATHER_SEEN,
     WEATHER_UNSEEN,
     action_id,
@@ -655,6 +656,11 @@ def schedules(protocol: dict[str, Any], seed: int, training: int) -> tuple[Any, 
     if kind not in ("route_cue", "recall"):
         return None, None, None
     schedule_of = recall_schedule if kind == "recall" else balanced_routes
+    if kind == "recall" and world.get("ask") == "order":
+        conditions = ORDER_CONDITIONS
+        if "gaps" in world:  # the writes K neutral events apart, for each declared K
+            conditions = tuple(f"ask-{w}-gap{int(k)}" for k in world["gaps"] for w in ("first", "latest"))
+        schedule_of = functools.partial(recall_schedule, conditions=conditions)
     return (
         schedule_of(training, rng(STREAM["routes"], seed)),
         schedule_of(withdrawal, rng(STREAM["withdrawal_routes"], seed)) if withdrawal > 0 else None,

@@ -1,0 +1,3080 @@
+{
+ "recall10-plain": {
+  "uniform_random": null,
+  "arms": {
+   "founder": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.4997767857142857,
+     "greedy": 0.4738839285714286,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.4991071428571428,
+     "greedy": 0.4861607142857142,
+     "vs_base": -0.0006696428571428519,
+     "ci": [
+      -0.0051339285714285645,
+      0.003571428571428584
+     ],
+     "up": 7,
+     "down": 8,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.49888392857142855,
+     "greedy": 0.5078125,
+     "vs_base": -0.0008928571428571342,
+     "ci": [
+      -0.016517857142857143,
+      0.01607142857142858
+     ],
+     "up": 6,
+     "down": 11,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.49709821428571416,
+     "greedy": 0.5122767857142857,
+     "vs_base": -0.002678571428571419,
+     "ci": [
+      -0.019866071428571414,
+      0.016071428571428584
+     ],
+     "up": 6,
+     "down": 13,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "random": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.4984375,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.4984375,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.4984375,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.4984375,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "recall": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "teach_step": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.9823660714285714,
+     "greedy": 0.9892857142857142,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 1536.0,
+     "sweeps": 56638.4
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.9680803571428569,
+     "greedy": 0.975,
+     "vs_base": -0.014285714285714285,
+     "ci": [
+      -0.04285714285714286,
+      0.007366071428571435
+     ],
+     "up": 3,
+     "down": 5,
+     "labels": 1536.0,
+     "sweeps": 56193.6
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.9859374999999998,
+     "greedy": 0.9928571428571429,
+     "vs_base": 0.0035714285714285752,
+     "ci": [
+      -0.015011160714285656,
+      0.020982142857142876
+     ],
+     "up": 4,
+     "down": 1,
+     "labels": 1536.0,
+     "sweeps": 54236.8
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.9825892857142857,
+     "greedy": 0.9892857142857142,
+     "vs_base": 0.00022321428571428492,
+     "ci": [
+      -0.01406250000000001,
+      0.014508928571428575
+     ],
+     "up": 4,
+     "down": 3,
+     "labels": 1536.0,
+     "sweeps": 55720.0
+    }
+   },
+   "reward_step": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.663392857142857,
+     "greedy": 0.6660714285714285,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.6236607142857142,
+     "greedy": 0.6247767857142856,
+     "vs_base": -0.039732142857142855,
+     "ci": [
+      -0.12366071428571428,
+      0.044642857142857144
+     ],
+     "up": 6,
+     "down": 8,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.7075892857142857,
+     "greedy": 0.7107142857142856,
+     "vs_base": 0.04419642857142858,
+     "ci": [
+      -0.03884486607142857,
+      0.1352678571428571
+     ],
+     "up": 7,
+     "down": 8,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.6515625,
+     "greedy": 0.6544642857142857,
+     "vs_base": -0.011830357142857139,
+     "ci": [
+      -0.09486607142857142,
+      0.0700948660714285
+     ],
+     "up": 7,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "reward_live": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.821875,
+     "greedy": 0.8850446428571429,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.7727678571428571,
+     "greedy": 0.8008928571428571,
+     "vs_base": -0.04910714285714286,
+     "ci": [
+      -0.11585379464285712,
+      0.018973214285714253
+     ],
+     "up": 6,
+     "down": 13,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.7707589285714285,
+     "greedy": 0.8294642857142858,
+     "vs_base": -0.05111607142857144,
+     "ci": [
+      -0.14933035714285717,
+      0.04486607142857142
+     ],
+     "up": 9,
+     "down": 11,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.7578124999999999,
+     "greedy": 0.7745535714285714,
+     "vs_base": -0.06406250000000002,
+     "ci": [
+      -0.14799107142857143,
+      0.02299107142857141
+     ],
+     "up": 5,
+     "down": 15,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   }
+  }
+ },
+ "recall10-order": {
+  "uniform_random": null,
+  "arms": {
+   "founder": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.5000000000000001,
+     "greedy": 0.5125,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.4970982142857142,
+     "greedy": 0.5,
+     "vs_base": -0.0029017857142857066,
+     "ci": [
+      -0.006026785714285709,
+      2.7755575615628915e-18
+     ],
+     "up": 5,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.4966517857142857,
+     "greedy": 0.49375,
+     "vs_base": -0.0033482142857142877,
+     "ci": [
+      -0.012053571428571419,
+      0.004910714285714282
+     ],
+     "up": 9,
+     "down": 9,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.49620535714285713,
+     "greedy": 0.5,
+     "vs_base": -0.003794642857142869,
+     "ci": [
+      -0.012500000000000015,
+      0.004910714285714268
+     ],
+     "up": 7,
+     "down": 9,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "random": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.49933035714285723,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.49933035714285723,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.49933035714285723,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.49933035714285723,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "recall": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "teach_step": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.9468750000000001,
+     "greedy": 0.95,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 1536.0,
+     "sweeps": 68904.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.9359375,
+     "greedy": 0.9375,
+     "vs_base": -0.010937499999999994,
+     "ci": [
+      -0.10178571428571426,
+      0.0752232142857143
+     ],
+     "up": 4,
+     "down": 6,
+     "labels": 1536.0,
+     "sweeps": 64531.2
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.9714285714285713,
+     "greedy": 0.975,
+     "vs_base": 0.02455357142857143,
+     "ci": [
+      -0.05,
+      0.09799665178571423
+     ],
+     "up": 5,
+     "down": 3,
+     "labels": 1536.0,
+     "sweeps": 64180.8
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.9843749999999998,
+     "greedy": 0.9875,
+     "vs_base": 0.037500000000000006,
+     "ci": [
+      -0.012276785714285709,
+      0.09955357142857142
+     ],
+     "up": 5,
+     "down": 3,
+     "labels": 1536.0,
+     "sweeps": 60635.2
+    }
+   },
+   "reward_step": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.5011160714285714,
+     "greedy": 0.51875,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.49084821428571435,
+     "greedy": 0.5,
+     "vs_base": -0.01026785714285714,
+     "ci": [
+      -0.01986607142857142,
+      -0.00200892857142857
+     ],
+     "up": 3,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.4968749999999999,
+     "greedy": 0.49375,
+     "vs_base": -0.004241071428571422,
+     "ci": [
+      -0.022767857142857135,
+      0.01473214285714286
+     ],
+     "up": 7,
+     "down": 8,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.49910714285714286,
+     "greedy": 0.5,
+     "vs_base": -0.00200892857142857,
+     "ci": [
+      -0.018973214285714284,
+      0.01629464285714286
+     ],
+     "up": 7,
+     "down": 9,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "reward_live": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.4977678571428571,
+     "greedy": 0.50625,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.5017857142857143,
+     "greedy": 0.5,
+     "vs_base": 0.004017857142857137,
+     "ci": [
+      -0.00892857142857143,
+      0.017410714285714272
+     ],
+     "up": 7,
+     "down": 3,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.5082589285714285,
+     "greedy": 0.5,
+     "vs_base": 0.01049107142857143,
+     "ci": [
+      -0.008258928571428561,
+      0.02901785714285713
+     ],
+     "up": 8,
+     "down": 4,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.49910714285714286,
+     "greedy": 0.50625,
+     "vs_base": 0.0013392857142857178,
+     "ci": [
+      -0.011160714285714279,
+      0.013616071428571418
+     ],
+     "up": 7,
+     "down": 8,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   }
+  }
+ },
+ "route10-delay16": {
+  "uniform_random": null,
+  "arms": {
+   "founder": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.061250000000000006,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.05700000000000001,
+     "greedy": 0.0,
+     "vs_base": -0.004250000000000003,
+     "ci": [
+      -0.009750000000000002,
+      0.0009999999999999953
+     ],
+     "up": 6,
+     "down": 12,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.061250000000000006,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.05700000000000001,
+     "greedy": 0.0,
+     "vs_base": -0.004250000000000003,
+     "ci": [
+      -0.009750000000000002,
+      0.0009999999999999953
+     ],
+     "up": 6,
+     "down": 12,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.0685,
+     "greedy": 0.0,
+     "vs_base": 0.007250000000000001,
+     "ci": [
+      -0.008249999999999997,
+      0.02375
+     ],
+     "up": 11,
+     "down": 8,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.07125000000000001,
+     "greedy": 0.0,
+     "vs_base": 0.009999999999999998,
+     "ci": [
+      -0.005750000000000001,
+      0.025249999999999995
+     ],
+     "up": 11,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "random": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.09425000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.09425000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.09425000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.09425000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.09425000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.09425000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "recall": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "guide_step_1920": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.39699999999999996,
+     "greedy": 0.15,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 2931.8,
+     "sweeps": 51465.85
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.5805,
+     "greedy": 0.475,
+     "vs_base": 0.1835,
+     "ci": [
+      0.01125,
+      0.34875624999999993
+     ],
+     "up": 12,
+     "down": 7,
+     "labels": 3242.2,
+     "sweeps": 69556.6
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.47074999999999995,
+     "greedy": 0.5,
+     "vs_base": 0.07375000000000001,
+     "ci": [
+      0.019499999999999997,
+      0.13000624999999993
+     ],
+     "up": 13,
+     "down": 6,
+     "labels": 2817.5,
+     "sweeps": 39804.25
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.5202500000000001,
+     "greedy": 0.475,
+     "vs_base": 0.12325000000000001,
+     "ci": [
+      0.07125000000000001,
+      0.18400000000000002
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 2803.15,
+     "sweeps": 46268.8
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.579,
+     "greedy": 0.575,
+     "vs_base": 0.182,
+     "ci": [
+      0.03799999999999999,
+      0.33225
+     ],
+     "up": 13,
+     "down": 7,
+     "labels": 2885.45,
+     "sweeps": 46286.65
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.657,
+     "greedy": 0.575,
+     "vs_base": 0.26,
+     "ci": [
+      0.10348749999999998,
+      0.4135062499999999
+     ],
+     "up": 13,
+     "down": 7,
+     "labels": 3164.1,
+     "sweeps": 49763.15
+    }
+   },
+   "natural_live_1920": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.27349999999999997,
+     "greedy": 0.125,
+     "vs_base": 0.27349999999999997,
+     "ci": [
+      0.19299375000000002,
+      0.35324999999999995
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.24600000000000005,
+     "greedy": 0.125,
+     "vs_base": 0.24600000000000005,
+     "ci": [
+      0.16225,
+      0.333
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   }
+  }
+ },
+ "route10-delay2": {
+  "uniform_random": null,
+  "arms": {
+   "founder": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.05375,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.061499999999999985,
+     "greedy": 0.0,
+     "vs_base": 0.007749999999999998,
+     "ci": [
+      0.0002500000000000002,
+      0.01575
+     ],
+     "up": 11,
+     "down": 6,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.05375,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.061499999999999985,
+     "greedy": 0.0,
+     "vs_base": 0.007749999999999998,
+     "ci": [
+      0.0002500000000000002,
+      0.01575
+     ],
+     "up": 11,
+     "down": 6,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.06925,
+     "greedy": 0.0,
+     "vs_base": 0.015500000000000003,
+     "ci": [
+      0.0025000000000000014,
+      0.029250000000000005
+     ],
+     "up": 14,
+     "down": 6,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.06599999999999999,
+     "greedy": 0.0,
+     "vs_base": 0.01225,
+     "ci": [
+      0.0012499999999999998,
+      0.023250000000000003
+     ],
+     "up": 12,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "random": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.09150000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.09150000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.09150000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.09150000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.09150000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.09150000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "recall": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "guide_step_1920": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.40825000000000006,
+     "greedy": 0.2,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 3257.75,
+     "sweeps": 54289.1
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.6445000000000001,
+     "greedy": 0.55,
+     "vs_base": 0.23625000000000002,
+     "ci": [
+      0.03000000000000002,
+      0.44550624999999994
+     ],
+     "up": 13,
+     "down": 7,
+     "labels": 3214.85,
+     "sweeps": 58884.8
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.6797500000000001,
+     "greedy": 0.6,
+     "vs_base": 0.27149999999999996,
+     "ci": [
+      0.08550000000000002,
+      0.45325
+     ],
+     "up": 14,
+     "down": 6,
+     "labels": 2659.25,
+     "sweeps": 51194.15
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.7060000000000001,
+     "greedy": 0.725,
+     "vs_base": 0.29775,
+     "ci": [
+      0.14150000000000001,
+      0.45325
+     ],
+     "up": 18,
+     "down": 2,
+     "labels": 2631.15,
+     "sweeps": 52028.05
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.6295,
+     "greedy": 0.525,
+     "vs_base": 0.22125,
+     "ci": [
+      -0.023499999999999993,
+      0.4422499999999999
+     ],
+     "up": 13,
+     "down": 5,
+     "labels": 3259.3,
+     "sweeps": 53484.55
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.55475,
+     "greedy": 0.5,
+     "vs_base": 0.14650000000000002,
+     "ci": [
+      -0.04900625,
+      0.33975
+     ],
+     "up": 14,
+     "down": 6,
+     "labels": 3220.15,
+     "sweeps": 63359.15
+    }
+   },
+   "natural_live_1920": {
+    "recall": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 20,
+     "sampled": 0.20824999999999996,
+     "greedy": 0.075,
+     "vs_base": 0.20824999999999996,
+     "ci": [
+      0.1345,
+      0.28675
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 20,
+     "sampled": 0.20675,
+     "greedy": 0.05,
+     "vs_base": 0.20675,
+     "ci": [
+      0.13649999999999998,
+      0.28124999999999994
+     ],
+     "up": 20,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 20,
+     "sampled": 0.0,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   }
+  }
+ },
+ "view10-hidden": {
+  "uniform_random": 0.1208738816,
+  "arms": {
+   "founder": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.1,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.20125,
+      0.20936544650372307,
+      0.18996272352042368,
+      0.2262705521466831
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.099,
+     "greedy": 0.0,
+     "vs_base": -0.0010000000000000005,
+     "ci": [
+      -0.007999999999999998,
+      0.005750000000000002
+     ],
+     "up": 15,
+     "down": 16,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.20350000000000001,
+      0.20140383663864697,
+      0.19176114655242812,
+      0.22578392405228237
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.1,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.20125,
+      0.20936544650372307,
+      0.18996272352042368,
+      0.2262705521466831
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.099,
+     "greedy": 0.0,
+     "vs_base": -0.0010000000000000005,
+     "ci": [
+      -0.007999999999999998,
+      0.005750000000000002
+     ],
+     "up": 15,
+     "down": 16,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.20350000000000001,
+      0.20140383663864697,
+      0.19176114655242812,
+      0.22578392405228237
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.06575,
+     "greedy": 0.0,
+     "vs_base": -0.03425,
+     "ci": [
+      -0.0465,
+      -0.02225
+     ],
+     "up": 7,
+     "down": 29,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.19849999999999998,
+      0.21404232078475566,
+      0.1549328352293365,
+      0.20373412400201163
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.06725,
+     "greedy": 0.0,
+     "vs_base": -0.03275,
+     "ci": [
+      -0.04575,
+      -0.01975
+     ],
+     "up": 11,
+     "down": 27,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.20400000000000001,
+      0.2118779291236895,
+      0.16440343160705592,
+      0.19854002912099825
+     ]
+    }
+   },
+   "random": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "recall": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "searcher": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.22475,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.22475,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.22475,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.22475,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.22475,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.22475,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "corrective_step_120": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.45175,
+     "greedy": 0.375,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 256.4,
+     "sweeps": 4311.025,
+     "first_try": [
+      0.5820000000000001,
+      0.1500652477524569,
+      0.3087719083166135,
+      0.47345028102855463
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.43274999999999997,
+     "greedy": 0.45,
+     "vs_base": -0.01899999999999999,
+     "ci": [
+      -0.15899999999999997,
+      0.12325
+     ],
+     "up": 23,
+     "down": 16,
+     "labels": 252.05,
+     "sweeps": 4489.675,
+     "first_try": [
+      0.5885,
+      0.21707422125346731,
+      0.28438762610115403,
+      0.4403595668890941
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.75675,
+     "greedy": 0.5,
+     "vs_base": 0.305,
+     "ci": [
+      0.1585,
+      0.44600624999999994
+     ],
+     "up": 29,
+     "down": 10,
+     "labels": 150.5,
+     "sweeps": 2320.825,
+     "first_try": [
+      0.671,
+      0.5117753666989039,
+      0.7278029294636265,
+      0.8517825212136592
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.76475,
+     "greedy": 0.575,
+     "vs_base": 0.313,
+     "ci": [
+      0.18825,
+      0.4387499999999999
+     ],
+     "up": 31,
+     "down": 8,
+     "labels": 153.3,
+     "sweeps": 2393.85,
+     "first_try": [
+      0.6915,
+      0.6010907439439552,
+      0.7937089588302338,
+      0.8160354586087493
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.3625,
+     "greedy": 0.225,
+     "vs_base": -0.08924999999999998,
+     "ci": [
+      -0.21950624999999996,
+      0.035499999999999976
+     ],
+     "up": 21,
+     "down": 18,
+     "labels": 260.625,
+     "sweeps": 3761.375,
+     "first_try": [
+      0.5202500000000001,
+      0.15984517775917934,
+      0.2840344699139868,
+      0.3556024045940357
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.38075000000000003,
+     "greedy": 0.25,
+     "vs_base": -0.071,
+     "ci": [
+      -0.20575625,
+      0.06375624999999992
+     ],
+     "up": 17,
+     "down": 22,
+     "labels": 258.2,
+     "sweeps": 3854.0,
+     "first_try": [
+      0.4977500000000001,
+      0.20134157521551668,
+      0.2776831487047321,
+      0.381476899104053
+     ]
+    }
+   },
+   "corrective_step_480": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.6060000000000001,
+     "greedy": 0.525,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 753.725,
+     "sweeps": 11605.65,
+     "first_try": [
+      0.6234999999999999,
+      0.2925621967099965,
+      0.510305734324551,
+      0.550680869294907
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.42299999999999993,
+     "greedy": 0.275,
+     "vs_base": -0.183,
+     "ci": [
+      -0.3297625,
+      -0.03623750000000017
+     ],
+     "up": 14,
+     "down": 24,
+     "labels": 853.85,
+     "sweeps": 13292.2,
+     "first_try": [
+      0.5317500000000001,
+      0.21745104255726835,
+      0.4097410493817946,
+      0.4232923042068249
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.93575,
+     "greedy": 0.825,
+     "vs_base": 0.32975,
+     "ci": [
+      0.18899375000000002,
+      0.46399999999999997
+     ],
+     "up": 26,
+     "down": 9,
+     "labels": 380.025,
+     "sweeps": 5939.0,
+     "first_try": [
+      0.8190000000000002,
+      0.8509097683121982,
+      0.8609252198816806,
+      0.8937387044296374
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.8905,
+     "greedy": 0.775,
+     "vs_base": 0.2845,
+     "ci": [
+      0.14199375,
+      0.41825
+     ],
+     "up": 26,
+     "down": 9,
+     "labels": 433.625,
+     "sweeps": 6250.725,
+     "first_try": [
+      0.675,
+      0.6755841232125961,
+      0.8688659745550925,
+      0.8971998389344675
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.5584999999999999,
+     "greedy": 0.4,
+     "vs_base": -0.0475,
+     "ci": [
+      -0.198,
+      0.1035
+     ],
+     "up": 19,
+     "down": 19,
+     "labels": 795.0,
+     "sweeps": 11936.55,
+     "first_try": [
+      0.63225,
+      0.25186321578193827,
+      0.4683611240710828,
+      0.5164185643940407
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.5894999999999999,
+     "greedy": 0.45,
+     "vs_base": -0.016500000000000004,
+     "ci": [
+      -0.16875624999999997,
+      0.1332562499999999
+     ],
+     "up": 21,
+     "down": 17,
+     "labels": 810.775,
+     "sweeps": 12261.225,
+     "first_try": [
+      0.5565,
+      0.20074010193646594,
+      0.4846658101149556,
+      0.5660406626539786
+     ]
+    }
+   },
+   "natural_live_480": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.026250000000000002,
+     "greedy": 0.025,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.08399999999999999,
+      0.06390557158817343,
+      0.16870721175232453,
+      0.6732037420443217
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.01475,
+     "greedy": 0.0,
+     "vs_base": -0.011500000000000002,
+     "ci": [
+      -0.03775,
+      0.01225
+     ],
+     "up": 6,
+     "down": 9,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.094,
+      0.04824678997900221,
+      0.19517045454545456,
+      0.5014697236919459
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.9097500000000001,
+     "greedy": 1.0,
+     "vs_base": 0.8835000000000001,
+     "ci": [
+      0.843,
+      0.9179999999999999
+     ],
+     "up": 40,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.5424999999999999,
+      0.5318823868816505,
+      0.8990818063351581,
+      0.8851515566292841
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.853,
+     "greedy": 0.95,
+     "vs_base": 0.82675,
+     "ci": [
+      0.7707437499999998,
+      0.877
+     ],
+     "up": 40,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.5075000000000001,
+      0.5139504130061066,
+      0.9294013597811267,
+      0.8763202675942636
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.02275,
+     "greedy": 0.0,
+     "vs_base": -0.0034999999999999996,
+     "ci": [
+      -0.03325,
+      0.02475
+     ],
+     "up": 12,
+     "down": 10,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.11525,
+      0.06600368830240255,
+      0.2384323392003477,
+      0.5451964460660113
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.02125,
+     "greedy": 0.0,
+     "vs_base": -0.004999999999999999,
+     "ci": [
+      -0.03225,
+      0.01825624999999991
+     ],
+     "up": 10,
+     "down": 7,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.0885,
+      0.057321987733691994,
+      0.2386436776282963,
+      0.676042476042476
+     ]
+    }
+   }
+  }
+ },
+ "view10-visible": {
+  "uniform_random": 0.1208738816,
+  "arms": {
+   "founder": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.0925,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.1975,
+      0.20880972541863335,
+      0.18802630017781255,
+      0.2222504413337582
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.096,
+     "greedy": 0.0,
+     "vs_base": 0.0035000000000000005,
+     "ci": [
+      -0.00275,
+      0.010000000000000002
+     ],
+     "up": 15,
+     "down": 13,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.193,
+      0.2075316005855489,
+      0.19697077394422033,
+      0.21832899235791037
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.0925,
+     "greedy": 0.0,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.1975,
+      0.20880972541863335,
+      0.18802630017781255,
+      0.2222504413337582
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.096,
+     "greedy": 0.0,
+     "vs_base": 0.0035000000000000005,
+     "ci": [
+      -0.00275,
+      0.010000000000000002
+     ],
+     "up": 15,
+     "down": 13,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.193,
+      0.2075316005855489,
+      0.19697077394422033,
+      0.21832899235791037
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.07875,
+     "greedy": 0.0,
+     "vs_base": -0.013749999999999998,
+     "ci": [
+      -0.027499999999999997,
+      0.00025000000000000125
+     ],
+     "up": 10,
+     "down": 27,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.19875,
+      0.21145914993728693,
+      0.1665140322447442,
+      0.1990340146168432
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.079,
+     "greedy": 0.0,
+     "vs_base": -0.013499999999999998,
+     "ci": [
+      -0.027249999999999996,
+      0.0005062499999999107
+     ],
+     "up": 11,
+     "down": 25,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.1955,
+      0.21068972399334682,
+      0.16648352342592765,
+      0.19799973256606224
+     ]
+    }
+   },
+   "random": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.11825000000000001,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "oracle": {
+    "recall": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 1.0,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "searcher": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.297,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.297,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.297,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.297,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.297,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.297,
+     "greedy": NaN,
+     "vs_base": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0
+    }
+   },
+   "corrective_step_120": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.6667500000000001,
+     "greedy": 0.5,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 224.9,
+     "sweeps": 3659.775,
+     "first_try": [
+      0.56275,
+      0.31712197684080873,
+      0.3165777045478453,
+      0.5288498265780552
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.70675,
+     "greedy": 0.625,
+     "vs_base": 0.039999999999999994,
+     "ci": [
+      -0.09050625,
+      0.1705
+     ],
+     "up": 19,
+     "down": 17,
+     "labels": 224.775,
+     "sweeps": 3732.6,
+     "first_try": [
+      0.6905,
+      0.2405231038879605,
+      0.2854289538318424,
+      0.5341823408709457
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.9465,
+     "greedy": 0.925,
+     "vs_base": 0.27975000000000005,
+     "ci": [
+      0.15299375,
+      0.40525
+     ],
+     "up": 33,
+     "down": 4,
+     "labels": 29.175,
+     "sweeps": 537.2,
+     "first_try": [
+      0.946,
+      0.9078976279650437,
+      0.924836903517938,
+      0.9629939227439227
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.9890000000000001,
+     "greedy": 0.975,
+     "vs_base": 0.32225000000000004,
+     "ci": [
+      0.2105,
+      0.4382499999999999
+     ],
+     "up": 35,
+     "down": 3,
+     "labels": 29.925,
+     "sweeps": 538.45,
+     "first_try": [
+      0.97325,
+      0.9528006329113923,
+      0.9396690074753984,
+      0.9899948979591837
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.67625,
+     "greedy": 0.525,
+     "vs_base": 0.009500000000000003,
+     "ci": [
+      -0.12725625000000002,
+      0.1435
+     ],
+     "up": 18,
+     "down": 19,
+     "labels": 226.65,
+     "sweeps": 3518.75,
+     "first_try": [
+      0.524,
+      0.21831512712624365,
+      0.22627220555903832,
+      0.5557249246078747
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.6679999999999999,
+     "greedy": 0.55,
+     "vs_base": 0.001250000000000004,
+     "ci": [
+      -0.118,
+      0.1220062499999999
+     ],
+     "up": 17,
+     "down": 20,
+     "labels": 225.975,
+     "sweeps": 3534.525,
+     "first_try": [
+      0.61125,
+      0.2592856363456802,
+      0.2679743219115417,
+      0.4815644512791425
+     ]
+    }
+   },
+   "corrective_step_480": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.8002499999999999,
+     "greedy": 0.625,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 643.05,
+     "sweeps": 10427.475,
+     "first_try": [
+      0.6827500000000001,
+      0.5575550503824734,
+      0.3538014999953972,
+      0.7028925540459128
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.73675,
+     "greedy": 0.65,
+     "vs_base": -0.0635,
+     "ci": [
+      -0.20500625,
+      0.07225624999999991
+     ],
+     "up": 18,
+     "down": 17,
+     "labels": 616.825,
+     "sweeps": 10453.525,
+     "first_try": [
+      0.7314999999999999,
+      0.4613736875525607,
+      0.5142056887647224,
+      0.596660790191633
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.99925,
+     "greedy": 1.0,
+     "vs_base": 0.199,
+     "ci": [
+      0.11325,
+      0.29175
+     ],
+     "up": 30,
+     "down": 2,
+     "labels": 62.125,
+     "sweeps": 1094.175,
+     "first_try": [
+      0.9637500000000001,
+      0.9745000000000001,
+      0.968,
+      0.9894897959183673
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.99875,
+     "greedy": 1.0,
+     "vs_base": 0.1985,
+     "ci": [
+      0.11225,
+      0.29125
+     ],
+     "up": 29,
+     "down": 3,
+     "labels": 57.575,
+     "sweeps": 1086.35,
+     "first_try": [
+      0.9855,
+      0.9640000000000001,
+      0.9642500000000002,
+      0.9919974747474747
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.8385,
+     "greedy": 0.775,
+     "vs_base": 0.038249999999999985,
+     "ci": [
+      -0.09225000000000001,
+      0.16525624999999988
+     ],
+     "up": 22,
+     "down": 17,
+     "labels": 601.9,
+     "sweeps": 9074.925,
+     "first_try": [
+      0.73575,
+      0.40201525065074223,
+      0.37900851156609017,
+      0.7118945233795475
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.834,
+     "greedy": 0.725,
+     "vs_base": 0.03374999999999999,
+     "ci": [
+      -0.0845,
+      0.15525624999999987
+     ],
+     "up": 17,
+     "down": 17,
+     "labels": 622.375,
+     "sweeps": 9190.325,
+     "first_try": [
+      0.6912499999999999,
+      0.46162363695625697,
+      0.30036577070883846,
+      0.6876597081250733
+     ]
+    }
+   },
+   "natural_live_480": {
+    "recall": {
+     "founders": 40,
+     "sampled": 0.1525,
+     "greedy": 0.075,
+     "vs_base": 0.0,
+     "ci": [
+      NaN,
+      NaN
+     ],
+     "up": 0,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.17975000000000002,
+      0.13398271482349905,
+      0.2981572843882087,
+      0.817105706215964
+     ]
+    },
+    "recall_r0": {
+     "founders": 40,
+     "sampled": 0.10275000000000001,
+     "greedy": 0.05,
+     "vs_base": -0.049749999999999996,
+     "ci": [
+      -0.1145,
+      0.012750000000000003
+     ],
+     "up": 15,
+     "down": 17,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.14825,
+      0.22463710842682397,
+      0.3835904530722095,
+      0.7304947306106512
+     ]
+    },
+    "episodic_recall": {
+     "founders": 40,
+     "sampled": 0.9887499999999999,
+     "greedy": 1.0,
+     "vs_base": 0.83625,
+     "ci": [
+      0.7612437499999999,
+      0.9015000000000001
+     ],
+     "up": 40,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.9584999999999999,
+      0.956468085106383,
+      0.8938869009241349,
+      0.9803981324315671
+     ]
+    },
+    "episodic_recall_r0": {
+     "founders": 40,
+     "sampled": 0.9879999999999999,
+     "greedy": 1.0,
+     "vs_base": 0.8354999999999999,
+     "ci": [
+      0.75849375,
+      0.90125625
+     ],
+     "up": 40,
+     "down": 0,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.9717500000000001,
+      0.9582499999999999,
+      0.9085606352819167,
+      0.9858924171067027
+     ]
+    },
+    "recall_h2": {
+     "founders": 40,
+     "sampled": 0.12974999999999998,
+     "greedy": 0.075,
+     "vs_base": -0.02275,
+     "ci": [
+      -0.11100624999999999,
+      0.06899999999999999
+     ],
+     "up": 10,
+     "down": 20,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.149,
+      0.16357205383500256,
+      0.2268811729849404,
+      0.8140402271182495
+     ]
+    },
+    "recall_h2_r0": {
+     "founders": 40,
+     "sampled": 0.1365,
+     "greedy": 0.075,
+     "vs_base": -0.016,
+     "ci": [
+      -0.09450625,
+      0.06174999999999999
+     ],
+     "up": 16,
+     "down": 17,
+     "labels": 0.0,
+     "sweeps": 0.0,
+     "first_try": [
+      0.13574999999999998,
+      0.16548786837909873,
+      0.2810818112674814,
+      0.781317276995002
+     ]
+    }
+   }
+  }
+ }
+}

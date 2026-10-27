@@ -1,0 +1,259 @@
+{
+ "schema": "stone-age-sequence/1",
+ "name": "Cadence 0.89 memory on the ordered recall world: the first or the latest written value",
+ "question": "Two values are written, then asked: the first through a query marker of its own, or the latest. Does the position term let a lesson teach the read to look back to the older write?",
+ "scope": "component reading of the memory options in a world; development founders",
+ "world": {
+  "kind": "recall",
+  "success_reward": 1.0,
+  "failure_reward": -1.0,
+  "ask": "order"
+ },
+ "recipes": {
+  "carried": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3
+   },
+   "note": "the recall world's base"
+  },
+  "retained": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.8,
+    "working_memory_amplitude": 0.3
+   },
+   "note": "a retained working trace"
+  },
+  "recall": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true
+   },
+   "note": "the recall memory with its default position term"
+  },
+  "recall_nopos": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_position": 0
+   },
+   "note": "no position term"
+  },
+  "recall_r0": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_recency": 0.0
+   },
+   "note": "no recency charge"
+  },
+  "recall_nopos_r0": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_position": 0,
+    "recall_recency": 0.0
+   },
+   "note": "no position term and no recency charge"
+  },
+  "recall_h2": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_heads": 2
+   },
+   "note": "two heads"
+  },
+  "recall_h2_nopos": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_heads": 2,
+    "recall_position": 0
+   },
+   "note": "two heads, no position"
+  },
+  "attention": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "attention": true,
+    "learned_code": 8
+   },
+   "note": "the learned-code contextual recipe"
+  }
+ },
+ "arms": {
+  "teach_step": {
+   "adapter": "step",
+   "caregiver": "guide",
+   "note": "the asked value labelled at every QUERY before the brain answers"
+  },
+  "reward_step": {
+   "adapter": "step",
+   "caregiver": "none",
+   "note": "only the paid outcome of the answer"
+  },
+  "reward_live": {
+   "adapter": "live",
+   "caregiver": "none",
+   "note": "the continuing life: calm routine, surprise arouses and learns"
+  }
+ },
+ "controls": [
+  "founder",
+  "random",
+  "oracle"
+ ],
+ "schedule": {
+  "guided": 1,
+  "autonomous": 0,
+  "unit": "decisions; every QUERY of the guide arm is labelled"
+ },
+ "training_episodes": 1536,
+ "withdrawal_episodes": 0,
+ "evaluation": {
+  "episodes": 224,
+  "modes": [
+   "sampled",
+   "greedy"
+  ],
+  "reset": "episode"
+ },
+ "seeds": {
+  "development": [
+   1001,
+   1002,
+   1003,
+   1004,
+   1005,
+   1006,
+   1007,
+   1008,
+   1009,
+   1010,
+   1011,
+   1012,
+   1013,
+   1014,
+   1015,
+   1016,
+   1017,
+   1018,
+   1019,
+   1020
+  ]
+ },
+ "streams": {
+  "evaluation": 1,
+  "random": 2,
+  "routes": 3,
+  "withdrawal_routes": 4,
+  "analysis_seed": 31012
+ },
+ "analysis": {
+  "unit": "founder",
+  "primary": "QUERY accuracy per condition, greedy and sampled"
+ },
+ "caps": {
+  "per_founder_arm_seconds": 1800,
+  "rss_bytes": 2147483648,
+  "output_bytes": 262144000
+ }
+}

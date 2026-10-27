@@ -1,0 +1,372 @@
+{
+ "recall2": {
+  "founder": {
+   "carried": {
+    "clean-0": 0.5078125,
+    "clean-1": 0.484375,
+    "clean-2": 0.4734375,
+    "distractor-1": 0.5046875,
+    "distractor-2": 0.4671875,
+    "order-latest": 0.5328125,
+    "replacement": 0.4921875
+   },
+   "recall": {
+    "clean-0": 0.5171875,
+    "clean-1": 0.4890625,
+    "clean-2": 0.4703125,
+    "distractor-1": 0.4953125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.528125,
+    "replacement": 0.496875
+   },
+   "recall_nopos": {
+    "clean-0": 0.5171875,
+    "clean-1": 0.4890625,
+    "clean-2": 0.4703125,
+    "distractor-1": 0.4953125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.528125,
+    "replacement": 0.496875
+   },
+   "recall_p4": {
+    "clean-0": 0.5171875,
+    "clean-1": 0.4890625,
+    "clean-2": 0.4703125,
+    "distractor-1": 0.4953125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.528125,
+    "replacement": 0.496875
+   },
+   "recall_rate03": {
+    "clean-0": 0.5171875,
+    "clean-1": 0.4890625,
+    "clean-2": 0.4703125,
+    "distractor-1": 0.4953125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.528125,
+    "replacement": 0.496875
+   },
+   "recall_h2": {
+    "clean-0": 0.503125,
+    "clean-1": 0.4859375,
+    "clean-2": 0.46875,
+    "distractor-1": 0.5125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.5234375,
+    "replacement": 0.5046875
+   },
+   "recall_h2_nopos": {
+    "clean-0": 0.503125,
+    "clean-1": 0.4859375,
+    "clean-2": 0.46875,
+    "distractor-1": 0.5125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.5234375,
+    "replacement": 0.5046875
+   },
+   "recall_h4": {
+    "clean-0": 0.490625,
+    "clean-1": 0.4625,
+    "clean-2": 0.4765625,
+    "distractor-1": 0.515625,
+    "distractor-2": 0.484375,
+    "order-latest": 0.50625,
+    "replacement": 0.4828125
+   },
+   "recall_areward": {
+    "clean-0": 0.5171875,
+    "clean-1": 0.4890625,
+    "clean-2": 0.4703125,
+    "distractor-1": 0.4953125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.528125,
+    "replacement": 0.496875
+   },
+   "recall_h2_areward": {
+    "clean-0": 0.503125,
+    "clean-1": 0.4859375,
+    "clean-2": 0.46875,
+    "distractor-1": 0.5125,
+    "distractor-2": 0.4734375,
+    "order-latest": 0.5234375,
+    "replacement": 0.5046875
+   }
+  },
+  "reward_live": {
+   "carried": {
+    "clean-0": 0.509375,
+    "clean-1": 0.4765625,
+    "clean-2": 0.471875,
+    "distractor-1": 0.484375,
+    "distractor-2": 0.465625,
+    "order-latest": 0.5265625,
+    "replacement": 0.4828125
+   },
+   "recall": {
+    "clean-0": 0.9453125,
+    "clean-1": 0.9109375,
+    "clean-2": 0.8796875,
+    "distractor-1": 0.9078125,
+    "distractor-2": 0.8109375,
+    "order-latest": 0.6484375,
+    "replacement": 0.796875
+   },
+   "recall_nopos": {
+    "clean-0": 0.9453125,
+    "clean-1": 0.9109375,
+    "clean-2": 0.8796875,
+    "distractor-1": 0.9078125,
+    "distractor-2": 0.8109375,
+    "order-latest": 0.6484375,
+    "replacement": 0.796875
+   },
+   "recall_p4": {
+    "clean-0": 0.9453125,
+    "clean-1": 0.9109375,
+    "clean-2": 0.8796875,
+    "distractor-1": 0.9078125,
+    "distractor-2": 0.8109375,
+    "order-latest": 0.6484375,
+    "replacement": 0.796875
+   },
+   "recall_rate03": {
+    "clean-0": 0.9453125,
+    "clean-1": 0.9109375,
+    "clean-2": 0.8796875,
+    "distractor-1": 0.9078125,
+    "distractor-2": 0.8109375,
+    "order-latest": 0.6484375,
+    "replacement": 0.796875
+   },
+   "recall_h2": {
+    "clean-0": 0.903125,
+    "clean-1": 0.875,
+    "clean-2": 0.825,
+    "distractor-1": 0.878125,
+    "distractor-2": 0.7484375,
+    "order-latest": 0.6859375,
+    "replacement": 0.7140625
+   },
+   "recall_h2_nopos": {
+    "clean-0": 0.903125,
+    "clean-1": 0.875,
+    "clean-2": 0.825,
+    "distractor-1": 0.878125,
+    "distractor-2": 0.7484375,
+    "order-latest": 0.6859375,
+    "replacement": 0.7140625
+   },
+   "recall_h4": {
+    "clean-0": 0.9046875,
+    "clean-1": 0.8859375,
+    "clean-2": 0.84375,
+    "distractor-1": 0.88125,
+    "distractor-2": 0.7796875,
+    "order-latest": 0.7828125,
+    "replacement": 0.79375
+   },
+   "recall_areward": {
+    "clean-0": 0.9046875,
+    "clean-1": 0.8921875,
+    "clean-2": 0.8484375,
+    "distractor-1": 0.8890625,
+    "distractor-2": 0.8265625,
+    "order-latest": 0.684375,
+    "replacement": 0.696875
+   },
+   "recall_h2_areward": {
+    "clean-0": 0.95,
+    "clean-1": 0.9078125,
+    "clean-2": 0.8875,
+    "distractor-1": 0.9359375,
+    "distractor-2": 0.8703125,
+    "order-latest": 0.6640625,
+    "replacement": 0.621875
+   }
+  },
+  "reward_step": {
+   "carried": {
+    "clean-0": 0.50625,
+    "clean-1": 0.4859375,
+    "clean-2": 0.4703125,
+    "distractor-1": 0.4953125,
+    "distractor-2": 0.471875,
+    "order-latest": 0.5234375,
+    "replacement": 0.4859375
+   },
+   "recall": {
+    "clean-0": 0.775,
+    "clean-1": 0.771875,
+    "clean-2": 0.721875,
+    "distractor-1": 0.7671875,
+    "distractor-2": 0.74375,
+    "order-latest": 0.5,
+    "replacement": 0.646875
+   },
+   "recall_nopos": {
+    "clean-0": 0.775,
+    "clean-1": 0.771875,
+    "clean-2": 0.721875,
+    "distractor-1": 0.7671875,
+    "distractor-2": 0.74375,
+    "order-latest": 0.5,
+    "replacement": 0.646875
+   },
+   "recall_p4": {
+    "clean-0": 0.775,
+    "clean-1": 0.771875,
+    "clean-2": 0.721875,
+    "distractor-1": 0.7671875,
+    "distractor-2": 0.74375,
+    "order-latest": 0.5,
+    "replacement": 0.646875
+   },
+   "recall_rate03": {
+    "clean-0": 0.775,
+    "clean-1": 0.771875,
+    "clean-2": 0.721875,
+    "distractor-1": 0.7671875,
+    "distractor-2": 0.74375,
+    "order-latest": 0.5,
+    "replacement": 0.646875
+   },
+   "recall_h2": {
+    "clean-0": 0.703125,
+    "clean-1": 0.671875,
+    "clean-2": 0.584375,
+    "distractor-1": 0.6984375,
+    "distractor-2": 0.6453125,
+    "order-latest": 0.5015625,
+    "replacement": 0.5859375
+   },
+   "recall_h2_nopos": {
+    "clean-0": 0.703125,
+    "clean-1": 0.671875,
+    "clean-2": 0.584375,
+    "distractor-1": 0.6984375,
+    "distractor-2": 0.6453125,
+    "order-latest": 0.5015625,
+    "replacement": 0.5859375
+   },
+   "recall_h4": {
+    "clean-0": 0.8734375,
+    "clean-1": 0.821875,
+    "clean-2": 0.734375,
+    "distractor-1": 0.871875,
+    "distractor-2": 0.7484375,
+    "order-latest": 0.5328125,
+    "replacement": 0.7046875
+   },
+   "recall_areward": {
+    "clean-0": 0.7265625,
+    "clean-1": 0.7453125,
+    "clean-2": 0.6921875,
+    "distractor-1": 0.746875,
+    "distractor-2": 0.7359375,
+    "order-latest": 0.578125,
+    "replacement": 0.54375
+   },
+   "recall_h2_areward": {
+    "clean-0": 0.70625,
+    "clean-1": 0.6953125,
+    "clean-2": 0.64375,
+    "distractor-1": 0.671875,
+    "distractor-2": 0.665625,
+    "order-latest": 0.625,
+    "replacement": 0.51875
+   }
+  },
+  "teach_step": {
+   "carried": {
+    "clean-0": 0.5109375,
+    "clean-1": 0.4734375,
+    "clean-2": 0.4703125,
+    "distractor-1": 0.4953125,
+    "distractor-2": 0.465625,
+    "order-latest": 0.53125,
+    "replacement": 0.48125
+   },
+   "recall": {
+    "clean-0": 0.9984375,
+    "clean-1": 0.9921875,
+    "clean-2": 0.9890625,
+    "distractor-1": 0.9953125,
+    "distractor-2": 0.9921875,
+    "order-latest": 0.8984375,
+    "replacement": 0.9203125
+   },
+   "recall_nopos": {
+    "clean-0": 0.9484375,
+    "clean-1": 0.9578125,
+    "clean-2": 0.9578125,
+    "distractor-1": 0.9421875,
+    "distractor-2": 0.9390625,
+    "order-latest": 0.896875,
+    "replacement": 0.7421875
+   },
+   "recall_p4": {
+    "clean-0": 0.9984375,
+    "clean-1": 0.9921875,
+    "clean-2": 0.9890625,
+    "distractor-1": 0.9953125,
+    "distractor-2": 0.9921875,
+    "order-latest": 0.8984375,
+    "replacement": 0.9203125
+   },
+   "recall_rate03": {
+    "clean-0": 0.9984375,
+    "clean-1": 0.99375,
+    "clean-2": 0.9890625,
+    "distractor-1": 0.996875,
+    "distractor-2": 0.9921875,
+    "order-latest": 0.946875,
+    "replacement": 0.96875
+   },
+   "recall_h2": {
+    "clean-0": 0.9984375,
+    "clean-1": 0.99375,
+    "clean-2": 0.9890625,
+    "distractor-1": 0.9953125,
+    "distractor-2": 0.9921875,
+    "order-latest": 0.996875,
+    "replacement": 0.9953125
+   },
+   "recall_h2_nopos": {
+    "clean-0": 0.971875,
+    "clean-1": 0.9625,
+    "clean-2": 0.959375,
+    "distractor-1": 0.9734375,
+    "distractor-2": 0.971875,
+    "order-latest": 0.9734375,
+    "replacement": 0.909375
+   },
+   "recall_h4": {
+    "clean-0": 0.9984375,
+    "clean-1": 0.9953125,
+    "clean-2": 0.990625,
+    "distractor-1": 0.996875,
+    "distractor-2": 0.9921875,
+    "order-latest": 0.996875,
+    "replacement": 0.99375
+   },
+   "recall_areward": {
+    "clean-0": 0.9984375,
+    "clean-1": 0.9921875,
+    "clean-2": 0.9890625,
+    "distractor-1": 0.9953125,
+    "distractor-2": 0.9921875,
+    "order-latest": 0.996875,
+    "replacement": 0.89375
+   },
+   "recall_h2_areward": {
+    "clean-0": 0.9984375,
+    "clean-1": 0.9953125,
+    "clean-2": 0.9890625,
+    "distractor-1": 0.9953125,
+    "distractor-2": 0.9921875,
+    "order-latest": 0.9734375,
+    "replacement": 0.9953125
+   }
+  }
+ }
+}

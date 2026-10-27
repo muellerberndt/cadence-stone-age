@@ -1,0 +1,189 @@
+{
+ "schema": "stone-age-sequence/1",
+ "name": "Cadence 0.89 memory on the recall world: six recipes, 10 founders",
+ "question": "Does the recall memory, with or without its position term, answer the latest written value?",
+ "scope": "component reading of the memory options in a world; development founders",
+ "world": {
+  "kind": "recall",
+  "success_reward": 1.0,
+  "failure_reward": -1.0
+ },
+ "recipes": {
+  "carried": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3
+   },
+   "note": "the recall world's own base recipe"
+  },
+  "retained": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.8,
+    "working_memory_amplitude": 0.3
+   },
+   "note": "the base with a retained working trace"
+  },
+  "recall": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true
+   },
+   "note": "the base with the recall memory and its default position term"
+  },
+  "recall_nopos": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_position": 0
+   },
+   "note": "the base with the recall memory, no position term"
+  },
+  "recall_h2": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_heads": 2
+   },
+   "note": "the base with two recall heads"
+  },
+  "attention": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "attention": true,
+    "learned_code": 8
+   },
+   "note": "the base with the learned-code contextual recipe"
+  }
+ },
+ "arms": {
+  "teach_step": {
+   "adapter": "step",
+   "caregiver": "guide",
+   "note": "the asked value labelled at every QUERY before the brain answers"
+  },
+  "reward_step": {
+   "adapter": "step",
+   "caregiver": "none",
+   "note": "only the paid outcome of the answer"
+  },
+  "reward_live": {
+   "adapter": "live",
+   "caregiver": "none",
+   "note": "the continuing life: calm routine, surprise arouses and learns"
+  }
+ },
+ "controls": [
+  "founder",
+  "random",
+  "oracle"
+ ],
+ "schedule": {
+  "guided": 1,
+  "autonomous": 0,
+  "unit": "decisions; every QUERY of the guide arm is labelled"
+ },
+ "training_episodes": 1536,
+ "withdrawal_episodes": 0,
+ "evaluation": {
+  "episodes": 224,
+  "modes": [
+   "sampled",
+   "greedy"
+  ],
+  "reset": "episode"
+ },
+ "seeds": {
+  "development": [
+   1001,
+   1002,
+   1003,
+   1004,
+   1005,
+   1006,
+   1007,
+   1008,
+   1009,
+   1010
+  ]
+ },
+ "streams": {
+  "evaluation": 1,
+  "random": 2,
+  "routes": 3,
+  "withdrawal_routes": 4,
+  "analysis_seed": 31012
+ },
+ "analysis": {
+  "unit": "founder",
+  "primary": "QUERY accuracy per condition, greedy and sampled"
+ },
+ "caps": {
+  "per_founder_arm_seconds": 1800,
+  "rss_bytes": 2147483648,
+  "output_bytes": 262144000
+ }
+}

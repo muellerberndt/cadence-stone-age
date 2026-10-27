@@ -1,0 +1,186 @@
+{
+ "schema": "stone-age-sequence/1",
+ "name": "Cadence 0.89 memory on the route cue, cue hidden: eight recipes, 10 founders",
+ "question": "With the cue shown once and then gone, does any memory recipe carry it across the neutral events to the first decision, against the cue kept visible?",
+ "scope": "component reading of the memory options in a world; development founders",
+ "world": {
+  "kind": "route_cue",
+  "neutral": 2,
+  "deadline": 10,
+  "success_reward": 2.0,
+  "failure_reward": -1.0,
+  "cue_persists": false
+ },
+ "recipes": {
+  "defaults": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true
+   },
+   "note": "the base: Brain.compose(7, 5, modules=(48, 24), arousal=True)"
+  },
+  "episodic": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true
+   },
+   "note": "the episodic memory votes in the choice"
+  },
+  "recall": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true
+   },
+   "note": "the recall memory with its default position term (32 exact ages)"
+  },
+  "recall_nopos": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_position": 0
+   },
+   "note": "the recall memory without the position term"
+  },
+  "recall_h2": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_heads": 2
+   },
+   "note": "the recall memory read by two heads"
+  },
+  "recall_w2": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "recall": true,
+    "recall_window": 2
+   },
+   "note": "the recall memory keyed on the last two events"
+  },
+  "attention": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "attention": true,
+    "learned_code": 8
+   },
+   "note": "the learned-code contextual recipe (recall, window 2, learned code of 8 units)"
+  },
+  "episodic_recall": {
+   "compose": {
+    "modules": [
+     48,
+     24
+    ],
+    "arousal": true,
+    "memory_choice": true,
+    "recall": true
+   },
+   "note": "the episodic vote and the recall memory"
+  }
+ },
+ "arms": {
+  "guide_step": {
+   "adapter": "step",
+   "caregiver": "guide"
+  },
+  "grade_step": {
+   "adapter": "step",
+   "caregiver": "grade"
+  },
+  "natural_live": {
+   "adapter": "live",
+   "caregiver": "none"
+  }
+ },
+ "controls": [
+  "founder",
+  "random",
+  "oracle"
+ ],
+ "schedule": {
+  "guided": 4,
+  "autonomous": 8,
+  "unit": "executed decisions of the whole life"
+ },
+ "caregiver": {
+  "grade_right": 0.5,
+  "grade_wrong": -0.5,
+  "label": "the required action of the observation shown now, after an executed nonterminal mistake in a guided window"
+ },
+ "caregiver_note": "a wrong first collection ends the episode, so a corrective label never reaches the decision that needs history; the arms are reward-only and graded",
+ "training_episodes": 480,
+ "budget_readings": [
+  120,
+  480,
+  1920
+ ],
+ "withdrawal_episodes": 0,
+ "evaluation": {
+  "episodes": 200,
+  "modes": [
+   "sampled",
+   "greedy"
+  ],
+  "reset": "episode",
+  "note": "frozen copies with their own action stream; Brain.reset at every episode start equals the life's episode boundary for an act-only reader"
+ },
+ "seeds": {
+  "development": [
+   1001,
+   1002,
+   1003,
+   1004,
+   1005,
+   1006,
+   1007,
+   1008,
+   1009,
+   1010
+  ]
+ },
+ "streams": {
+  "evaluation": 1,
+  "random": 2,
+  "routes": 3,
+  "withdrawal_routes": 4,
+  "analysis_seed": 31012
+ },
+ "analysis": {
+  "unit": "founder",
+  "bootstrap_resamples": 10000,
+  "interval": "percentile 95",
+  "primary": "first-choice accuracy and whole-route success; context-blind ceiling 0.5 at the first choice"
+ },
+ "caps": {
+  "per_founder_arm_seconds": 1800,
+  "rss_bytes": 2147483648,
+  "output_bytes": 262144000
+ }
+}

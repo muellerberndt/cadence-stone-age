@@ -1,0 +1,167 @@
+{
+ "schema": "stone-age-sequence/1",
+ "name": "Cadence 0.89 recency 0 with the position term on the order recall world",
+ "question": "Two values are written, then asked: the first through a query marker of its own, or the latest. Does the position term let a lesson teach the read to look back to the older write?",
+ "scope": "component reading of the memory options in a world; development founders",
+ "world": {
+  "kind": "recall",
+  "success_reward": 1.0,
+  "failure_reward": -1.0,
+  "ask": "order"
+ },
+ "recipes": {
+  "recall": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true
+   },
+   "note": "the recall memory at the founder recency 0.25"
+  },
+  "recall_r0": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_recency": 0.0
+   },
+   "note": "the recall memory at recency 0"
+  },
+  "recall_h2": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_heads": 2
+   },
+   "note": "two heads, recency 0.25"
+  },
+  "recall_h2_r0": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_heads": 2,
+    "recall_recency": 0.0
+   },
+   "note": "two heads, recency 0"
+  }
+ },
+ "arms": {
+  "teach_step": {
+   "adapter": "step",
+   "caregiver": "guide",
+   "note": "the asked value labelled at every QUERY before the brain answers"
+  },
+  "reward_step": {
+   "adapter": "step",
+   "caregiver": "none",
+   "note": "only the paid outcome of the answer"
+  },
+  "reward_live": {
+   "adapter": "live",
+   "caregiver": "none",
+   "note": "the continuing life: calm routine, surprise arouses and learns"
+  }
+ },
+ "controls": [
+  "founder",
+  "random",
+  "oracle"
+ ],
+ "schedule": {
+  "guided": 1,
+  "autonomous": 0,
+  "unit": "decisions; every QUERY of the guide arm is labelled"
+ },
+ "training_episodes": 1536,
+ "withdrawal_episodes": 0,
+ "evaluation": {
+  "episodes": 224,
+  "modes": [
+   "sampled",
+   "greedy"
+  ],
+  "reset": "episode"
+ },
+ "seeds": {
+  "development": [
+   1021,
+   1022,
+   1023,
+   1024,
+   1025,
+   1026,
+   1027,
+   1028,
+   1029,
+   1030,
+   1031,
+   1032,
+   1033,
+   1034,
+   1035,
+   1036,
+   1037,
+   1038,
+   1039,
+   1040
+  ]
+ },
+ "streams": {
+  "evaluation": 1,
+  "random": 2,
+  "routes": 3,
+  "withdrawal_routes": 4,
+  "analysis_seed": 31012
+ },
+ "analysis": {
+  "unit": "founder",
+  "primary": "QUERY accuracy per condition, greedy and sampled"
+ },
+ "caps": {
+  "per_founder_arm_seconds": 1800,
+  "rss_bytes": 2147483648,
+  "output_bytes": 262144000
+ }
+}

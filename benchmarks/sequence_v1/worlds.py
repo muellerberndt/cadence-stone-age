@@ -249,16 +249,30 @@ class ViewChain(ColdChain):
 
     name = "view_chain"
 
-    def __init__(self, view: str = "hidden", **chain: Any) -> None:
+    def __init__(self, view: str = "hidden", efference: bool = False, **chain: Any) -> None:
         if view not in CHAIN_VIEWS:
             raise ValueError(f"a chain view is one of {sorted(CHAIN_VIEWS)}, got {view!r}")
         super().__init__(**chain)
         self.view = view
+        # with ``efference`` the observation also shows the brain's last executed action, one
+        # input per action, all zero before the episode's first decision
+        self.efference = bool(efference)
+        self.inputs = V5_INPUTS + (self.actions if self.efference else 0)
+        self.last_action: int | None = None
 
     def observation(self) -> np.ndarray:
-        if self.success:
-            return super().observation()
-        return CHAIN_VIEWS[self.view][self.stage].copy()
+        x = super().observation() if self.success else CHAIN_VIEWS[self.view][self.stage].copy()
+        if not self.efference:
+            return x
+        copy = np.zeros((1, self.actions))
+        if self.last_action is not None:
+            copy[0, self.last_action] = 1.0
+        return np.concatenate([np.atleast_2d(x), copy], axis=1)
+
+    def step(self, action: int) -> Outcome:
+        outcome = super().step(action)
+        self.last_action = int(action_id(np.asarray([action], dtype=np.int64), self.actions))
+        return outcome
 
 
 def views_distinct(spec: dict[str, Any]) -> bool:
@@ -417,7 +431,8 @@ def make_world(spec: dict[str, Any], route: Any = None) -> Any:
         cell = route if isinstance(route, dict) else {"condition": "clean-0", "value": int(route or 0), "seed": 0}
         return Recall(cell["condition"], cell["value"], cell.get("seed", 0),
                       success_reward=spec.get("success_reward", 1.0),
-                      failure_reward=spec.get("failure_reward", -1.0))
+                      failure_reward=spec.get("failure_reward", -1.0),
+                      ordered=spec.get("ask") == "order")
     if kind == "cold_chain":
         return ColdChain(
             deadline=spec.get("deadline", V5_DEADLINE),
@@ -427,6 +442,7 @@ def make_world(spec: dict[str, Any], route: Any = None) -> Any:
     if kind == "view_chain":
         return ViewChain(
             spec.get("view", "hidden"),
+            efference=bool(spec.get("efference", False)),
             deadline=spec.get("deadline", V5_DEADLINE),
             success_reward=spec.get("success_reward", V5_SUCCESS),
             failure_reward=spec.get("failure_reward", V5_FAILURE),
@@ -473,21 +489,37 @@ RECALL_TOKENS = np.array([[1.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 1.0]])
 RECALL_CONDITIONS = (
     "clean-0", "clean-1", "clean-2", "distractor-1", "distractor-2", "replacement", "order-latest",
 )
+# the ordered recall world (``"ask": "order"``): two values written, then a query for the first or
+# the latest, the first asked through a marker of its own at input RECALL_QUERY_FIRST
+RECALL_QUERY_FIRST = RECALL_INPUTS
+ORDER_CONDITIONS = ("ask-latest", "ask-first", "ask-latest-gap", "ask-first-gap")
 
 
-def recall_events(condition: str, value: int, seed: int) -> list[np.ndarray]:
+def recall_events(condition: str, value: int, seed: int, width: int = RECALL_INPUTS) -> list[np.ndarray]:
     """The observations of one recall episode; the value asked at QUERY is ``value``, the
-    latest written one. Distractors carry a small random payload under their own marker."""
+    latest written one (in the ordered world the first or the latest, as its query asks).
+    Distractors carry a small random payload under their own marker."""
     rng = np.random.default_rng(seed)
 
     def marker(index: int, payload: np.ndarray | None = None) -> np.ndarray:
-        x = np.zeros((1, RECALL_INPUTS))
+        x = np.zeros((1, width))
         x[0, index] = 1.0
         if payload is not None:
             x[0, RECALL_PAYLOAD] = payload
         return x
 
     events = [marker(RECALL_START)]
+    if condition in ORDER_CONDITIONS or condition.startswith(("ask-first-gap", "ask-latest-gap")):
+        if width <= RECALL_QUERY_FIRST:
+            raise ValueError("an ordered recall condition needs the ordered world's query marker")
+        first = condition.startswith("ask-first")
+        # "-gap" puts one neutral event between the writes, "-gapK" puts K
+        tail = condition.rpartition("-gap")[2] if "-gap" in condition else None
+        gap = [marker(RECALL_NEUTRAL)] * (0 if tail is None else int(tail or 1))
+        writes = [RECALL_TOKENS[value], RECALL_TOKENS[1 - value]] if first else [RECALL_TOKENS[1 - value], RECALL_TOKENS[value]]
+        events += [marker(RECALL_WRITE, writes[0]), *gap, marker(RECALL_WRITE, writes[1]), marker(RECALL_NEUTRAL)]
+        events.append(marker(RECALL_QUERY_FIRST if first else RECALL_QUERY))
+        return events
     kind, _, count = condition.partition("-")
     if kind in ("clean", "distractor"):
         events.append(marker(RECALL_WRITE, RECALL_TOKENS[value]))
@@ -519,11 +551,12 @@ class Recall:
     stages = 1
 
     def __init__(self, condition: str, value: int, seed: int = 0, *,
-                 success_reward: float = 1.0, failure_reward: float = -1.0) -> None:
+                 success_reward: float = 1.0, failure_reward: float = -1.0, ordered: bool = False) -> None:
         if value not in (0, 1):
             raise ValueError("value is 0 or 1")
         self.condition, self.value = condition, int(value)
-        self.events = recall_events(condition, self.value, seed)
+        self.inputs = RECALL_INPUTS + 1 if ordered else RECALL_INPUTS
+        self.events = recall_events(condition, self.value, seed, self.inputs)
         self.success_reward, self.failure_reward = float(success_reward), float(failure_reward)
         self.event = 0
         self.stage = 0
