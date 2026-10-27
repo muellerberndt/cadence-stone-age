@@ -87,6 +87,44 @@
    },
    "note": "0.89.0's position term: 32 exact ages at rate 0.1, no slope"
   },
+  "recall_rate01": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_position_rate": 0.1
+   },
+   "note": "the table taught at 0.1 (0.89.0's rate), the slope kept"
+  },
+  "recall_noslope": {
+   "compose": {
+    "modules": [
+     32
+    ],
+    "lateral": 0.0,
+    "episodic": false,
+    "arousal": true,
+    "learning_qualified": true,
+    "learning_free_steps": 1024,
+    "learning_nudged_steps": 1024,
+    "learning_tolerance": 0.003,
+    "working_memory_decay": 0.0,
+    "working_memory_amplitude": 0.3,
+    "recall": true,
+    "recall_slope_rate": 0.0
+   },
+   "note": "no slope, the table exact to 64 at 0.01 kept"
+  },
   "recall_089": {
    "compose": {
     "modules": [

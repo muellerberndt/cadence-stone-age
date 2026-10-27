@@ -179,6 +179,8 @@ DIAG_EXTRA = {
     "recall_r025": ({"recall_recency": 0.25}, "the age charge of 0.25 (0.89.0's founder)"),
     "recall_p32": ({"recall_position": 32, "recall_position_rate": 0.1, "recall_slope_rate": 0.0},
                    "0.89.0's position term: 32 exact ages at rate 0.1, no slope"),
+    "recall_rate01": ({"recall_position_rate": 0.1}, "the table taught at 0.1 (0.89.0's rate), the slope kept"),
+    "recall_noslope": ({"recall_slope_rate": 0.0}, "no slope, the table exact to 64 at 0.01 kept"),
     "recall_089": ({"learning_surprise": False, "recall_recency": 0.25, "recall_position": 32,
                     "recall_position_rate": 0.1, "recall_slope_rate": 0.0}, "every 0.89.0 setting"),
 }
