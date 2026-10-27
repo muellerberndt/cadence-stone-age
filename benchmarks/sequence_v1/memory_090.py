@@ -3,6 +3,9 @@
     python memory_090.py derive            # write protocol-m090-recall-order.json and -route-hidden.json
     python memory_090.py jobs OUT          # one line per runner process: library, reading, recipe, seed
     python memory_090.py analyze OUT       # paired tables -> OUT/M090_RESULTS.md, OUT/m090-summary.json
+    python memory_090.py derive-diagnostic # protocol-m090d-*.json: one 0.89.0 setting restored at a time
+    python memory_090.py jobs-diagnostic DIAG
+    python memory_090.py analyze-diagnostic OUT DIAG   # -> DIAG/M090_DIAGNOSTIC.md
 
 Readings: the ordered recall world taught (``teach_step``, as grid 5) and the route cue shown once
 and hidden behind two neutral events, guided (``guide_step``, as grid 2). Recipes ``recall`` and
@@ -167,6 +170,83 @@ def analyze(out: Path) -> None:
     print("\n".join(lines))
 
 
+# -- a diagnostic after the readings: which change of the candidate moves the result
+
+# Each recipe takes the candidate's ``recall`` recipe back to one 0.89.0 setting; ``recall_089``
+# takes it back to all of them, so under the candidate it must read as ``recall`` under 0.89.0.
+DIAG_EXTRA = {
+    "recall_every": ({"learning_surprise": False}, "lessons on every row (0.89.0's default)"),
+    "recall_r025": ({"recall_recency": 0.25}, "the age charge of 0.25 (0.89.0's founder)"),
+    "recall_p32": ({"recall_position": 32, "recall_position_rate": 0.1, "recall_slope_rate": 0.0},
+                   "0.89.0's position term: 32 exact ages at rate 0.1, no slope"),
+    "recall_089": ({"learning_surprise": False, "recall_recency": 0.25, "recall_position": 32,
+                    "recall_position_rate": 0.1, "recall_slope_rate": 0.0}, "every 0.89.0 setting"),
+}
+DIAG = {reading: (f"protocol-m090d-{reading}.json", arm) for reading, (_, arm, _) in READINGS.items()}
+
+
+def derive_diag() -> list[str]:
+    written = []
+    for reading, (protocol, _) in DIAG.items():
+        p = json.loads((HERE / READINGS[reading][0]).read_text())
+        p["name"] = p["name"].replace("Cadence 0.90 candidate against 0.89.0", "Diagnostic of the 0.90 candidate")
+        base = p["recipes"]["recall"]["compose"]
+        p["recipes"] = {"recall": p["recipes"]["recall"], **recipes(DIAG_EXTRA, base)}
+        (HERE / protocol).write_text(json.dumps(p, indent=1) + "\n")
+        written.append(protocol)
+    return written
+
+
+def jobs_diag(out: Path) -> None:
+    lines = [f"C090 {reading} {protocol} {recipe} {seed} {arm}"
+             for reading, (protocol, arm) in DIAG.items() for seed in SEEDS for recipe in DIAG_EXTRA]
+    (out / "jobs.txt").write_text("\n".join(lines) + "\n")
+    print(len(lines), "jobs")
+
+
+def analyze_diag(readings: Path, out: Path) -> None:
+    """Each diagnostic recipe under the candidate against ``recall`` under the candidate and under
+    0.89.0 (from the readings in ``readings``), founder-paired."""
+    lines = ["# Diagnostic of the 0.90 candidate (founders 1101 to 1120, after the readings)", "",
+             "The candidate's `recall` recipe with one 0.89.0 setting restored at a time. Sampled frozen "
+             "success, mean over founders; differences founder-paired, bootstrap 95%.", ""]
+    summary: dict = {}
+    for reading, (_, arm) in DIAG.items():
+        def sampled(lib_dir: Path, recipe: str) -> dict:
+            got = {}
+            for seed in SEEDS:
+                run = read_run(lib_dir / reading / recipe / f"s{seed}", recipe)
+                if run is not None:
+                    got[seed] = run[arm]["sampled"]
+            return got
+        cand = sampled(readings / "C090", "recall")
+        old = sampled(readings / "R089", "recall")
+        lines += [f"## {reading} ({arm})", "",
+                  "| Recipe under the candidate | Sampled | - `recall` under the candidate [95%] | "
+                  "- `recall` under 0.89.0 [95%] |", "| --- | --- | --- | --- |",
+                  f"| `recall` (the candidate as composed) | {np.mean(list(cand.values())):.3f} | | |"]
+        summary[reading] = {"recall_C090": float(np.mean(list(cand.values()))),
+                            "recall_R089": float(np.mean(list(old.values())))}
+        for recipe in DIAG_EXTRA:
+            got = sampled(out / "C090", recipe)
+            if not got:
+                continue
+            cells = []
+            for ref in (cand, old):
+                seeds = [s for s in got if s in ref]
+                d = np.array([got[s] - ref[s] for s in seeds])
+                lo, hi = bootstrap(d)
+                cells.append(f"{d.mean():+.3f} [{lo:+.3f}, {hi:+.3f}]")
+            summary[reading][recipe] = {"sampled": float(np.mean(list(got.values()))),
+                                        "per_founder": {str(s): v for s, v in got.items()}}
+            lines.append(f"| `{recipe}`: {DIAG_EXTRA[recipe][1]} | {np.mean(list(got.values())):.3f} | "
+                         f"{cells[0]} | {cells[1]} |")
+        lines += ["", f"`recall` under 0.89.0: {np.mean(list(old.values())):.3f}.", ""]
+    (out / "m090d-summary.json").write_text(json.dumps(summary, indent=1) + "\n")
+    (out / "M090_DIAGNOSTIC.md").write_text("\n".join(lines) + "\n")
+    print("\n".join(lines))
+
+
 if __name__ == "__main__":
     command = sys.argv[1]
     if command == "derive":
@@ -175,5 +255,11 @@ if __name__ == "__main__":
         jobs(Path(sys.argv[2]))
     elif command == "analyze":
         analyze(Path(sys.argv[2]))
+    elif command == "derive-diagnostic":
+        print("\n".join(derive_diag()))
+    elif command == "jobs-diagnostic":
+        jobs_diag(Path(sys.argv[2]))
+    elif command == "analyze-diagnostic":
+        analyze_diag(Path(sys.argv[2]), Path(sys.argv[3]))
     else:
         raise SystemExit(__doc__)
